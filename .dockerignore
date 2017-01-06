@@ -1,0 +1,11 @@
+*.md
+.editorconfig
+.gitignore
+
+Dockerfile
+
+BackEnd/composer.lock
+BackEnd/composer.json
+
+FrontEnd/
+!FrontEnd/dist/

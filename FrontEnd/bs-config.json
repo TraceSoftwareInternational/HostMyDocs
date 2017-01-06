@@ -1,0 +1,7 @@
+{
+    "port": 8080,
+    "files": "dist",
+    "server": "dist",
+    "notify": false,
+    "cors": true
+}

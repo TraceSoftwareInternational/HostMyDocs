@@ -1,0 +1,7 @@
+{
+  "name": "tracesoftware/host-my-docs",
+  "require": {
+    "slim/slim": "^3.7"
+  },
+  "license": "GPL-3.0"
+}

@@ -6,11 +6,12 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const { CheckerPlugin }  = require('awesome-typescript-loader');
 const ExtractTextPlugin  = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin  = require('html-webpack-plugin');
+const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
 module.exports = {
     entry: {
         polyfills: helpers.root('src/ts/polyfills.ts'),
-        vendor: helpers.root('/src/ts/vendor.ts'),
+        vendor: helpers.root('src/ts/vendor.ts'),
         main: helpers.root('src/ts/main.ts')
     },
     output: {
@@ -52,7 +53,7 @@ module.exports = {
             names: ['main', 'vendor', 'polyfills']
         }),
         // extracting the CSS in it's own file
-        new ExtractTextPlugin('css/[chunkhash].styles.css'),
+        new ExtractTextPlugin('css/[chunkhash].[name].css'),
         new HtmlWebpackPlugin({
             inject: 'body',
             template: helpers.root('src/index.html'),
@@ -71,6 +72,12 @@ module.exports = {
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
             helpers.root('src'), // location of your src
         { }
-      )
+      ),
+      new TypedocWebpackPlugin({
+          name: 'HostMyDocs',
+          target: 'es6',
+          mode: 'file',
+          out: helpers.root('dist/docs')
+      }, helpers.root('src'))
     ]
 };

@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+    - "node"
+
+sudo: required
+
+services:
+    - docker
+
+script:
+    - cd FrontEnd
+    - yarn
+    - yarn build:prod
+    - cd ..
+
+after_success:
+  - docker login  -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+  - docker build -t tracesoftware/hostmydocs .
+  - docker push tracesoftware/hostmydocs

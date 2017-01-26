@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "declaration": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": ["es6", "dom"],
+        "module": "es6",
+        "moduleResolution": "node",
+        "target": "es5"
+    },
+    "awesomeTypescriptLoaderOptions": {
+        "useWebpackText": true // Allows other loaders to be chained to awesome-typescript-loader.
+    }
+}

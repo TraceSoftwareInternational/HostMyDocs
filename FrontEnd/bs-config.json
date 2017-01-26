@@ -1,7 +1,6 @@
 {
     "port": 8080,
-    "files": "dist",
+    "files": ["dist", "dist/docs"],
     "server": "dist",
-    "notify": false,
-    "cors": true
+    "notify": false
 }

@@ -32,6 +32,12 @@ module.exports = {
                 test: /\.html$/,
                 loader: 'html-loader'
             },
+            {
+                test: /\.min.css$/,
+                loader: ExtractTextPlugin.extract({
+                        loader: 'css-loader'
+                })
+            },
             // this loader will transform any SASS into CSS that will be put in a separate file thanks to ExtractTextPlugin
             {
                 test: /\.sass$/,

@@ -7,3 +7,11 @@ import '@angular/core';
 import '@angular/common';
 import '@angular/http';
 import '@angular/router';
+import '@angular/forms';
+
+import 'clarity-icons';
+import 'clarity-icons/clarity-icons.min.css';
+
+import 'clarity-ui/clarity-ui.min.css';
+
+import 'clarity-angular';

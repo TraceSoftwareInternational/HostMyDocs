@@ -20,7 +20,7 @@ module.exports = webpackMerge(commonConfig, {
             },
         }),
         // make build fail if there is any error
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
         new webpack.optimize.UglifyJsPlugin({
 
             beautify: false,

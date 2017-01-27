@@ -2,10 +2,10 @@ const webpack = require('webpack');
 const path    = require("path");
 const helpers = require('./helpers');
 
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const { CheckerPlugin }  = require('awesome-typescript-loader');
-const ExtractTextPlugin  = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin  = require('html-webpack-plugin');
+const CleanWebpackPlugin   = require('clean-webpack-plugin');
+const { CheckerPlugin }    = require('awesome-typescript-loader');
+const ExtractTextPlugin    = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin    = require('html-webpack-plugin');
 const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
 module.exports = {
@@ -38,20 +38,10 @@ module.exports = {
                         loader: 'css-loader'
                 })
             },
-            // this loader will transform any SASS into CSS that will be put in a separate file thanks to ExtractTextPlugin
             {
                 test: /\.sass$/,
-                loaders: [
-                    ExtractTextPlugin.extract({
-                        loader: 'css-loader!sass-loader'
-                    })
-                ]
+                loaders: ['raw-loader', 'sass-loader']
             },
-            // this loader will replace file reference by the content of the SASS file
-            {
-                test: /\.sass$/,
-                loader: 'raw-loader!sass-loader'
-            }
         ]
     },
     plugins: [

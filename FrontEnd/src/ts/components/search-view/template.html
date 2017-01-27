@@ -1,3 +1,26 @@
-<h1 class="big-text">Hello {{name}} !</h1>
+<div class="main-container">
+    <header class="header header-1">
+        <div class="branding">
+            <a href="/">
+                <clr-icon class="is-inverse" shape="directory"></clr-icon>
+                <span class="title">HostMyDocs</span>
+            </a>
+        </div>
+    </header>
 
-<div class="progress loop"><progress></progress></div>
+    <div class="content-container">
+        <div class="content-area">
+            Hello {{ name }}
+        </div>
+
+        <nav class="sidenav">
+            <clr-tree-node *ngFor="let project of projects" [clrTreeNodeExpanded]="true">
+                <clr-icon shape="folder"></clr-icon>
+                {{ project.name }}
+                <clr-tree-node *ngFor="let language of project.languages">
+                    {{ language }}
+                </clr-tree-node>
+            </clr-tree-node>
+        </nav>
+    </div>
+</div>

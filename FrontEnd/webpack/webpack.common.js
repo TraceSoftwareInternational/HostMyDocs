@@ -73,6 +73,7 @@ module.exports = {
           name: 'HostMyDocs',
           target: 'es6',
           mode: 'file',
+          exclude: helpers.root('src/**/*.spec.ts'),
           out: helpers.root('dist/docs')
       }, helpers.root('src'))
     ]

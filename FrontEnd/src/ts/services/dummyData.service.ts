@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class DummyData {
-    getProjects(): Object {
+    getProjects(): Array<Object> {
         return [
             {
                 'name': 'libtruc',

@@ -17,6 +17,6 @@ export class SearchView implements OnInit {
         this.projects = this.dummyData.getProjects();
     }
 
-    name = 'GitHub';
-    projects = null;
+    name: string = 'GitHub';
+    projects: Array<Object> = null;
 }

@@ -6,7 +6,8 @@
         "lib": ["es6", "dom"],
         "module": "es6",
         "moduleResolution": "node",
-        "target": "es5"
+        "target": "es5",
+        "types": ["jasmine"]
     },
     "awesomeTypescriptLoaderOptions": {
         "useWebpackText": true // Allows other loaders to be chained to awesome-typescript-loader.

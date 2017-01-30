@@ -1,7 +1,13 @@
 {
-  "name": "tracesoftware/host-my-docs",
-  "require": {
+    "name": "tracesoftware/host-my-docs",
+    "require": {
     "slim/slim": "^3.7"
-  },
-  "license": "GPL-3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.5.*"
+    },
+    "autoload-dev": {
+        "psr-4": { "Tests\\": "tests/" }
+    },
+    "license": "GPL-3.0"
 }

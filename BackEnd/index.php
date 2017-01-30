@@ -2,13 +2,12 @@
 
 require 'vendor/autoload.php';
 
-use Slim\Http\Response as Response;
-use Slim\Http\Request as Request;
+session_start();
 
-$slim = new \Slim\App();
+$settings = require 'src/settings.php';
 
-$slim->get('/home', function (Request $request, Response $response) {
-    return $response->write('It works !');
-});
+$slim = new \Slim\App($settings);
+
+require 'src/routes.php';
 
 $slim->run();

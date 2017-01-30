@@ -6,6 +6,8 @@ Dockerfile
 
 BackEnd/composer.lock
 BackEnd/composer.json
+BackEnd/phpunit.xml
+BackEnd/tests/
 
 FrontEnd/
 !FrontEnd/dist/

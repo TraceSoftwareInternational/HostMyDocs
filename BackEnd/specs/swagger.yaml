@@ -1,0 +1,85 @@
+swagger: "2.0"
+
+info:
+    version: 1.0.0
+    title: HostMyDocs
+    description: a lightweight app to host your favourite documentation !
+
+basePath: /BackEnd
+
+paths:
+  /projects:
+    get:
+      operationId: listProjects
+      description: Returns all the versions from all the languages from all the projects.
+      responses:
+        200:
+          description: the project list
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Project'
+    put:
+      operationId: addProject
+      description: Add a given version of a project to the database
+      parameters:
+        - name: name
+          type: string
+          required: true
+          in: formData
+          description: Display name of the project
+        - name: language
+          type: string
+          required: true
+          in: formData
+          description: Programming language used in this version of the project
+        - name: version
+          type: string
+          required: true
+          in: formData
+          description: a version number that match SemVer specification
+        - name: archive
+          type: file
+          required: true
+          in: formData
+          description: a zip file containing all the documentation with at least an index file
+      responses:
+        200:
+          description: project was added successfully
+        400:
+          description: one or more parameters are invalid
+
+
+definitions:
+  Project:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Display name of the project
+      versions:
+        type: array
+        items:
+          $ref: '#/definitions/Version'
+
+  Version:
+    type: object
+    properties:
+      number:
+        type: string
+        description: A version number that matches SemVer
+      languages:
+        type: array
+        items:
+          $ref: '#/definitions/Language'
+
+  Language:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the programming language
+      index:
+        type: string
+        description: an host-relative path to the index.html file of the documentation for a given version in a given project
+

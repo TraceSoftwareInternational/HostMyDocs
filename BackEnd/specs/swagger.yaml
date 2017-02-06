@@ -19,7 +19,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Project'
-    put:
+    post:
       operationId: addProject
       description: Add a given version of a project to the database
       parameters:

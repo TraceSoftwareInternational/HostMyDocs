@@ -1,13 +1,29 @@
 {
     "name": "tracesoftware/host-my-docs",
-    "require": {
-    "slim/slim": "^3.7"
+    "scripts": {
+        "test": "phpunit --configuration PHPUnitConfig.xml",
+        "fix-psr2": "php-cs-fixer fix ./src --rules=@PSR2"
     },
-    "require-dev": {
-        "phpunit/phpunit": "5.5.*"
+    "require": {
+        "slim/slim": "^3.7",
+        "vierbergenlars/php-semver": "^3.0",
+        "chumper/zipper": "^1.0",
+        "symfony/finder": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "HostMyDocs\\Controllers\\": "src/controllers",
+            "HostMyDocs\\Models\\": "src/models"
+        }
     },
     "autoload-dev": {
-        "psr-4": { "Tests\\": "tests/" }
+        "psr-4": {
+            "HostMyDocs\\Tests\\": "tests/"
+        }
     },
-    "license": "GPL-3.0"
+    "license": "GPL-3.0",
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.0",
+        "phpunit/phpunit": "^5.7"
+    }
 }

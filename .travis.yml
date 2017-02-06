@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+    - "node"
+
+sudo: required
+
+services:
+    - docker
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+script:
+    - cd BackEnd
+    - composer update --prefer-dist --optimize-autoloader
+    - composer test
+    - cd ../FrontEnd
+    - yarn
+    - yarn test
+    - yarn build:prod
+    - cd ..
+
+after_success:
+  - docker login  -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+  - docker build -t tracesoftware/hostmydocs .
+  - docker push tracesoftware/hostmydocs

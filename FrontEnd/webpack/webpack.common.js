@@ -30,12 +30,23 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                loader: 'html-loader'
+                loader: 'html-loader',
+                options: {
+                    minimize: true,
+                    removeComments: true,
+                    collapseWhitespace: true,
+
+                    // angular 2 templates break if these are omitted
+                    removeAttributeQuotes: false,
+                    keepClosingSlash: true,
+                    caseSensitive: true,
+                    conservativeCollapse: true
+                }
             },
             {
                 test: /\.min.css$/,
                 loader: ExtractTextPlugin.extract({
-                        loader: 'css-loader'
+                    use: 'css-loader'
                 })
             },
             {
@@ -66,15 +77,14 @@ module.exports = {
         new webpack.ContextReplacementPlugin(
             // The (\\|\/) piece accounts for path separators in *nix and Windows
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-            helpers.root('src'), // location of your src
-        { }
-      ),
-      new TypedocWebpackPlugin({
-          name: 'HostMyDocs',
-          target: 'es6',
-          mode: 'file',
-          exclude: helpers.root('src/**/*.spec.ts'),
-          out: helpers.root('dist/docs')
-      }, helpers.root('src'))
+            helpers.root('src'), {}
+        ),
+        new TypedocWebpackPlugin({
+            name: 'HostMyDocs',
+            target: 'es6',
+            mode: 'file',
+            exclude: helpers.root('src/**/*.spec.ts'),
+            out: helpers.root('dist/docs')
+        }, helpers.root('src'))
     ]
 };

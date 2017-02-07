@@ -13,8 +13,7 @@ before_script:
 
 script:
     - cd BackEnd
-    - composer update --prefer-dist --optimize-autoloader
-    - composer test
+    - docker run -v "`pwd`:/home/builder/" tracesoftware/gitlab-builder:php7-cli /bin/sh -c "mkdir -p $ARCHIVE_PATH $DOCS_PATH; chmod -R 777 $DATA_PATH; composer update; composer test"
     - cd ../FrontEnd
     - yarn
     - yarn test

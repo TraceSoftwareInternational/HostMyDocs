@@ -1,7 +1,7 @@
 {
     "name": "tracesoftware/host-my-docs",
     "scripts": {
-        "test": "phpunit --configuration PHPUnitConfig.xml",
+        "test": "phpunit --configuration phpunit.xml",
         "fix-psr2": "php-cs-fixer fix ./src --rules=@PSR2"
     },
     "require": {

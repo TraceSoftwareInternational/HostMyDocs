@@ -42,15 +42,15 @@ class Language implements \JsonSerializable
         $data = [];
 
         if ($this->name !== null) {
-            $data['language'] = $this->name;
+            $data['name'] = $this->name;
         }
 
         if ($this->indexFile !== null) {
-            $data['index'] = $this->indexFile;
+            $data['indexPath'] = $this->indexFile;
         }
 
         if ($this->archiveFile !== null) {
-            $data['archive'] = $this->archiveFile;
+            $data['archivePath'] = $this->archiveFile;
         }
 
         return $data;

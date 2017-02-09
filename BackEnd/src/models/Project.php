@@ -2,6 +2,9 @@
 
 namespace HostMyDocs\Models;
 
+use vierbergenlars\SemVer\version as Semver;
+
+
 class Project implements \JsonSerializable
 {
     /**
@@ -29,8 +32,12 @@ class Project implements \JsonSerializable
         $data = [];
 
         if ($this->name !== null) {
-            $data['project'] = $this->name;
+            $data['name'] = $this->name;
         }
+
+        usort($this->versions, function (Version $a, Version $b) {
+            return Semver::gt($a->getNumber(), $b->getNumber());
+        });
 
         if ($this->versions !== []) {
             foreach ($this->versions as $version) {

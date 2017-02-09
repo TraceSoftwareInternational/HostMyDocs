@@ -1,4 +1,4 @@
-FROM tracesoftware/gitlab-builder:php7-apache
+FROM php:7.1-apache
 MAINTAINER Matthieu Vion<mvion@trace-software.com>
 
 RUN apt-get update && apt-get install zlib1g-dev && \

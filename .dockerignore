@@ -8,6 +8,6 @@ BackEnd/composer.lock
 BackEnd/composer.json
 BackEnd/phpunit.xml
 BackEnd/tests/
-
+BackEnd/specs
 FrontEnd/
 !FrontEnd/dist/

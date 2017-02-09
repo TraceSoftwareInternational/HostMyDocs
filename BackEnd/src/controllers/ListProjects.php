@@ -25,10 +25,9 @@ class ListProjects extends BaseController
 
     public function __invoke(Request $request, Response $response)
     {
-        if ($this->listProjects() === false) {
-            $response->write($this->errorMessage);
-            return $response->withStatus(500);
-        }
+        try {
+            $this->listProjects();
+        } catch (\Exception $e) {}
 
         return $response->withJson($this->projects);
     }

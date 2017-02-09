@@ -1,3 +1,7 @@
+/**
+ * @module Models
+ */
+
 import { Language } from './Language';
 
 import { JSONLanguage, JSONVersion } from './JsonInterfaces';
@@ -15,7 +19,7 @@ export class Version {
 
     static arrayFromJSON(jsonVersions: JSONVersion[]) : Version[] {
         let versions: Version[] = [];
-        
+
         for(let version of jsonVersions) {
             versions.push(Version.fromJSON(version));
         }

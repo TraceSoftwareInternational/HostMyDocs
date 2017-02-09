@@ -1,0 +1,21 @@
+<clr-tree-node *ngIf="projects.length === 0">
+    No projects to display ):
+</clr-tree-node>
+
+<ng-container *ngIf="projects.length > 0">
+    <clr-tree-node *ngFor="let project of projects">
+        <clr-icon shape="folder"></clr-icon>
+        {{ project.name }}
+        <a class="label badge-link">
+            {{ getLastVersion(project) }}
+        </a>
+        <clr-tree-node *ngFor="let version of project.versions">
+            {{ version.number }}
+            <clr-tree-node *ngFor="let language of version.languages">
+                <a class="clr-treenode-link tree-link" (click)="notifyParent(language.indexPath, language.archivePath)">
+                    {{ language.name }}
+                </a>
+            </clr-tree-node>
+        </clr-tree-node>
+    </clr-tree-node>
+</ng-container>

@@ -1,7 +1,7 @@
 <div class="main-container">
     <header class="header header-1">
         <div class="branding">
-            <a href="/">
+            <a href="">
                 <clr-icon class="is-inverse" shape="directory"></clr-icon>
                 <span class="title">HostMyDocs</span>
             </a>
@@ -10,17 +10,13 @@
 
     <div class="content-container">
         <div class="content-area">
-            Hello {{ name }}
+            <documentation-viewer [indexFile]="indexFileToDisplay"></documentation-viewer>
         </div>
 
         <nav class="sidenav">
-            <clr-tree-node *ngFor="let project of projects" [clrTreeNodeExpanded]="true">
-                <clr-icon shape="folder"></clr-icon>
-                {{ project.name }}
-                <clr-tree-node *ngFor="let language of project.languages">
-                    {{ language }}
-                </clr-tree-node>
-            </clr-tree-node>
+            <section class="sidenav-content">
+                <project-tree (onProjectSelection)="openDocumentation($event)"></project-tree>
+            </section>
         </nav>
     </div>
 </div>

@@ -1,3 +1,7 @@
+/**
+ * @module Models
+ */
+
 import { Version } from './Version';
 
 import { JSONProject } from './JsonInterfaces';

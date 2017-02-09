@@ -1,3 +1,7 @@
+/**
+ * @module Models
+ */
+
 import { JSONLanguage }    from './JsonInterfaces';
 
 export class Language {
@@ -8,11 +12,11 @@ export class Language {
     ){}
 
     /**
-     * @param JSONLanguage a JSON array 
+     * @param JSONLanguage a JSON array
      */
     static arrayFromJSON(jsonLanguages: JSONLanguage[]) : Language[] {
         let languages: Language[] = [];
-        
+
         for(let language of jsonLanguages) {
             languages.push(Language.fromJSON(language));
         }

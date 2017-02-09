@@ -4,7 +4,7 @@ describe('Models : Language', () => {
     let languageName: string = 'TypeScript';
     let archivePath: string = '/archive.zip';
     let indexPath: string = '/docs/index.html';
-    
+
     let language: Language;
 
     beforeEach(() => {

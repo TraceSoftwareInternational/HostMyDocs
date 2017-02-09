@@ -85,6 +85,6 @@ module.exports = {
             mode: 'file',
             exclude: helpers.root('src/**/*.spec.ts'),
             out: helpers.root('dist/docs')
-        }, helpers.root('src'))
+        }, helpers.root('src/ts'))
     ]
 };

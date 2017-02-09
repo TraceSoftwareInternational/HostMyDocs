@@ -7,7 +7,7 @@
 
 Small web application to quickly access all your documentation !
 
-![Screenshot of HostMyDocs](http://i.imgur.com/uZ4hTke.png)
+![Screenshot of HostMyDocs](http://i.imgur.com/uAVV722.png)
 
 ## Getting Started
 
@@ -18,18 +18,18 @@ Small web application to quickly access all your documentation !
 3) Zip that folder !
 
 4) Now upload it with cURL by example :
-    ``` bash
-    curl --request POST \
-    --url http://localhost:8080/BackEnd/projects \
-    --header 'content-type: multipart/form-data; boundary=---011000010111000001101001' \
-    --form name=DocumentationName \
-    --form version=0.1.0 \
-    --form language=YourProgrammingLanguage \
-    --form archive=@/path/to/your/file.zip
-    ```
+``` bash
+curl --request POST \
+--url http://localhost:8080/BackEnd/projects \
+--header 'content-type: multipart/form-data; boundary=---011000010111000001101001' \
+--form name=DocumentationName \
+--form version=0.1.0 \
+--form language=YourProgrammingLanguage \
+--form archive=@/path/to/your/file.zip
+```
 
 5) Open [http://localhost:8080](http://localhost:8080) to see your uploaded docs !
 
 ## BackEnd API
 
-You can visualize it [in the Swagger editor](http://editor.swagger.io/#/?import=https://cdn.rawgit.com/TraceSoftwareInternational/HostMyDocs/develop/BackEnd/specs/swagger.yaml)
+You can visualize it [in the Swagger editor](http://editor.swagger.io/#/?import=https://cdn.rawgit.com/TraceSoftwareInternational/HostMyDocs/master/BackEnd/specs/swagger.yaml)

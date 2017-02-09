@@ -1,12 +1,12 @@
 import { Language } from './Language';
 import { Version }  from './Version';
-import { Project } from './Project';
+import { Project }  from './Project';
 
 describe('Models : Project', () => {
     let languageName: string = 'TypeScript';
     let archivePath: string = '/archive.zip';
     let indexPath: string = '/docs/index.html';
-    
+
     let versionNumber = '1.1.1';
 
     let projectName = 'Project Live';

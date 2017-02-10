@@ -7,7 +7,11 @@
         "module": "es6",
         "moduleResolution": "node",
         "target": "es5",
-        "types": ["jasmine"]
+        "types": ["jasmine"],
+        "baseUrl": "./",
+        "paths": {
+            "clarityIconsShapes": ["node_modules/clarity-icons/shapes"]
+        }
     },
     "awesomeTypescriptLoaderOptions": {
         "useWebpackText": true // Allows other loaders to be chained to awesome-typescript-loader.

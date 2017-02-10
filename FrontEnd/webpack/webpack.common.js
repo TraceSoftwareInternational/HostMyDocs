@@ -20,7 +20,10 @@ module.exports = {
         sourceMapFilename: '[name].map'
     },
     resolve: {
-        extensions: ['.ts', '.js', '.html', '.sass']
+        extensions: ['.ts', '.js', '.html', '.sass'],
+        alias: {
+            clarityIconsShapes: helpers.root('node_modules/clarity-icons/shapes')
+        }
     },
     module: {
         loaders: [

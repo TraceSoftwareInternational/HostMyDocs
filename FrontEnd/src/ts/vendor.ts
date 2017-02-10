@@ -9,8 +9,12 @@ import '@angular/http';
 import '@angular/router';
 import '@angular/forms';
 
-import 'clarity-icons';
 import 'clarity-icons/clarity-icons.min.css';
+import 'clarity-icons';
+
+import 'clarityIconsShapes/technology-shapes';
+import 'clarityIconsShapes/essential-shapes';
+import 'clarityIconsShapes/social-shapes';
 
 import 'clarity-ui/clarity-ui.min.css';
 

@@ -2,10 +2,10 @@ const webpack = require('webpack');
 const path    = require("path");
 const helpers = require('./helpers');
 
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const { CheckerPlugin }  = require('awesome-typescript-loader');
-const ExtractTextPlugin  = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin  = require('html-webpack-plugin');
+const CleanWebpackPlugin   = require('clean-webpack-plugin');
+const { CheckerPlugin }    = require('awesome-typescript-loader');
+const ExtractTextPlugin    = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin    = require('html-webpack-plugin');
 const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
 module.exports = {
@@ -20,7 +20,10 @@ module.exports = {
         sourceMapFilename: '[name].map'
     },
     resolve: {
-        extensions: ['.ts', '.js', '.html', '.sass']
+        extensions: ['.ts', '.js', '.html', '.sass'],
+        alias: {
+            clarityIconsShapes: helpers.root('node_modules/clarity-icons/shapes')
+        }
     },
     module: {
         loaders: [
@@ -30,28 +33,29 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                loader: 'html-loader'
+                loader: 'html-loader',
+                options: {
+                    minimize: true,
+                    removeComments: true,
+                    collapseWhitespace: true,
+
+                    // angular 2 templates break if these are omitted
+                    removeAttributeQuotes: false,
+                    keepClosingSlash: true,
+                    caseSensitive: true,
+                    conservativeCollapse: true
+                }
             },
             {
                 test: /\.min.css$/,
                 loader: ExtractTextPlugin.extract({
-                        loader: 'css-loader'
+                    use: 'css-loader'
                 })
             },
-            // this loader will transform any SASS into CSS that will be put in a separate file thanks to ExtractTextPlugin
             {
                 test: /\.sass$/,
-                loaders: [
-                    ExtractTextPlugin.extract({
-                        loader: 'css-loader!sass-loader'
-                    })
-                ]
+                loaders: ['raw-loader', 'sass-loader']
             },
-            // this loader will replace file reference by the content of the SASS file
-            {
-                test: /\.sass$/,
-                loader: 'raw-loader!sass-loader'
-            }
         ]
     },
     plugins: [
@@ -76,14 +80,14 @@ module.exports = {
         new webpack.ContextReplacementPlugin(
             // The (\\|\/) piece accounts for path separators in *nix and Windows
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-            helpers.root('src'), // location of your src
-        { }
-      ),
-      new TypedocWebpackPlugin({
-          name: 'HostMyDocs',
-          target: 'es6',
-          mode: 'file',
-          out: helpers.root('dist/docs')
-      }, helpers.root('src'))
+            helpers.root('src'), {}
+        ),
+        new TypedocWebpackPlugin({
+            name: 'HostMyDocs',
+            target: 'es6',
+            mode: 'file',
+            exclude: helpers.root('src/**/*.spec.ts'),
+            out: helpers.root('dist/docs')
+        }, helpers.root('src/ts'))
     ]
 };

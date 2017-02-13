@@ -7,9 +7,16 @@ sudo: required
 services:
     - docker
 
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
 script:
-    - cd FrontEnd
+    - cd BackEnd
+    - docker run -v "`pwd`:/home/builder/" tracesoftware/gitlab-builder:php7-cli /bin/sh -c "mkdir -p $ARCHIVE_PATH $DOCS_PATH; chmod -R 777 $DATA_PATH; composer update; composer test"
+    - cd ../FrontEnd
     - yarn
+    - yarn test
     - yarn build:prod
     - cd ..
 

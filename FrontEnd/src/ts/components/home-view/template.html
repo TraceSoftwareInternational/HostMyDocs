@@ -1,0 +1,22 @@
+<div class="main-container">
+    <header class="header header-1">
+        <div class="branding">
+            <a href="">
+                <clr-icon class="is-inverse" shape="directory"></clr-icon>
+                <span class="title">HostMyDocs</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="content-container">
+        <div class="content-area">
+            <documentation-viewer [indexFile]="indexFileToDisplay"></documentation-viewer>
+        </div>
+
+        <nav class="sidenav">
+            <section class="sidenav-content">
+                <project-tree (onProjectSelection)="openDocumentation($event)"></project-tree>
+            </section>
+        </nav>
+    </div>
+</div>

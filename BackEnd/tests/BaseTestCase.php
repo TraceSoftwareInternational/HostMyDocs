@@ -36,17 +36,22 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
      * @param string $requestUri the request URI
      * @param array|object|null $requestData the request data
      * @param null|UploadedFile[] $files files uploaded in the request
+     * @param null|string $credential HTTP Authentication credential (by example : "user:password")
      * @return Response
      */
-    public function runApp($requestMethod, $requestUri, $requestData = null, $files = null)
+    public function runApp($requestMethod, $requestUri, $requestData = null, $files = null, $credential = null)
     {
+        $baseEnvironment = [
+            'REQUEST_METHOD' => $requestMethod,
+            'REQUEST_URI' => $requestUri
+        ];
+
+        if ($credential !== null) {
+            $baseEnvironment['HTTP_AUTHORIZATION'] =  'Basic '.base64_encode($credential);
+        }
+
         // Create a mock environment for testing with
-        $environment = Environment::mock(
-            [
-                'REQUEST_METHOD' => $requestMethod,
-                'REQUEST_URI' => $requestUri
-            ]
-        );
+        $environment = Environment::mock($baseEnvironment);
         // Set up a request object based on the environment
         $request = Request::createFromEnvironment($environment);
         // Add request data, if it exists
@@ -62,6 +67,8 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         $settings = require __DIR__ . '/../src/settings.php';
         // Instantiate the application
         $slim = new App($settings);
+        // Registering application's middlewares
+        require __DIR__ . '/../src/middleware.php';
         // Register routes
         require __DIR__ . '/../src/routes.php';
         // Process the application

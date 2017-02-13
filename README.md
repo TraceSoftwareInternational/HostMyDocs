@@ -11,16 +11,18 @@ Small web application to quickly access all your documentation !
 
 ## Getting Started
 
-1) Launch the application and it's server with `docker run -p 8080:80 tracesoftware/hostmydocs`.
+1) Launch the application and it's server with `docker run -e CREDENTIALS=user:password -p 8080:80 tracesoftware/hostmydocs`.
 
 2) Put all the documentation files and the `index.html` file into a folder
 
 3) Zip that folder !
 
 4) Now upload it with cURL by example :
+
 ``` bash
 curl --request POST \
 --url http://localhost:8080/BackEnd/projects \
+--header 'authorization: Basic dXNlcjpwYXNzd29yZA==' \
 --header 'content-type: multipart/form-data; boundary=---011000010111000001101001' \
 --form name=DocumentationName \
 --form version=0.1.0 \

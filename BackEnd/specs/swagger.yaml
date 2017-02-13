@@ -8,7 +8,7 @@ info:
 basePath: /BackEnd
 
 paths:
-  /projects:
+  /listProjects:
     get:
       operationId: listProjects
       description: Returns all the versions from all the languages from all the projects.
@@ -19,9 +19,13 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Project'
+
+  /addProject:
     post:
       operationId: addProject
       description: Add a given version of a project to the database
+      security:
+        - basicAuth: []
       parameters:
         - name: name
           type: string
@@ -48,7 +52,13 @@ paths:
           description: project was added successfully
         400:
           description: one or more parameters are invalid
+        401:
+          description: provided password is wrong
 
+securityDefinitions:
+  basicAuth:
+    type: basic
+    description: HTTP Basic Authentication. Works on `HTTPS` only
 
 definitions:
   Project:

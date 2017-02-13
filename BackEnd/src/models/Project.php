@@ -4,7 +4,6 @@ namespace HostMyDocs\Models;
 
 use vierbergenlars\SemVer\version as Semver;
 
-
 class Project implements \JsonSerializable
 {
     /**

@@ -9,7 +9,6 @@ $slim->get('/', function (Request $request, Response $response) {
     return $response->write('What did you expect ?');
 });
 
-$slim->group('/projects', function () {
-    $this->get('', ListProjects::class);
-    $this->post('', AddProject::class);
-});
+
+$slim->get('/listProjects', ListProjects::class);
+$slim->post('/addProject', AddProject::class);

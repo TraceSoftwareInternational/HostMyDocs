@@ -27,7 +27,8 @@ class ListProjects extends BaseController
     {
         try {
             $this->listProjects();
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return $response->withJson($this->projects);
     }

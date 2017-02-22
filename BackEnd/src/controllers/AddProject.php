@@ -50,10 +50,21 @@ class AddProject extends BaseController
      */
     public function __invoke(Request $request, Response $response)
     {
-        $this->name     = $request->getParam('name');
-        $this->version  = $request->getParam('version');
-        $this->language = $request->getParam('language');
-        $this->files    = $request->getUploadedFiles();
+        $requestParams = $request->getParsedBody();
+
+        if (array_key_exists('name', $requestParams)) {
+            $this->name = $requestParams['name'];
+        }
+
+        if (array_key_exists('version', $requestParams)) {
+            $this->version = $requestParams['version'];
+        }
+
+        if (array_key_exists('language', $requestParams)) {
+            $this->language = $requestParams['language'];
+        }
+
+        $this->files = $request->getUploadedFiles();
 
         if ($this->checkParams() === false) {
             if ($this->errorMessage !== null) {

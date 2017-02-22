@@ -1,9 +1,29 @@
 <div class="main-container">
     <header class="header header-1">
         <div class="branding">
-            <a href="">
+            <a class="clickable-element">
                 <clr-icon class="is-inverse" shape="directory"></clr-icon>
                 <span class="title">HostMyDocs</span>
+            </a>
+        </div>
+        <div class="header-nav">
+            <a ngxClipboard
+                *ngIf="indexFileToDisplay !== undefined"
+                cbContent="{{ getSharingLink() }}"
+                role="tooltip"
+                aria-haspopup="true"
+                class="nav-link nav-icon tooltip tooltip-xs tooltip-bottom-right clickable-element">
+                <clr-icon shape="share"></clr-icon>
+                <span class="tooltip-content">Get link</span>
+            </a>
+            <a *ngIf="downloadLink !== undefined"
+                [attr.href]="downloadLink"
+                role="tooltip"
+                aria-haspopup="true"
+                class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right clickable-element"
+                download>
+                <clr-icon shape="download"></clr-icon>
+                <span class="tooltip-content">Download this documentation</span>
             </a>
         </div>
     </header>
@@ -15,7 +35,12 @@
 
         <nav class="sidenav">
             <section class="sidenav-content">
-                <project-tree (onProjectSelection)="openDocumentation($event)"></project-tree>
+                <project-tree
+                    [project]="currentState.project"
+                    [version]="currentState.version"
+                    [language]="currentState.language"
+                    (onProjectSelection)="openDocumentation($event)">
+                </project-tree>
             </section>
         </nav>
     </div>

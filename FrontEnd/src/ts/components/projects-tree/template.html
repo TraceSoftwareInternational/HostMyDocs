@@ -12,7 +12,7 @@
         <clr-tree-node *ngFor="let version of project.versions">
             {{ version.number }}
             <clr-tree-node *ngFor="let language of version.languages">
-                <a class="clr-treenode-link tree-link" (click)="notifyParent(language.indexPath, language.archivePath)">
+                <a class="clr-treenode-link tree-link" (click)="notifyParent(project, version, language)">
                     {{ language.name }}
                 </a>
             </clr-tree-node>

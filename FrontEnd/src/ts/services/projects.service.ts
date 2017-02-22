@@ -15,7 +15,7 @@ export class ProjectsService {
     /**
      * Url where we will request projects
      */
-    private getProjectsUrl: string = '/BackEnd/projects';
+    private getProjectsUrl: string = '/BackEnd/listProjects';
 
     constructor(private http: Http) {}
 

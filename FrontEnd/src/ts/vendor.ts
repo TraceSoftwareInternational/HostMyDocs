@@ -19,3 +19,5 @@ import 'clarityIconsShapes/social-shapes';
 import 'clarity-ui/clarity-ui.min.css';
 
 import 'clarity-angular';
+
+import 'ngx-clipboard';

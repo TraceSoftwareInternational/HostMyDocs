@@ -13,3 +13,9 @@ export interface JSONProject {
     name: string,
     versions: JSONVersion[]
 }
+
+export interface JSONProjectInfo {
+    project: string,
+    version: string,
+    language: string
+}

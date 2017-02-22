@@ -25,6 +25,7 @@
         "clarity-icons": "^0.8.3",
         "clarity-ui": "^0.8.3",
         "core-js": "^2.4.1",
+        "ngx-clipboard": "^3.0.5",
         "rxjs": "^5.0.2",
         "zone.js": "^0.7.4"
     },

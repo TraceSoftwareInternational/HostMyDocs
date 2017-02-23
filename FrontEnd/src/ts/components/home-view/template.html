@@ -1,15 +1,16 @@
 <div class="main-container">
     <header class="header header-1">
         <div class="branding">
-            <a class="clickable-element">
-                <clr-icon class="is-inverse" shape="directory"></clr-icon>
+            <a class="clickable-element" (click)="toggleSidenav()">
+                <clr-icon class="is-inverse" shape="menu"></clr-icon>
                 <span class="title">HostMyDocs</span>
             </a>
         </div>
         <div class="header-nav">
-            <a ngxClipboard
+            <a #copyButton
+                [attr.data-clipboard-text]="this.downloadLink"
+                id="copyButton"
                 *ngIf="indexFileToDisplay !== undefined"
-                cbContent="{{ getSharingLink() }}"
                 role="tooltip"
                 aria-haspopup="true"
                 class="nav-link nav-icon tooltip tooltip-xs tooltip-bottom-right clickable-element">
@@ -33,7 +34,7 @@
             <documentation-viewer [indexFile]="indexFileToDisplay"></documentation-viewer>
         </div>
 
-        <nav class="sidenav">
+        <nav class="sidenav" [class.hidden]="hideSidenav">
             <section class="sidenav-content">
                 <project-tree
                     [project]="currentState.project"

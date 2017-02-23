@@ -20,4 +20,5 @@ import 'clarity-ui/clarity-ui.min.css';
 
 import 'clarity-angular';
 
+import 'clipboard';
 import 'ngx-clipboard';

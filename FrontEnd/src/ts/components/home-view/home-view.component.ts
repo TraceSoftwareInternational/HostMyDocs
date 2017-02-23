@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
@@ -6,13 +6,17 @@ import { Observable } from 'rxjs/Observable';
 
 import { ProjectInfo } from '../../models/ProjectInfo';
 
+import * as Clipboard from 'clipboard';
+
 @Component({
     selector: 'home-view',
     templateUrl: './template.html',
     styleUrls: ['./styles.sass']
 })
 
-export class HomeView implements OnInit {
+export class HomeView implements OnInit, AfterViewChecked {
+    @ViewChild('copyButton') copyElement: ElementRef;
+
     /**
      * Information about the current documentation (project name, version and language)
      */
@@ -28,6 +32,16 @@ export class HomeView implements OnInit {
      */
     downloadLink: string;
 
+    /**
+     * Helper to hide or show side navigation
+     */
+    hideSidenav = false;
+
+    /**
+     * Clipboard.js instance
+     */
+    clipboard: Clipboard;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -35,19 +49,32 @@ export class HomeView implements OnInit {
     ) {}
 
     /**
-     * Tries to read URL params to set a certain state
+     * Tries to read URL params to set a certain state.
      */
     ngOnInit() {
         this.route.params.subscribe((val) => {
             this.currentState = JSON.parse(JSON.stringify(val), ProjectInfo.reviver);
+
+            if (this.currentState.isValid()) {
+                this.hideSidenav = true;
+            }
         })
     }
 
     /**
-     * Return the full URL that the user will be able to share
+     * Initialize clipboard.js instance
      */
-    getSharingLink(): string {
-        return window.location.href;
+    ngAfterViewChecked() {
+        if (this.clipboard === undefined && this.copyElement !== undefined) {
+            this.clipboard = new Clipboard(`#${this.copyElement.nativeElement.id}`);
+        }
+    }
+
+    /**
+     * Change the state of to boolean that control sidenav visibility
+     */
+    toggleSidenav() {
+        this.hideSidenav = ! this.hideSidenav;
     }
 
     /**

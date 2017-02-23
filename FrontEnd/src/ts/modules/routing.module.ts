@@ -9,6 +9,7 @@ import { HomeView } from '../components/home-view/home-view.component';
 let routes: Routes = [
     { path: 'view', component: HomeView },
     { path: '', redirectTo: '/view', pathMatch: 'full' },
+    { path: '**', redirectTo: '/view' }
 ];
 
 @NgModule({

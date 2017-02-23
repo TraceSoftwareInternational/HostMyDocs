@@ -23,8 +23,8 @@ import { TrustUrl } from '../pipes/TrustUrl.pipe';
         ClipboardModule,
         BrowserModule,
         HttpModule,
-        Routing,
-        ClarityModule.forChild()
+        ClarityModule.forChild(),
+        Routing
     ],
     declarations: [
         AppRoot,

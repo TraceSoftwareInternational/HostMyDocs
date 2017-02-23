@@ -11,10 +11,26 @@ export class ProjectInfo {
     private archiveFile: string
 
     constructor(
-        private project?: string,
-        private version?: string,
-        private language?: string
+        private project: string,
+        private version: string,
+        private language: string
     ) {}
+
+    public isValid() : boolean {
+        if(this.project === undefined) {
+            return false;
+        }
+
+        if (this.version === undefined) {
+            return false;
+        }
+
+        if (this.language === undefined) {
+            return false;
+        }
+
+        return true;
+    }
 
     public getProject() : string {
         return this.project;
@@ -24,15 +40,15 @@ export class ProjectInfo {
         return this.version;
     }
 
-    public getLanguage(): string {
+    public getLanguage() : string {
         return this.language;
     }
 
-    public getArchiveFile(): string {
+    public getArchiveFile() : string {
         return this.archiveFile;
     }
 
-    public getIndexFile(): string {
+    public getIndexFile() : string {
         return this.indexFile;
     }
 

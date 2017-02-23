@@ -121,7 +121,7 @@ class AddProject extends BaseController
             return false;
         }
 
-        if ($this->archive->getClientMediaType() !== 'application/zip') {
+        if (pathinfo($this->archive->getClientFilename(), PATHINFO_EXTENSION) !== 'zip') {
             $this->errorMessage = 'archive is not a zip file';
             return false;
         }

@@ -23,10 +23,10 @@ script:
 after_success:
   - docker login  -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build -t tracesoftware/hostmydocs:latest .
+    docker build -t tracesoftware/hostmydocs:latest . ;
     docker push tracesoftware/hostmydocs:latest;
     fi
   - if [ "$TRAVIS_BRANCH" == "develop" ]; then
-    docker build -t tracesoftware/hostmydocs:dev .
+    docker build -t tracesoftware/hostmydocs:dev . ;
     docker push tracesoftware/hostmydocs:dev;
     fi

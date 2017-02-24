@@ -1,14 +1,13 @@
+import { JSONProjectInfo } from './JsonInterfaces';
+import { Language } from './Language'
+import { Params } from '@angular/router';
 import { Project } from './Project'
 import { Version } from './Version'
-import { Language } from './Language'
-
-import { JSONProjectInfo } from './JsonInterfaces';
-
-import { Params } from '@angular/router';
 
 export class ProjectInfo {
     private indexFile: string
     private archiveFile: string
+    private currentPage: string
 
     constructor(
         private project: string,
@@ -60,6 +59,33 @@ export class ProjectInfo {
         this.indexFile = path;
     }
 
+    public setCurrentPage(path: string) {
+        this.currentPage = path;
+    }
+
+    /**
+     * return a representation of this object in matrix notation
+     */
+    public getMatrixNotation() : string {
+        let str = `project=${this.project};` +
+            `version=${this.version};` + 
+            `language=${this.language};` +
+            `currentPage=${this.currentPage};`;
+        
+        return str;
+    }
+
+    /**
+     * Return the currentPage if it exists or the indexFile
+     */
+    public getBestURL() : string {        
+        if (this.currentPage !== undefined) {
+            return decodeURIComponent(this.currentPage);
+        }
+
+        return this.indexFile;
+    }
+
     /**
      * Create a ProjectInfo object from a JSON object
      */
@@ -76,7 +102,7 @@ export class ProjectInfo {
      * reviver can be passed as the second parameter to JSON.parse
      * to automatically call ProjectInfo.fromJSON on the resulting value.
      */
-    static reviver(key: string, value: any) : any {
+    static reviver(key: string, value: any) : any {       
         return key === "" ? ProjectInfo.fromJSON(value) : value;
     }
 }

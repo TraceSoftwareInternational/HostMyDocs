@@ -1,7 +1,9 @@
+<base href="_blank">
 <iframe
     #frame
     *ngIf="isProjectLoaded"
     [src]="indexFile | trustUrl"
+    (load)="srcWatcher(frame)"
     width="100%"
     height="100%"
     seamless="seamless"

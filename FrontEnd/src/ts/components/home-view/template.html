@@ -8,7 +8,7 @@
         </div>
         <div class="header-nav">
             <a #copyButton
-                [attr.data-clipboard-text]="this.downloadLink"
+                [attr.data-clipboard-text]="this.sharingLink"
                 id="copyButton"
                 *ngIf="indexFileToDisplay !== undefined"
                 role="tooltip"
@@ -31,15 +31,16 @@
 
     <div class="content-container">
         <div class="content-area">
-            <documentation-viewer [indexFile]="indexFileToDisplay"></documentation-viewer>
+            <documentation-viewer 
+                [indexFile]="indexFileToDisplay" 
+                (currentRelativeURL)="setCurrentNavigationPage($event)"
+                (currentLink)="currentLink"></documentation-viewer>
         </div>
 
         <nav class="sidenav" [class.hidden]="hideSidenav">
             <section class="sidenav-content">
                 <project-tree
-                    [project]="currentState.project"
-                    [version]="currentState.version"
-                    [language]="currentState.language"
+                    [existingState]="currentState"
                     (onProjectSelection)="openDocumentation($event)">
                 </project-tree>
             </section>

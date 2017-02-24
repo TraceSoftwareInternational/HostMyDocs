@@ -1,12 +1,11 @@
-import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
-import { Location } from '@angular/common';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-
-import { Observable } from 'rxjs/Observable';
-
-import { ProjectInfo } from '../../models/ProjectInfo';
-
 import * as Clipboard from 'clipboard';
+
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+
+import { Location } from '@angular/common';
+import { Observable } from 'rxjs/Observable';
+import { ProjectInfo } from '../../models/ProjectInfo';
 
 @Component({
     selector: 'home-view',
@@ -28,14 +27,29 @@ export class HomeView implements OnInit, AfterViewChecked {
     indexFileToDisplay: string;
 
     /**
+     * Link to the current page/link in the current documentation
+     */
+    currentLink: string;
+
+    /**
      * Full URL to the archive to download
      */
     downloadLink: string;
 
     /**
+     * Full URL to the current documentation
+     */
+    sharingLink: string;
+
+    /**
      * Helper to hide or show side navigation
      */
     hideSidenav = false;
+
+    /**
+     * Parameters that will be appended to the current URL
+     */
+    urlParams: string
 
     /**
      * Clipboard.js instance
@@ -51,20 +65,22 @@ export class HomeView implements OnInit, AfterViewChecked {
     /**
      * Tries to read URL params to set a certain state.
      */
-    ngOnInit() {
+    ngOnInit() : void {
         this.route.params.subscribe((val) => {
             this.currentState = JSON.parse(JSON.stringify(val), ProjectInfo.reviver);
 
             if (this.currentState.isValid()) {
                 this.hideSidenav = true;
             }
+
+            this.openDocumentation(this.currentState);
         })
     }
 
     /**
      * Initialize clipboard.js instance
      */
-    ngAfterViewChecked() {
+    ngAfterViewChecked() : void {
         if (this.clipboard === undefined && this.copyElement !== undefined) {
             this.clipboard = new Clipboard(`#${this.copyElement.nativeElement.id}`);
         }
@@ -73,8 +89,23 @@ export class HomeView implements OnInit, AfterViewChecked {
     /**
      * Change the state of to boolean that control sidenav visibility
      */
-    toggleSidenav() {
+    toggleSidenav() : void {
         this.hideSidenav = ! this.hideSidenav;
+    }
+
+    /**
+     * Change the current URL using this.urlParams content
+     */
+    updateUrl() : void {
+        this.location.replaceState('/view;' + this.currentState.getMatrixNotation());
+    }
+
+    /**
+     * Update ths.currentState currentUrl and then update URL
+     */
+    setCurrentNavigationPage(url: string) : void {
+        this.currentState.setCurrentPage(encodeURIComponent(url));
+        this.updateUrl();
     }
 
     /**
@@ -83,9 +114,11 @@ export class HomeView implements OnInit, AfterViewChecked {
     openDocumentation(event: ProjectInfo) : void {
         this.currentState = event;
 
-        this.location.replaceState(`/view;project=${event.getProject()};version=${event.getVersion()};language=${event.getLanguage()}`);
+        this.indexFileToDisplay = event.getBestURL();
 
-        this.indexFileToDisplay = event.getIndexFile();
         this.downloadLink = window.location.origin + event.getArchiveFile();
+        this.sharingLink  = window.location.origin + event.getMatrixNotation();
+
+        this.updateUrl();
     }
 }

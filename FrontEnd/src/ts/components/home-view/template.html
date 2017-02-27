@@ -1,8 +1,8 @@
 <div class="main-container">
     <header class="header header-1">
         <div class="branding">
-            <a class="clickable-element" (click)="toggleSidenav()">
-                <clr-icon class="is-inverse" shape="menu"></clr-icon>
+            <a class="clickable-element">
+                <clr-icon class="is-inverse" shape="menu" (click)="toggleSidenav()"></clr-icon>
                 <span class="title">HostMyDocs</span>
             </a>
         </div>
@@ -31,8 +31,8 @@
 
     <div class="content-container">
         <div class="content-area">
-            <documentation-viewer 
-                [indexFile]="indexFileToDisplay" 
+            <documentation-viewer
+                [indexFile]="indexFileToDisplay"
                 (currentRelativeURL)="setCurrentNavigationPage($event)"
                 (currentLink)="currentLink"></documentation-viewer>
         </div>

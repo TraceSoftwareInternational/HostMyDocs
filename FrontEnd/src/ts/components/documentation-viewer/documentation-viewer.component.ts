@@ -17,7 +17,7 @@ export class DocumentationViewer implements OnChanges {
     /**
      * Full path to the documentation to preview
      */
-    @Input() indexFile = '';
+    @Input() indexFile: string;
 
     /**
      * Representation of to the iframe DOM node
@@ -37,9 +37,7 @@ export class DocumentationViewer implements OnChanges {
     /**
      * watching changes to reflect on this.indexFile
      */
-    ngOnChanges(changes: {
-        [propKey: string]: SimpleChange
-    }) {
+    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         for (let propName in changes) {
             let changedProp = changes[propName];
 
@@ -52,7 +50,7 @@ export class DocumentationViewer implements OnChanges {
 
     srcWatcher(iframe) {
         let fullUrl = iframe.contentWindow.location.href;
-        let relativeUrl = fullUrl.replace(iframe.contentWindow.location.origin, '');        
+        let relativeUrl = fullUrl.replace(iframe.contentWindow.location.origin, '');
 
         if(relativeUrl !== undefined) {
             this.currentRelativeURL.emit(relativeUrl);

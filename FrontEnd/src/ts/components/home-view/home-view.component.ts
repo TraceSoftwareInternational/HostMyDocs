@@ -27,11 +27,6 @@ export class HomeView implements OnInit, AfterViewChecked {
     indexFileToDisplay: string;
 
     /**
-     * Link to the current page/link in the current documentation
-     */
-    currentLink: string;
-
-    /**
      * Full URL to the archive to download
      */
     downloadLink: string;
@@ -71,9 +66,8 @@ export class HomeView implements OnInit, AfterViewChecked {
 
             if (this.currentState.isValid()) {
                 this.hideSidenav = true;
+                this.openDocumentation(this.currentState);
             }
-
-            this.openDocumentation(this.currentState);
         })
     }
 
@@ -94,18 +88,22 @@ export class HomeView implements OnInit, AfterViewChecked {
     }
 
     /**
-     * Change the current URL using this.urlParams content
+     * Change the current URL using this.urlParams content.
      */
-    updateUrl() : void {
-        this.location.replaceState('/view;' + this.currentState.getMatrixNotation());
+    updateUrlBar() : void {
+        this.location.replaceState('/view' + this.currentState.getMatrixNotation());
     }
 
     /**
-     * Update ths.currentState currentUrl and then update URL
+     * Update this.currentState and this.sharingURL
      */
     setCurrentNavigationPage(url: string) : void {
-        this.currentState.setCurrentPage(encodeURIComponent(url));
-        this.updateUrl();
+        this.currentState.setCurrentPage(url);
+
+        this.updateUrlBar();
+
+        this.downloadLink = window.location.origin + this.currentState.getArchiveFile();
+        this.sharingLink  = window.location.origin + '/#/view' + this.currentState.getMatrixNotation();
     }
 
     /**
@@ -114,11 +112,8 @@ export class HomeView implements OnInit, AfterViewChecked {
     openDocumentation(event: ProjectInfo) : void {
         this.currentState = event;
 
-        this.indexFileToDisplay = event.getBestURL();
+        this.indexFileToDisplay = this.currentState.getBestURL();
 
-        this.downloadLink = window.location.origin + event.getArchiveFile();
-        this.sharingLink  = window.location.origin + event.getMatrixNotation();
-
-        this.updateUrl();
+        this.updateUrlBar();
     }
 }

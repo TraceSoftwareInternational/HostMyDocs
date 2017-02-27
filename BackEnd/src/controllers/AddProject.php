@@ -102,6 +102,11 @@ class AddProject extends BaseController
             return false;
         }
 
+        if (strpos($this->name, '/') !== false) {
+            $this->errorMessage = 'name cannot contains slashes';
+            return false;
+        }
+
         try {
             new version($this->version);
         } catch (\Exception $e) {
@@ -111,6 +116,11 @@ class AddProject extends BaseController
 
         if ($this->language === null) {
             $this->errorMessage = 'language is empty';
+            return false;
+        }
+
+        if (strpos($this->language, '/') !== false) {
+            $this->errorMessage = 'language cannot contains slashes';
             return false;
         }
 
@@ -168,8 +178,8 @@ class AddProject extends BaseController
 
         $destinationPath = implode('/', $destination);
 
-        if ($destinationPath !== filter_var($destinationPath, FILTER_SANITIZE_URL)) {
-            $this->errorMessage = 'request contains invalid characters';
+        if (filter_var($destinationPath, FILTER_SANITIZE_URL) === false) {
+            $this->errorMessage = 'extract path contains invalid characters';
             return false;
         }
 

@@ -7,7 +7,9 @@ import { HomeView } from '../components/home-view/home-view.component';
  * Declaring all the application routes in one place
  */
 let routes: Routes = [
-    { path: '', component: HomeView }
+    { path: 'view', component: HomeView },
+    { path: '', redirectTo: '/view', pathMatch: 'full' },
+    { path: '**', redirectTo: '/view' }
 ];
 
 @NgModule({

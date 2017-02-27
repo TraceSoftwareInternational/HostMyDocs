@@ -1,2 +1,12 @@
-<iframe #frame *ngIf="isProjectLoaded" width="100%" height="100%" seamless="seamless" [src]="indexFile | trustUrl"></iframe>
+<base href="_blank">
+<iframe
+    #frame
+    *ngIf="isProjectLoaded"
+    [src]="indexFile | trustUrl"
+    (load)="srcWatcher(frame)"
+    width="100%"
+    height="100%"
+    seamless="seamless"
+    frameBorder="0">
+</iframe>
 <h1 *ngIf="isProjectLoaded === false">No project loaded</h1>

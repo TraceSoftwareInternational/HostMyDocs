@@ -7,7 +7,7 @@
 
 Small web application to quickly access all your documentation !
 
-![Screenshot of HostMyDocs](http://i.imgur.com/uAVV722.png)
+![Screenshot of HostMyDocs](http://i.imgur.com/mpqVKrG.png)
 
 ## Getting Started
 
@@ -21,13 +21,14 @@ Small web application to quickly access all your documentation !
 
 ``` bash
 curl --request POST \
---url http://localhost:8080/BackEnd/projects \
---header 'authorization: Basic dXNlcjpwYXNzd29yZA==' \
---header 'content-type: multipart/form-data; boundary=---011000010111000001101001' \
---form name=DocumentationName \
---form version=0.1.0 \
---form language=YourProgrammingLanguage \
---form archive=@/path/to/your/file.zip
+  --url http://localhost:8080/BackEnd/addProject \
+  --user user:password \
+  --header 'content-type: multipart/form-data;authorization: Basic dXNlcjpwYXNzd29yZA==' \
+  --header 'boundary=---011000010111000001101001' \
+  -F "name=DocumentationName" \
+  -F "version=1.0.0" \
+  -F "language=YourProgrammingLanguage" \
+  -F "archive=@YourZipFile.zip;type=application/zip"
 ```
 
 5) Open [http://localhost:8080](http://localhost:8080) to see your uploaded docs !

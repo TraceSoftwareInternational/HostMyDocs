@@ -1,21 +1,48 @@
 <div class="main-container">
     <header class="header header-1">
         <div class="branding">
-            <a href="">
-                <clr-icon class="is-inverse" shape="directory"></clr-icon>
+            <a class="clickable-element" (click)="toggleSidenav()">
+                <clr-icon class="is-inverse" shape="menu"></clr-icon>
                 <span class="title">HostMyDocs</span>
+            </a>
+        </div>
+        <div class="header-nav">
+            <a #copyButton
+                [attr.data-clipboard-text]="this.sharingLink"
+                id="copyButton"
+                *ngIf="indexFileToDisplay !== undefined"
+                role="tooltip"
+                aria-haspopup="true"
+                class="nav-link nav-icon tooltip tooltip-xs tooltip-bottom-right clickable-element">
+                <clr-icon shape="share"></clr-icon>
+                <span class="tooltip-content">Get link</span>
+            </a>
+            <a *ngIf="downloadLink !== undefined"
+                [attr.href]="downloadLink"
+                role="tooltip"
+                aria-haspopup="true"
+                class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right clickable-element"
+                download>
+                <clr-icon shape="download"></clr-icon>
+                <span class="tooltip-content">Download this documentation</span>
             </a>
         </div>
     </header>
 
     <div class="content-container">
         <div class="content-area">
-            <documentation-viewer [indexFile]="indexFileToDisplay"></documentation-viewer>
+            <documentation-viewer 
+                [indexFile]="indexFileToDisplay" 
+                (currentRelativeURL)="setCurrentNavigationPage($event)"
+                (currentLink)="currentLink"></documentation-viewer>
         </div>
 
-        <nav class="sidenav">
+        <nav class="sidenav" [class.hidden]="hideSidenav">
             <section class="sidenav-content">
-                <project-tree (onProjectSelection)="openDocumentation($event)"></project-tree>
+                <project-tree
+                    [existingState]="currentState"
+                    (onProjectSelection)="openDocumentation($event)">
+                </project-tree>
             </section>
         </nav>
     </div>

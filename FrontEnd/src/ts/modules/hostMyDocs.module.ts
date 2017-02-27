@@ -4,6 +4,8 @@ import { HttpModule }    from '@angular/http';
 
 import { ClarityModule } from 'clarity-angular';
 
+import { ClipboardModule } from 'ngx-clipboard';
+
 import { Routing } from '../modules/routing.module';
 
 import { AppRoot }             from '../components/app-root/index';
@@ -18,10 +20,11 @@ import { TrustUrl } from '../pipes/TrustUrl.pipe';
  */
 @NgModule({
     imports: [
+        ClipboardModule,
         BrowserModule,
         HttpModule,
-        Routing,
-        ClarityModule.forChild()
+        ClarityModule.forChild(),
+        Routing
     ],
     declarations: [
         AppRoot,

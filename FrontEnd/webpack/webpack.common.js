@@ -7,11 +7,12 @@ const { CheckerPlugin }    = require('awesome-typescript-loader');
 const ExtractTextPlugin    = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin    = require('html-webpack-plugin');
 const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
+const CommonsChunkPlugin   = require('webpack/lib/optimize/CommonsChunkPlugin');
+
 
 module.exports = {
     entry: {
         polyfills: helpers.root('src/ts/polyfills.ts'),
-        vendor: helpers.root('src/ts/vendor.ts'),
         main: helpers.root('src/ts/main.ts')
     },
     output: {
@@ -59,8 +60,18 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            names: ['main', 'vendor', 'polyfills']
+        new CommonsChunkPlugin({
+            name: 'polyfills',
+            chunks: ['polyfills']
+        }),
+        // This enables tree shaking of the vendor modules
+        new CommonsChunkPlugin({
+            name: 'vendor',
+            chunks: ['main'],
+            minChunks: module => /node_modules/.test(module.resource)
+        }),
+        new CommonsChunkPlugin({
+            name: ['polyfills', 'vendor'].reverse()
         }),
         // extracting the CSS in it's own file
         new ExtractTextPlugin('css/[chunkhash].[name].css'),

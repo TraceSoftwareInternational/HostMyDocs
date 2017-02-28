@@ -4,12 +4,14 @@ var commonConfig = require('./webpack.common.js');
 var helpers = require('./helpers');
 
 const OptimizeJsPlugin = require('optimize-js-plugin');
+const SriPlugin = require('webpack-subresource-integrity');
 
 module.exports = webpackMerge(commonConfig, {
     output: {
         path: helpers.root('dist'),
         publicPath: '/',
         filename: '[name].[hash].js',
+        crossOriginLoading: 'anonymous'
     },
 
     plugins: [
@@ -22,6 +24,9 @@ module.exports = webpackMerge(commonConfig, {
             mangle: {
                 keep_fnames: true
             }
+        }),
+        new SriPlugin({
+            hashFuncNames: ['sha384']
         })
     ]
 });

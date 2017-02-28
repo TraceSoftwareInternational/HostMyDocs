@@ -59,6 +59,7 @@
         "typedoc-webpack-plugin": "^1.1.3",
         "typescript": "^2.1.4",
         "webpack": "beta",
-        "webpack-merge": "^2.0.0"
+        "webpack-merge": "^2.0.0",
+        "webpack-subresource-integrity": "^0.8.2"
     }
 }

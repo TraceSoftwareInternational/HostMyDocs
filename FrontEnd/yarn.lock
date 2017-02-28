@@ -3904,7 +3904,7 @@ source-map@^0.1.41:
   dependencies:
     amdefine ">=0.0.4"
 
-source-map@^0.4.4:
+source-map@^0.4.4, source-map@~0.4.1:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.4.4.tgz#eba4f5da9c0dc999de68032d8b4f76173652036b"
   dependencies:
@@ -4350,6 +4350,13 @@ watchpack@^1.2.0:
     chokidar "^1.4.3"
     graceful-fs "^4.1.2"
 
+webpack-core@^0.6.8:
+  version "0.6.9"
+  resolved "https://registry.yarnpkg.com/webpack-core/-/webpack-core-0.6.9.tgz#fc571588c8558da77be9efb6debdc5a3b172bdc2"
+  dependencies:
+    source-list-map "~0.1.7"
+    source-map "~0.4.1"
+
 webpack-dev-middleware@^1.0.11:
   version "1.10.1"
   resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-1.10.1.tgz#c6b4cf428139cf1aefbe06a0c00fdb4f8da2f893"
@@ -4371,6 +4378,12 @@ webpack-sources@^0.1.0, webpack-sources@^0.1.2, webpack-sources@^0.1.4:
   dependencies:
     source-list-map "~0.1.7"
     source-map "~0.5.3"
+
+webpack-subresource-integrity@^0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/webpack-subresource-integrity/-/webpack-subresource-integrity-0.8.2.tgz#3f73f0513c8060c059c8691b79400bc5fe961fcf"
+  dependencies:
+    webpack-core "^0.6.8"
 
 webpack@beta:
   version "2.2.0"

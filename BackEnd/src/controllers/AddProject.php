@@ -184,8 +184,7 @@ class AddProject extends BaseController
         }
 
         if (file_exists($destinationPath)) {
-            $this->errorMessage =  'this project have been already uploaded';
-            return false;
+            $this->recursiveDirectoryDeletion($destinationPath);
         }
 
         if (mkdir($destinationPath, 0755, true) === false) {
@@ -235,5 +234,19 @@ class AddProject extends BaseController
         }
 
         return true;
+    }
+
+    /**
+     * Delete a folder and all its folders and files
+     *
+     * @param $path string directory to completely delete
+     */
+    private function recursiveDirectoryDeletion($path) : void {
+        $files = glob($path . '/*');
+
+        foreach ($files as $file) {
+            is_dir($file) ? $this->recursiveDirectoryDeletion($file) : unlink($file);
+        }
+        rmdir($path);
     }
 }

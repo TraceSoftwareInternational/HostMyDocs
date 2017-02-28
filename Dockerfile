@@ -10,6 +10,7 @@ COPY FrontEnd/dist /var/www/html/
 
 RUN mkdir -p /var/www/html/data && \
     chmod -R 755 /var/www/html && \
-    chown -R www-data:www-data /var/www/html
+    chown -R www-data:www-data /var/www/html && \
+    ln -s /var/www/html/data /
 
-VOLUME /var/www/html/data
+VOLUME /data

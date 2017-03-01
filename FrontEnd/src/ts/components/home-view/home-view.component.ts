@@ -1,7 +1,7 @@
 import * as Clipboard from 'clipboard';
 
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
@@ -13,9 +13,7 @@ import { ProjectInfo } from '../../models/ProjectInfo';
     styleUrls: ['./styles.sass']
 })
 
-export class HomeView implements OnInit, AfterViewChecked {
-    @ViewChild('copyButton') copyElement: ElementRef;
-
+export class HomeView implements OnInit {
     /**
      * Information about the current documentation (project name, version and language)
      */
@@ -32,9 +30,14 @@ export class HomeView implements OnInit, AfterViewChecked {
     downloadLink: string;
 
     /**
-     * Full URL to the current documentation
+     * Full URL to the current documentation embedded in HostMyDocs
      */
-    sharingLink: string;
+    embeddedSharingLink: string;
+
+    /**
+     * Full URL to the current documentation without HostMyDocs
+     */
+    standaloneSharingLink: string;
 
     /**
      * Helper to hide or show side navigation
@@ -45,11 +48,6 @@ export class HomeView implements OnInit, AfterViewChecked {
      * Parameters that will be appended to the current URL
      */
     urlParams: string
-
-    /**
-     * Clipboard.js instance
-     */
-    clipboard: Clipboard;
 
     constructor(
         private route: ActivatedRoute,
@@ -69,15 +67,6 @@ export class HomeView implements OnInit, AfterViewChecked {
                 this.openDocumentation(this.currentState);
             }
         })
-    }
-
-    /**
-     * Initialize clipboard.js instance
-     */
-    ngAfterViewChecked() : void {
-        if (this.clipboard === undefined && this.copyElement !== undefined) {
-            this.clipboard = new Clipboard(`#${this.copyElement.nativeElement.id}`);
-        }
     }
 
     /**
@@ -103,7 +92,8 @@ export class HomeView implements OnInit, AfterViewChecked {
         this.updateUrlBar();
 
         this.downloadLink = window.location.origin + this.currentState.getArchiveFile();
-        this.sharingLink  = window.location.origin + '/#/view' + this.currentState.getMatrixNotation();
+        this.embeddedSharingLink  = window.location.origin + '/#/view' + this.currentState.getMatrixNotation();
+        this.standaloneSharingLink = window.location.origin + this.currentState.getBestURL();
     }
 
     /**

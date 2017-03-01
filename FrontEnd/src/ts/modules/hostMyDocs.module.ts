@@ -13,6 +13,8 @@ import { DocumentationViewer } from '../components/documentation-viewer/document
 import { HomeView }            from '../components/home-view/home-view.component';
 import { ProjectsTree }        from '../components/projects-tree/project-tree.component';
 
+import { TsiClipboard } from '../directives/tsiClipboard.directive';
+
 import { TrustUrl } from '../pipes/TrustUrl.pipe';
 
 /**
@@ -31,6 +33,7 @@ import { TrustUrl } from '../pipes/TrustUrl.pipe';
         DocumentationViewer,
         ProjectsTree,
         HomeView,
+        TsiClipboard,
         TrustUrl
     ],
     bootstrap: [AppRoot]

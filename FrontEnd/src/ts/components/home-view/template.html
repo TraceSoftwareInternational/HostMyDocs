@@ -7,16 +7,33 @@
             </a>
         </div>
         <div class="header-nav">
-            <a #copyButton
-                [attr.data-clipboard-text]="this.sharingLink"
-                id="copyButton"
-                *ngIf="indexFileToDisplay !== undefined"
-                role="tooltip"
-                aria-haspopup="true"
-                class="nav-link nav-icon tooltip tooltip-xs tooltip-bottom-right clickable-element">
-                <clr-icon shape="share"></clr-icon>
-                <span class="tooltip-content">Get link</span>
-            </a>
+            <clr-dropdown *ngIf="indexFileToDisplay !== undefined">
+                <a #copyButton
+                    clrDropdownToggle
+                    [attr.data-clipboard-text]="this.sharingLink"
+                    role="tooltip"
+                    aria-haspopup="true"
+                    class="nav-link nav-icon tooltip tooltip-xs tooltip-bottom-right dropdown clickable-element">
+                    <clr-icon shape="share"></clr-icon>
+                </a>
+                <div class="dropdown-menu">
+                    <p
+                        clrDropdownItem
+                        tsiClipboard
+                        id="embeddedCopy"
+                        [attr.data-clipboard-text]="this.embeddedSharingLink">
+                        Embedded documentation
+                    </p>
+                    <p
+                        clrDropdownItem
+                        id="standaloneCopy"
+                        tsiClipboard
+                        [attr.data-clipboard-text]="this.standaloneSharingLink"
+                        #standaloneCopy>
+                        Standalone documentation
+                    </p>
+                </div>
+            </clr-dropdown>
             <a *ngIf="downloadLink !== undefined"
                 [attr.href]="downloadLink"
                 role="tooltip"

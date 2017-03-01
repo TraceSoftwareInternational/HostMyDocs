@@ -1,0 +1,12 @@
+[Unit]
+Description=Documentation hosting server
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a hostmysdocs-service
+ExecStop=/usr/bin/docker stop -t 2 hostmysdocs-service
+
+[Install]
+WantedBy=default.target

@@ -36,3 +36,8 @@ curl --request POST \
 ## BackEnd API
 
 You can visualize it [in the Swagger editor](http://editor.swagger.io/#/?import=https://cdn.rawgit.com/TraceSoftwareInternational/HostMyDocs/master/BackEnd/specs/swagger.yaml)
+
+
+## Deploy in prod
+
+You can deploy this tools in production with the script `System/install.sh`.

@@ -48,6 +48,11 @@ export class HomeView implements OnInit {
      */
     urlParams: string
 
+    /**
+     * Shape of the clrIcon that triggers dropdown of copy actions
+     */
+    copyIconShape = 'share';
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -93,6 +98,24 @@ export class HomeView implements OnInit {
         this.downloadLink = window.location.origin + this.currentState.getArchiveFile();
         this.embeddedSharingLink  = window.location.origin + '/#/view' + this.currentState.getMatrixNotation();
         this.standaloneSharingLink = window.location.origin + this.currentState.getBestURL();
+    }
+
+    /**
+     * Change the shape of the copy icon on success or error
+     * Function to be a callback of the TsiClipboard
+     */
+    afterClipboardAction(status: boolean) {
+        console.log('status', status);
+
+        let originalValue = this.copyIconShape;
+
+        if (status) {
+            this.copyIconShape = 'success';
+        } else {
+            this.copyIconShape = 'error';
+        }
+
+        setTimeout(() => this.copyIconShape = originalValue, 1000);
     }
 
     /**

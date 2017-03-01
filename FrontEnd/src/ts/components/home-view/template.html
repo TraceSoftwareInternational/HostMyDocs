@@ -11,12 +11,14 @@
                 <a #copyButton
                     clrDropdownToggle
                     class="nav-link nav-icon dropdown clickable-element">
-                    <clr-icon shape="share"></clr-icon>
+                    <clr-icon [attr.shape]="copyIconShape"></clr-icon>
                 </a>
                 <div class="dropdown-menu">
                     <p
                         clrDropdownItem
                         tsiClipboard
+                        (onSuccess)="afterClipboardAction($event)"
+                        (onError)="afterClipboardAction($event)"
                         id="embeddedCopy"
                         [attr.data-clipboard-text]="this.embeddedSharingLink">
                         Embedded documentation
@@ -24,6 +26,8 @@
                     <p
                         clrDropdownItem
                         tsiClipboard
+                        (onSuccess)="afterClipboardAction($event)"
+                        (onError)="afterClipboardAction($event)"
                         id="standaloneCopy"
                         [attr.data-clipboard-text]="this.standaloneSharingLink">
                         Standalone documentation

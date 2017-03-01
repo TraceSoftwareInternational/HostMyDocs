@@ -24,7 +24,15 @@ export class ProjectsTree implements OnInit {
      */
     @Output() onProjectSelection = new EventEmitter<ProjectInfo>();
 
-    private projects: Array<Project> = [];
+    /**
+     * Parameter for the tree filter pipe
+     */
+    filterText = '';
+
+    /**
+     * All projects sent by the server
+     */
+    projects: Array<Project> = [];
 
     constructor(private projectsService: ProjectsService) {}
 

@@ -12,7 +12,6 @@ import { ProjectInfo } from '../../models/ProjectInfo';
     templateUrl: './template.html',
     styleUrls: ['./styles.sass']
 })
-
 export class HomeView implements OnInit {
     /**
      * Information about the current documentation (project name, version and language)

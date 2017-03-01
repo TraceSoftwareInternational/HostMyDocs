@@ -10,10 +10,7 @@
             <clr-dropdown *ngIf="indexFileToDisplay !== undefined">
                 <a #copyButton
                     clrDropdownToggle
-                    [attr.data-clipboard-text]="this.sharingLink"
-                    role="tooltip"
-                    aria-haspopup="true"
-                    class="nav-link nav-icon tooltip tooltip-xs tooltip-bottom-right dropdown clickable-element">
+                    class="nav-link nav-icon dropdown clickable-element">
                     <clr-icon shape="share"></clr-icon>
                 </a>
                 <div class="dropdown-menu">
@@ -26,10 +23,9 @@
                     </p>
                     <p
                         clrDropdownItem
-                        id="standaloneCopy"
                         tsiClipboard
-                        [attr.data-clipboard-text]="this.standaloneSharingLink"
-                        #standaloneCopy>
+                        id="standaloneCopy"
+                        [attr.data-clipboard-text]="this.standaloneSharingLink">
                         Standalone documentation
                     </p>
                 </div>

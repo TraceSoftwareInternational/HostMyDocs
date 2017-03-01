@@ -1,5 +1,6 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
 
 import { ClarityModule } from 'clarity-angular';
@@ -15,6 +16,7 @@ import { ProjectsTree }        from '../components/projects-tree/project-tree.co
 
 import { TsiClipboard } from '../directives/tsiClipboard.directive';
 
+import { FilterProjects } from '../pipes/FilterProjects.pipe';
 import { TrustUrl } from '../pipes/TrustUrl.pipe';
 
 /**
@@ -22,15 +24,17 @@ import { TrustUrl } from '../pipes/TrustUrl.pipe';
  */
 @NgModule({
     imports: [
-        ClipboardModule,
         BrowserModule,
+        ClipboardModule,
+        FormsModule,
         HttpModule,
+        Routing,
         ClarityModule.forChild(),
-        Routing
     ],
     declarations: [
         AppRoot,
         DocumentationViewer,
+        FilterProjects,
         ProjectsTree,
         HomeView,
         TsiClipboard,

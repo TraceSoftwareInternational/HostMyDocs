@@ -5,8 +5,8 @@ After=docker.service
 
 [Service]
 Restart=always
-ExecStart=/usr/bin/docker start -a hostmysdocs-service
-ExecStop=/usr/bin/docker stop -t 2 hostmysdocs-service
+ExecStart=/usr/bin/docker start -a hostmydocs-service
+ExecStop=/usr/bin/docker stop -t 2 hostmydocs-service
 
 [Install]
 WantedBy=default.target

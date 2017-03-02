@@ -7,7 +7,7 @@
 
 Small web application to quickly access all your documentation !
 
-![Screenshot of HostMyDocs](http://i.imgur.com/mpqVKrG.png)
+![Screenshot of HostMyDocs](http://i.imgur.com/FBu4RL4.png)
 
 ## Getting Started
 

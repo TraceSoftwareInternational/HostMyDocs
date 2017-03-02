@@ -88,7 +88,7 @@ export class ProjectInfo {
      */
     public getBestURL() : string {
         if (this.currentPage !== undefined) {
-            return decodeURIComponent(this.currentPage);
+            return this.currentPage;
         }
 
         return this.indexFile;
@@ -102,13 +102,14 @@ export class ProjectInfo {
             return JSON.parse(json, ProjectInfo.reviver)
         } else {
             let projectInfo = Object.create(ProjectInfo.prototype)
-            return Object.assign(projectInfo, json, {
-                currentPage: () => {
-                    if (json.currentPage !== undefined) {
-                        decodeURIComponent(json.currentPage)
-                    }
-                }
+
+            let newProjectInfo = Object.assign(projectInfo, json, {
+                currentPage: decodeURIComponent(json.currentPage)
             });
+
+            if (newProjectInfo.isValid()) {
+                return newProjectInfo;
+            }
         }
     }
 

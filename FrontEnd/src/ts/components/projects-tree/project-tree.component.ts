@@ -34,7 +34,6 @@ export class ProjectsTree implements OnInit {
 
     /**
      * Fetch projects from BackEnd at component initialization.
-     * Also tries to restore a certain state provided by project, version and language
      */
     ngOnInit(): void {
         this.projectsService.getProjects().subscribe(

@@ -50,7 +50,7 @@
             <h1 *ngIf="isProjectSelected === false && loadingError === false">No project loaded</h1>
             <h1 *ngIf="loadingError">Project cannot be loaded</h1>
 
-            <iframe  #frame
+            <iframe #frame
                 *ngIf="isProjectSelected"
                 [src]="urlToDisplay | trustUrl"
                 (load)="iframeSrcWatcher(frame)"

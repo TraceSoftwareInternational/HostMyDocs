@@ -13,7 +13,7 @@ export class ProjectInfo {
         private project: string,
         private version: string,
         private language: string
-    ) {}
+    ) { }
 
     public isValid() : boolean {
         if(this.project === undefined) {
@@ -26,6 +26,10 @@ export class ProjectInfo {
 
         if (this.language === undefined) {
             return false;
+        }
+
+        if(this.indexFile === undefined || this.currentPage === undefined) {
+            return true;
         }
 
         return true;
@@ -51,6 +55,10 @@ export class ProjectInfo {
         return this.indexFile;
     }
 
+    public getCurrentPage() : string {
+        return this.currentPage;
+    }
+
     public setArchiveFile(path: string) {
         this.archiveFile = path;
     }
@@ -67,18 +75,18 @@ export class ProjectInfo {
      * return a representation of this object in matrix notation
      */
     public getMatrixNotation() : string {
-        let str = `project=${this.project};` +
-            `version=${this.version};` + 
+            let str = `;project=${this.project};` +
+            `version=${this.version};` +
             `language=${this.language};` +
-            `currentPage=${this.currentPage};`;
-        
-        return str;
+            `currentPage=${encodeURIComponent(this.getBestURL())};`;
+
+            return str;
     }
 
     /**
      * Return the currentPage if it exists or the indexFile
      */
-    public getBestURL() : string {        
+    public getBestURL() : string {
         if (this.currentPage !== undefined) {
             return decodeURIComponent(this.currentPage);
         }
@@ -94,7 +102,13 @@ export class ProjectInfo {
             return JSON.parse(json, ProjectInfo.reviver)
         } else {
             let projectInfo = Object.create(ProjectInfo.prototype)
-            return Object.assign(projectInfo, json);
+            return Object.assign(projectInfo, json, {
+                currentPage: () => {
+                    if (json.currentPage !== undefined) {
+                        decodeURIComponent(json.currentPage)
+                    }
+                }
+            });
         }
     }
 
@@ -102,7 +116,7 @@ export class ProjectInfo {
      * reviver can be passed as the second parameter to JSON.parse
      * to automatically call ProjectInfo.fromJSON on the resulting value.
      */
-    static reviver(key: string, value: any) : any {       
+    static reviver(key: string, value: any) : any {
         return key === "" ? ProjectInfo.fromJSON(value) : value;
     }
 }

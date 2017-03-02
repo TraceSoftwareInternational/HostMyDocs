@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
 
-import { Language } from '../../models/Language';
-import { OnInit } from '@angular/core';
-import { Project }  from '../../models/Project';
-import { ProjectInfo } from '../../models/ProjectInfo';
 import { ProjectsService } from '../../services/projects.service';
-import { Version }  from '../../models/Version';
+
+import { Language }    from '../../models/Language';
+import { Version }     from '../../models/Version';
+import { Project }     from '../../models/Project';
+import { ProjectInfo } from '../../models/ProjectInfo';
+
 
 @Component({
     selector: 'project-tree',
@@ -15,16 +16,19 @@ import { Version }  from '../../models/Version';
 })
 export class ProjectsTree implements OnInit {
     /**
-     * Information about the doc to open
-     */
-    @Input() existingState: ProjectInfo;
-
-    /**
      * Event emitter to notify parent component of archivePath and indexPath from the selected language
      */
     @Output() onProjectSelection = new EventEmitter<ProjectInfo>();
 
-    private projects: Array<Project> = [];
+    /**
+     * Parameter for the tree filter pipe
+     */
+    filterText = '';
+
+    /**
+     * All projects sent by the server
+     */
+    projects: Array<Project> = [];
 
     constructor(private projectsService: ProjectsService) {}
 

@@ -17,5 +17,6 @@ export interface JSONProject {
 export interface JSONProjectInfo {
     project: string,
     version: string,
-    language: string
+    language: string,
+    currentPage: string
 }

@@ -3,7 +3,15 @@
 </clr-tree-node>
 
 <ng-container *ngIf="projects.length > 0">
-    <clr-tree-node *ngFor="let project of projects">
+    <label for="search_input">
+        <input
+            [(ngModel)]="filterText"
+            type="text"
+            class="small-margin-bottom"
+            placeholder="Filter projects">
+    </label>
+
+    <clr-tree-node *ngFor="let project of projects | filterProjects:filterText">
         <clr-icon shape="folder"></clr-icon>
         {{ project.name }}
         <a class="label badge-link">

@@ -1,24 +1,40 @@
 <div class="main-container">
     <header class="header header-1">
         <div class="branding">
-            <a class="clickable-element" (click)="toggleSidenav()">
-                <clr-icon class="is-inverse" shape="menu"></clr-icon>
+            <a class="clickable-element">
+                <clr-icon class="is-inverse" shape="menu" (click)="toggleSidenav()"></clr-icon>
                 <span class="title">HostMyDocs</span>
             </a>
         </div>
-        <div class="header-nav">
-            <a #copyButton
-                [attr.data-clipboard-text]="this.sharingLink"
-                id="copyButton"
-                *ngIf="indexFileToDisplay !== undefined"
-                role="tooltip"
-                aria-haspopup="true"
-                class="nav-link nav-icon tooltip tooltip-xs tooltip-bottom-right clickable-element">
-                <clr-icon shape="share"></clr-icon>
-                <span class="tooltip-content">Get link</span>
-            </a>
-            <a *ngIf="downloadLink !== undefined"
-                [attr.href]="downloadLink"
+        <div class="header-nav" *ngIf="isProjectSelected">
+            <clr-dropdown>
+                <a #copyButton
+                    clrDropdownToggle
+                    class="nav-link nav-icon dropdown clickable-element">
+                    <clr-icon [attr.shape]="copyIconShape"></clr-icon>
+                </a>
+                <div class="dropdown-menu">
+                    <p
+                        clrDropdownItem
+                        tsiClipboard
+                        (onSuccess)="afterClipboardAction($event)"
+                        (onError)="afterClipboardAction($event)"
+                        id="embeddedCopy"
+                        [attr.data-clipboard-text]="this.embeddedSharingLink">
+                        Embedded documentation
+                    </p>
+                    <p
+                        clrDropdownItem
+                        tsiClipboard
+                        (onSuccess)="afterClipboardAction($event)"
+                        (onError)="afterClipboardAction($event)"
+                        id="standaloneCopy"
+                        [attr.data-clipboard-text]="this.standaloneSharingLink">
+                        Standalone documentation
+                    </p>
+                </div>
+            </clr-dropdown>
+            <a [attr.href]="downloadLink"
                 role="tooltip"
                 aria-haspopup="true"
                 class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right clickable-element"
@@ -31,16 +47,23 @@
 
     <div class="content-container">
         <div class="content-area">
-            <documentation-viewer 
-                [indexFile]="indexFileToDisplay" 
-                (currentRelativeURL)="setCurrentNavigationPage($event)"
-                (currentLink)="currentLink"></documentation-viewer>
+            <h1 *ngIf="isProjectSelected === false && loadingError === false">No project loaded</h1>
+            <h1 *ngIf="loadingError">Project cannot be loaded</h1>
+
+            <iframe  #frame
+                *ngIf="isProjectSelected"
+                [src]="urlToDisplay | trustUrl"
+                (load)="iframeSrcWatcher(frame)"
+                width="100%"
+                height="100%"
+                seamless="seamless"
+                frameBorder="0">
+            </iframe>
         </div>
 
         <nav class="sidenav" [class.hidden]="hideSidenav">
             <section class="sidenav-content">
                 <project-tree
-                    [existingState]="currentState"
                     (onProjectSelection)="openDocumentation($event)">
                 </project-tree>
             </section>

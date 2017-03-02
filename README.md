@@ -11,7 +11,7 @@ Small web application to quickly access all your documentation !
 
 ## Getting Started
 
-1) Launch the application and it's server with `docker run -e CREDENTIALS=user:password -p 8080:80 tracesoftware/hostmydocs`.
+1) Launch the application and it's server with `docker run -e CREDENTIALS=user:password -v `pwd`:/data -p 8080:80 tracesoftware/hostmydocs`.
 
 2) Put all the documentation files and the `index.html` file into a folder
 

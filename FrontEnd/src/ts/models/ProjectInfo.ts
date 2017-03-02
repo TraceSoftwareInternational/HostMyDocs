@@ -28,6 +28,10 @@ export class ProjectInfo {
             return false;
         }
 
+        if(this.indexFile === undefined || this.currentPage === undefined) {
+            return true;
+        }
+
         return true;
     }
 
@@ -51,12 +55,16 @@ export class ProjectInfo {
         return this.indexFile;
     }
 
+    public getCurrentPage() : string {
+        return this.currentPage;
+    }
+
     public setArchiveFile(path: string) {
         this.archiveFile = path;
     }
 
     public setindexFile(path: string) {
-        this.indexFile = this.currentPage = path;
+        this.indexFile = path;
     }
 
     public setCurrentPage(path: string) {
@@ -67,12 +75,12 @@ export class ProjectInfo {
      * return a representation of this object in matrix notation
      */
     public getMatrixNotation() : string {
-        let str = `;project=${this.project};` +
+            let str = `;project=${this.project};` +
             `version=${this.version};` +
             `language=${this.language};` +
-            `currentPage=${encodeURIComponent(this.currentPage)};`;
+            `currentPage=${encodeURIComponent(this.getBestURL())};`;
 
-        return str;
+            return str;
     }
 
     /**
@@ -95,7 +103,11 @@ export class ProjectInfo {
         } else {
             let projectInfo = Object.create(ProjectInfo.prototype)
             return Object.assign(projectInfo, json, {
-                currentPage: decodeURIComponent(json.currentPage)
+                currentPage: () => {
+                    if (json.currentPage !== undefined) {
+                        decodeURIComponent(json.currentPage)
+                    }
+                }
             });
         }
     }

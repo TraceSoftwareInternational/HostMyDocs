@@ -7,6 +7,9 @@ const OptimizeJsPlugin = require('optimize-js-plugin');
 const SriPlugin = require('webpack-subresource-integrity');
 
 module.exports = webpackMerge(commonConfig, {
+    entry: {
+        main: helpers.root('src/ts/main.prod.ts')
+    },
     output: {
         path: helpers.root('dist'),
         publicPath: '/',

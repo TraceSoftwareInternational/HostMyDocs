@@ -5,14 +5,11 @@ import { HttpModule }    from '@angular/http';
 
 import { ClarityModule } from 'clarity-angular';
 
-import { ClipboardModule } from 'ngx-clipboard';
-
 import { Routing } from '../modules/routing.module';
 
-import { AppRoot }             from '../components/app-root/index';
-import { DocumentationViewer } from '../components/documentation-viewer/documentation-viewer.component';
-import { HomeView }            from '../components/home-view/home-view.component';
-import { ProjectsTree }        from '../components/projects-tree/project-tree.component';
+import { AppRoot }      from '../components/app-root/index';
+import { HomeView }     from '../components/home-view/home-view.component';
+import { ProjectsTree } from '../components/projects-tree/project-tree.component';
 
 import { TsiClipboard } from '../directives/tsiClipboard.directive';
 
@@ -25,7 +22,6 @@ import { TrustUrl } from '../pipes/TrustUrl.pipe';
 @NgModule({
     imports: [
         BrowserModule,
-        ClipboardModule,
         FormsModule,
         HttpModule,
         Routing,
@@ -33,7 +29,6 @@ import { TrustUrl } from '../pipes/TrustUrl.pipe';
     ],
     declarations: [
         AppRoot,
-        DocumentationViewer,
         FilterProjects,
         ProjectsTree,
         HomeView,

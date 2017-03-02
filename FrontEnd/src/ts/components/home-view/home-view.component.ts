@@ -81,12 +81,14 @@ export class HomeView implements OnInit {
             if (val !== {}) {
                 let routeParams = JSON.parse(JSON.stringify(val), ProjectInfo.reviver);
 
-                if (routeParams.isValid()) {
-                    this.currentState = routeParams;
-                    this.hideSidenav = true;
-                    this.openDocumentation(this.currentState);
-                } else {
-                    this.hideSidenav = false;
+                if (routeParams !== undefined) {
+                    if (routeParams.isValid()) {
+                        this.currentState = routeParams;
+                        this.hideSidenav = true;
+                        this.openDocumentation(this.currentState);
+                    } else {
+                        this.hideSidenav = false;
+                    }
                 }
             }
         })

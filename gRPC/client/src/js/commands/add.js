@@ -22,14 +22,14 @@ exports.builder = (yargs) => {
         alias: 'language',
         type: 'string',
         description: 'language of the project',
-        demandOption: true
+        demandOption: 'no language provided'
     })
     .option('f', {
         alias: 'file',
         type: 'string',
         description: 'path to the zip archive to upload',
         normalize: true,
-        demandOption: true
+        demandOption: 'no file provided'
     })
     .demandOption(['n', 'v', 'l', 'f'])
     .help('h')

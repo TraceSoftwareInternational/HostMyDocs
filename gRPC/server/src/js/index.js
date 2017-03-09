@@ -1,27 +1,21 @@
-const AddProjectController = require('./controllers/AddProject');
-const ListProjectsController = require('./controllers/ListProjects');
+const server = require('./grpcServer');
 
-const grpc = require('grpc');
-const protoDescriptor = grpc.load(__dirname + '/../../../models/models.proto');
+const argv = require('yargs')
+    .usage('$0 [options]', {
+        'p': {
+            alias: 'port',
+            description: 'port wherez the gRPC server will listen',
+            demandOption: 'no port provided'
+        },
+        'd': {
+            alias: 'directory',
+            description: 'full path where the archives will be extracted and saved',
+            demandOption: 'no path specified',
+            normalize: true
+        }
+    })
+    .help('h')
+    .alias('h', 'help')
+    .argv;
 
-// JavaScript representation of messages and Service defined in the roto file
-const hostMyDocs = protoDescriptor.hostMyDocs;
-
-const server = new grpc.Server();
-
-
-/**
- * Main function of the gRPC server.
- * It binds controllers to the rpc functions defined in the proto file.
- */
-function main() {
-    server.addProtoService(hostMyDocs.ProjectService.service, {
-        getProjects: ListProjectsController.process,
-        addProject: AddProjectController.process
-    });
-
-    server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
-    server.start();
-}
-
-main();
+server.start(argv.p, argv.d)

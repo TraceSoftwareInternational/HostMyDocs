@@ -1,0 +1,43 @@
+syntax = "proto3";
+package hostMyDocs;
+
+message Language {
+    string indexFilePath = 1;
+    string archiveFilePath = 2;
+}
+
+message Version {
+    string number = 1;
+    repeated Language languages = 2;
+}
+
+message Project {
+    string name = 1;
+    repeated Version versions = 2;
+}
+
+message Empty {}
+
+////////////////////////////////////// gRPC //////////////////////////////////////////
+
+message GetAllProjectsResponse {
+    repeated Project projects = 1;
+}
+
+message AddProjectRequest {
+    string projectName = 1;
+    string versionNumber = 2;
+    string languageName = 3;
+    bytes zipFile = 4;
+}
+
+message AddProjectResponse {
+    bool success = 1;
+}
+
+service ProjectService {
+    // list projects present on the filesystem
+    rpc getProjects(Empty) returns (GetAllProjectsResponse);
+    // add a new project to the server
+    rpc addProject(AddProjectRequest) returns (AddProjectResponse);
+}

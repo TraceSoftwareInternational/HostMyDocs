@@ -10,7 +10,6 @@
         "adm-zip": "^0.4.7",
         "google-protobuf": "^3.2.0",
         "grpc": "^1.1.2",
-        "mmmagic": "^0.4.5",
         "semver": "^5.3.0",
         "yargs": "^7.0.1"
     }

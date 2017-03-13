@@ -1,7 +1,5 @@
 const checker = require('../utility/checker');
 const fs = require('fs');
-const mmm = require('mmmagic');
-const Magic = mmm.Magic;
 const semver = require('semver');
 const grpcClient = require('../grpcClient');
 

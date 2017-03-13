@@ -2,8 +2,9 @@ syntax = "proto3";
 package hostMyDocs;
 
 message Language {
-    string indexFilePath = 1;
-    string archiveFilePath = 2;
+    string name = 1;
+    string indexFilePath = 2;
+    string archiveFilePath = 3;
 }
 
 message Version {

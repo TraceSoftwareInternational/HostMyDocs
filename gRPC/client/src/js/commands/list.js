@@ -1,4 +1,4 @@
-const ListProjectController = require('../controllers/ListProjects');
+const ListProjectsController = require('../controllers/ListProjects');
 
 /**
  * Describing the list command

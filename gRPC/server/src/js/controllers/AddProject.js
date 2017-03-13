@@ -15,7 +15,7 @@ let targetFolder = null;
 /**
  * Name of the folder where zip files are archived
  */
-const backupFolder = 'archive'
+const backupFolder = 'archives'
 
 /**
  * Name of the folder where with unzip archives
@@ -36,8 +36,6 @@ exports.process = (storagePath, call, callback) => {
 
     targetFolder = storagePath;
     request = call.request;
-
-    console.log(request);
 
     try {
         extractZip();

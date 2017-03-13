@@ -1,4 +1,4 @@
-const exec = require('child_process').exec;
+const execSync = require('child_process').execSync;
 const AdmZip = require('adm-zip');
 const fs = require('fs');
 
@@ -37,14 +37,32 @@ exports.process = (storagePath, call, callback) => {
     targetFolder = storagePath;
     request = call.request;
 
-    extractZip();
-    backupZip();
+    console.log(request);
+
+    try {
+        extractZip();
+    } catch (e) {
+        console.error('Exception :', e);
+        response.success = false;
+        callback(null, response);
+    }
+
+    try {
+        backupZip();
+    } catch (e) {
+        console.error('Exception :', e);
+        response.success = false;
+        callback(null, response);
+    }
 
     callback(null, response);
 
-    console.log(`Added project : ${request.projectName}`)
-    console.log(`\tversion  : ${request.versionNumber}`)
-    console.log(`\tlanguage : ${request.languageName}`)
+    if (response.success) {
+        console.log('New project added !');
+        console.log(`\tname     : ${request.projectName}`);
+        console.log(`\tversion  : ${request.versionNumber}`);
+        console.log(`\tlanguage : ${request.languageName}`);
+    }
 }
 
 const extractZip = () => {
@@ -58,7 +76,7 @@ const extractZip = () => {
 
     pathToCreate = pathToCreate.join('/');
 
-    exec(`mkdir -p ${pathToCreate}`);
+    execSync(`mkdir -p ${pathToCreate}`);
 
     const zip = new AdmZip(request.zipFile);
     const zipEntries = zip.getEntries();
@@ -76,7 +94,7 @@ const backupZip = () => {
 
     backupPath = backupPath.join('/');
 
-    exec(`mkdir -p ${backupPath}`);
+    execSync(`mkdir -p ${backupPath}`);
 
     backupPath += `/${request.projectName}-${request.versionNumber}-${request.languageName}.zip`;
 

@@ -77,8 +77,9 @@ this.checkParams = () => {
  * Convert the local ZIP file to binary to be able to send it
  */
 this.processZipFile = () => {
-    console.log('processing zip file');
+    console.time('zip processing');
     this.request.zipFile = fs.readFileSync(this.archivePath);
+    console.timeEnd('zip processing');
 
     return;
 }

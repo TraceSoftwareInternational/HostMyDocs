@@ -14,4 +14,8 @@ RUN mkdir -p /var/www/html/data && \
 
 COPY BackEnd /var/www/html/BackEnd
 
+COPY entrypoint.sh /usr/local/bin/
+
 VOLUME /data
+
+ENTRYPOINT entrypoint.sh

@@ -7,6 +7,13 @@ return [
 
     'storageRoot' => '/var/www/html/data/docs',
     'archiveRoot' => '/var/www/html/data/archives',
+    'shouldSecure' => function () {
+        if (getenv('SHOULD_SECURE') === false) {
+            return true;
+        } else {
+            return false;
+        }
+    },
     'authorizedUser' => function () {
         $credentials = getenv('CREDENTIALS');
 

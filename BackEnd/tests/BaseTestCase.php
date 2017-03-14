@@ -41,6 +41,8 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
      */
     public function runApp($requestMethod, $requestUri, $requestData = null, $files = null, $credential = null)
     {
+        putenv('SHOULD_SECURE=false');
+
         $baseEnvironment = [
             'REQUEST_METHOD' => $requestMethod,
             'REQUEST_URI' => $requestUri

@@ -11,13 +11,9 @@ Small web application to quickly access all your documentation !
 
 ## Getting Started
 
-1) Launch the application and it's server with
+Note that by default the BackEnd will require to be secured with HTTPS. If you want to be able to add documentation via unsecured HTTP you will need to pass this environment variable to your container : `SHOULD_SECURE=FALSE`
 
-    ```
-    docker run -e CREDENTIALS=user:password -v `pwd`:/data -p 8080:80 tracesoftware/hostmydocs
-    ```
-
-    Note that by default the BackEnd will require to be secured with HTTPS. If you want to be able to add documentation via unsecured HTTP you will need to pass this option to your container : `SHOULD_SECURE=FALSE`
+1) Launch the application and it's server with ```docker run -e CREDENTIALS=user:password -v `pwd`:/data -p 8080:80 tracesoftware/hostmydocs```
 
 2) Put all the documentation files and the `index.html` file into a folder
 

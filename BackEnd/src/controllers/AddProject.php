@@ -7,7 +7,6 @@ use Slim\Container;
 use Slim\Http\Response as Response;
 use Slim\Http\Request as Request;
 use Slim\Http\UploadedFile;
-use vierbergenlars\SemVer\version;
 
 class AddProject extends BaseController
 {
@@ -104,13 +103,6 @@ class AddProject extends BaseController
 
         if (strpos($this->name, '/') !== false) {
             $this->errorMessage = 'name cannot contains slashes';
-            return false;
-        }
-
-        try {
-            new version($this->version);
-        } catch (\Exception $e) {
-            $this->errorMessage = 'version is invalid';
             return false;
         }
 

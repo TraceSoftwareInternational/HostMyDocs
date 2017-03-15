@@ -6,15 +6,16 @@ RUN apt-get update && apt-get install zlib1g-dev && \
     a2enmod rewrite
 
 COPY FrontEnd/dist /var/www/html/
+COPY BackEnd /var/www/html/BackEnd
+
+COPY entrypoint.sh /usr/local/bin/
 
 RUN mkdir -p /var/www/html/data && \
     chmod -R 755 /var/www/html && \
     chown -R www-data:www-data /var/www/html && \
-    ln -s /var/www/html/data /data
+    ln -s /var/www/html/data /data && \
+    chmod +x /usr/local/bin/entrypoint.sh
 
-COPY BackEnd /var/www/html/BackEnd
-
-COPY entrypoint.sh /usr/local/bin/
 
 VOLUME /data
 

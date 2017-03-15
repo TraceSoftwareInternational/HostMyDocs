@@ -7,6 +7,6 @@ import { Project } from '../models/Project';
 })
 export class FilterProjects implements PipeTransform {
     transform(items: Project[], filter: string) : any {
-         return items.filter(project => project.name.indexOf(filter) !== -1);
+         return items.filter(project => project.name.toLowerCase().indexOf(filter.toLocaleLowerCase()) !== -1);
     }
 }

@@ -162,7 +162,7 @@ class AddProject extends BaseController
     private function extract()
     {
         $zipper = new Zipper();
-        $zipFile = $zipper->make($this->archive->file);
+        $zipFile = $zipper->make($this->archive->getClientFilename());
 
         $filesToExtract = $zipFile->listFiles();
 

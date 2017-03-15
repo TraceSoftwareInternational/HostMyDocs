@@ -36,4 +36,4 @@ notifications:
     urls:
         - $HOSTMYDOCS_HOOK_URL
     on_success: change
-    on_failure: alway
+    on_failure: always

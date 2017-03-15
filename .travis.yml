@@ -32,8 +32,4 @@ after_success:
     fi
 
 notifications:
-  webhooks:
-    urls:
-        - $HOSTMYDOCS_TEAMS_HOOK_URL
-    on_success: change
-    on_failure: always
+  webhooks: $MATTERMOST_HOOK_URL

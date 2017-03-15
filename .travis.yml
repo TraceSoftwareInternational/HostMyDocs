@@ -34,6 +34,6 @@ after_success:
 notifications:
   webhooks:
     urls:
-        - $HOSTMYDOCS_HOOK_URL
+        - $HOSTMYDOCS_TEAMS_HOOK_URL
     on_success: change
     on_failure: always

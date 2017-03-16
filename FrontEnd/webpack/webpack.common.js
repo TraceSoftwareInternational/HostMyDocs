@@ -60,18 +60,11 @@ module.exports = {
         ]
     },
     plugins: [
-        new CommonsChunkPlugin({
-            name: 'polyfills',
-            chunks: ['polyfills']
-        }),
-        // This enables tree shaking of the vendor modules
+        // This enables to put imports from node_modules into a separated chunk
         new CommonsChunkPlugin({
             name: 'vendor',
             chunks: ['main'],
             minChunks: module => /node_modules/.test(module.resource)
-        }),
-        new CommonsChunkPlugin({
-            name: ['polyfills', 'vendor'].reverse()
         }),
         // extracting the CSS in it's own file
         new ExtractTextPlugin('css/[chunkhash].[name].css'),

@@ -26,6 +26,8 @@ class AddProject extends BaseController
     private $language = null;
 
     /**
+     *
+     *
      * @var null|UploadedFile[] raw upload files from the request
      */
     private $files = null;
@@ -154,7 +156,7 @@ class AddProject extends BaseController
     private function extract()
     {
         $zipper = new Zipper();
-        $zipFile = $zipper->make($this->archive->getClientFilename());
+        $zipFile = $zipper->make($this->archive->file);
 
         $filesToExtract = $zipFile->listFiles();
 

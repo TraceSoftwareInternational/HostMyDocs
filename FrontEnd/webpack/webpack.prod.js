@@ -12,8 +12,8 @@ module.exports = webpackMerge(commonConfig, {
     },
     output: {
         path: helpers.root('dist'),
-        publicPath: '/',
-        filename: '[name].[hash].js',
+        publicPath: '',
+        filename: '[name].[chunkhash].js',
         crossOriginLoading: 'anonymous'
     },
 
@@ -24,9 +24,15 @@ module.exports = webpackMerge(commonConfig, {
             sourceMap: false
         }),
         new webpack.optimize.UglifyJsPlugin({
+            beautify: false,
             mangle: {
+                screw_ie8: true,
                 keep_fnames: true
-            }
+            },
+            compress: {
+                screw_ie8: true
+            },
+            comments: false
         }),
         new SriPlugin({
             hashFuncNames: ['sha384']

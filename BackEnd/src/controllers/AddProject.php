@@ -188,6 +188,8 @@ class AddProject extends BaseController
 
         $zipFile->folder($zipRoot)->extractTo($destinationPath);
 
+        $zipper->close();
+
         return true;
     }
 
@@ -223,8 +225,10 @@ class AddProject extends BaseController
         try {
             $this->archive->moveTo($destinationPath);
         } catch (\Exception $e) {
-            $this->errorMessage = 'failed to move uploaded file to backup folder';
-            return false;
+            if (rename($this->archive->file, $destination) === false) {
+                $this->errorMessage = 'failed twice to move uploaded file to backup folder';
+            }
+            return true;
         }
 
         return true;

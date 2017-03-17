@@ -53,6 +53,8 @@ class AddProject extends BaseController
     {
         $requestParams = $request->getParsedBody();
 
+        error_log('Processing a new request');
+
         if (array_key_exists('name', $requestParams)) {
             $this->name = $requestParams['name'];
         }
@@ -67,12 +69,22 @@ class AddProject extends BaseController
 
         $this->files = $request->getUploadedFiles();
 
+        error_log('Checking provided parameters');
+
         if ($this->checkParams() === false) {
             if ($this->errorMessage !== null) {
                 $response = $response->write($this->errorMessage);
             }
             return $response->withStatus(400);
         }
+
+        error_log('Parameters OK');
+
+        error_log("Name of the project : $this->name");
+        error_log("Version of the project : $this->version");
+        error_log("Language of the project : $this->language");
+
+        error_log('Extracting the archive');
 
         if ($this->extract() === false) {
             if ($this->errorMessage !== null) {
@@ -81,12 +93,20 @@ class AddProject extends BaseController
             return $response->withStatus(400);
         }
 
+        error_log('Extracting OK');
+
+        error_log('Backuping uploade file');
+
         if ($this->backup() === false) {
             if ($this->errorMessage !== null) {
                 $response = $response->write($this->errorMessage);
             }
             return $response->withStatus(400);
         }
+
+        error_log('Backup done.');
+
+        error_log('Project added successfully');
 
         return $response->withStatus(200);
     }
@@ -156,6 +176,13 @@ class AddProject extends BaseController
     private function extract()
     {
         $zipper = new Zipper();
+        
+        if(is_file($this->archive->file) === false) {
+            $this->errorMessage = 'impossible to open error file';
+        }
+        
+        error_log("Opening file : " . $this->archive->file);
+
         $zipFile = $zipper->make($this->archive->file);
 
         $filesToExtract = $zipFile->listFiles();
@@ -185,6 +212,8 @@ class AddProject extends BaseController
             $this->errorMessage = 'failed to create folder';
             return false;
         }
+
+        error_log('Extracting to ' . $destinationPath);
 
         $zipFile->folder($zipRoot)->extractTo($destinationPath);
 
@@ -222,10 +251,14 @@ class AddProject extends BaseController
 
         $destinationPath = implode('/', $destination);
 
+        error_log('Trying to move upload file to ' . $destinationPath);
+
         try {
             $this->archive->moveTo($destinationPath);
         } catch (\Exception $e) {
-            if (rename($this->archive->file, $destination) === false) {
+            error_log('UploadedFile::moveTo failed.');
+            error_log('Trying with rename()');
+            if (rename($this->archive->file, $destinationPath) === false) {
                 $this->errorMessage = 'failed twice to move uploaded file to backup folder';
             }
             return true;

@@ -26,8 +26,6 @@ class AddProject extends BaseController
     private $language = null;
 
     /**
-     *
-     *
      * @var null|UploadedFile[] raw upload files from the request
      */
     private $files = null;
@@ -95,7 +93,7 @@ class AddProject extends BaseController
 
         error_log('Extracting OK');
 
-        error_log('Backuping uploade file');
+        error_log('Backuping uploaded file');
 
         if ($this->backup() === false) {
             if ($this->errorMessage !== null) {
@@ -176,11 +174,12 @@ class AddProject extends BaseController
     private function extract()
     {
         $zipper = new Zipper();
-        
-        if(is_file($this->archive->file) === false) {
-            $this->errorMessage = 'impossible to open error file';
+
+        if (is_file($this->archive->file) === false) {
+            $this->errorMessage = 'impossible to open archive file';
+            return false;
         }
-        
+
         error_log("Opening file : " . $this->archive->file);
 
         $zipFile = $zipper->make($this->archive->file);
@@ -256,10 +255,11 @@ class AddProject extends BaseController
         try {
             $this->archive->moveTo($destinationPath);
         } catch (\Exception $e) {
-            error_log('UploadedFile::moveTo failed.');
+            error_log('moveTo method failed.');
             error_log('Trying with rename()');
             if (rename($this->archive->file, $destinationPath) === false) {
                 $this->errorMessage = 'failed twice to move uploaded file to backup folder';
+                return false;
             }
             return true;
         }
@@ -272,7 +272,8 @@ class AddProject extends BaseController
      *
      * @param $path string directory to completely delete
      */
-    private function recursiveDirectoryDeletion($path) : void {
+    private function recursiveDirectoryDeletion($path) : void
+    {
         $files = glob($path . '/*');
 
         foreach ($files as $file) {

@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install zlib1g-dev && \
     docker-php-ext-install zip && \
     a2enmod rewrite
 
+COPY BackEnd/hostMyDocs.ini /usr/local/etc/php/php.ini
 COPY FrontEnd/dist /var/www/html/
 COPY BackEnd /var/www/html/BackEnd
 

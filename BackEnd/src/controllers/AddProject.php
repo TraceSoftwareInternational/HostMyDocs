@@ -49,7 +49,16 @@ class AddProject extends BaseController
      */
     public function __invoke(Request $request, Response $response)
     {
+        // increasing execution time
+        ini_set ('max_execution_time', 3600);
+
         $requestParams = $request->getParsedBody();
+
+        if(is_array($requestParams) === false) {
+            $this->errorMessage = 'no parameters found';
+            $response = $response->write($this->errorMessage);
+            return $response->withStatus(400);
+        }
 
         error_log('Processing a new request');
 

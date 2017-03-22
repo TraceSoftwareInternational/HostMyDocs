@@ -39,7 +39,10 @@ curl --request POST \
 
 You can visualize it [in the Swagger editor](http://editor.swagger.io/#/?import=https://cdn.rawgit.com/TraceSoftwareInternational/HostMyDocs/master/BackEnd/specs/swagger.yaml)
 
-
 ## Deploy in prod
 
 You can deploy this tools in production with the script `System/install.sh`.
+
+### SSL management
+
+To deploy this tools with SSL layer, you should mount your certificate with the volume `/etc/ssl/certs/ssl-cert-snakeoil.pem` and your private keys in `/etc/ssl/private/ssl-cert-snakeoil.key`

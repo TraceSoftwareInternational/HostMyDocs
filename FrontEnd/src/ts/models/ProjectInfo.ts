@@ -75,12 +75,12 @@ export class ProjectInfo {
      * return a representation of this object in matrix notation
      */
     public getMatrixNotation() : string {
-            let str = `;project=${this.project};` +
-            `version=${this.version};` +
-            `language=${this.language};` +
+        let str = `;project=${encodeURIComponent(this.project)};` +
+            `version=${encodeURIComponent(this.version)};` +
+            `language=${encodeURIComponent(this.language)};` +
             `currentPage=${encodeURIComponent(this.getBestURL())};`;
 
-            return str;
+        return str;
     }
 
     /**

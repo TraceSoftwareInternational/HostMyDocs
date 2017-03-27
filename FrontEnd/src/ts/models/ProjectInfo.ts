@@ -104,7 +104,9 @@ export class ProjectInfo {
             let projectInfo = Object.create(ProjectInfo.prototype)
 
             let newProjectInfo = Object.assign(projectInfo, json, {
-                currentPage: decodeURIComponent(json.currentPage)
+                currentPage: decodeURIComponent(json.currentPage),
+                language: decodeURIComponent(json.language),
+                version: decodeURIComponent(json.version)
             });
 
             if (newProjectInfo.isValid()) {

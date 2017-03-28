@@ -3,9 +3,7 @@ MAINTAINER Matthieu Vion<mvion@trace-software.com>
 
 RUN apt-get update && apt-get install zlib1g-dev && \
     docker-php-ext-install zip && \
-    a2enmod rewrite && \
-    a2enmod ssl && \
-    a2ensite default-ssl
+    a2enmod rewrite
 
 COPY BackEnd/hostMyDocs.ini /usr/local/etc/php/php.ini
 COPY FrontEnd/dist /var/www/html/

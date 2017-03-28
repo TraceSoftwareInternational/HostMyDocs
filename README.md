@@ -48,7 +48,9 @@ You can visualize it [in the Swagger editor](http://editor.swagger.io/#/?import=
 You only need to put the `System` folder on your server to be able to deploy the application.
 
 First, you must modify the `System/.env` file to change the default credentials that are not secure.
+
 Then, you can execute the `System/install.sh` script. It will register a `hostmydocs.service` in `systemctl` so you can easily access to logs.
+
 If you want to upgrade the application, just run `System/install.sh` again !
 
 ### SSL management

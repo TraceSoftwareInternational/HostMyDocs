@@ -9,7 +9,8 @@
         "build:prod": "webpack --progress -p --config webpack/webpack.prod.js",
         "test": "karma start karma/karma.conf.js",
         "serve": "lite-server",
-        "start": "concurrently --kill-others -c \"blue,green\" \"npm run serve\" \"npm run build:dev\""
+        "start": "concurrently --kill-others -c \"blue,green\" \"npm run serve\" \"npm run build:dev\"",
+        "docs": "compodoc -p tsconfig.json --theme readthedocs"
     },
     "dependencies": {
         "@angular/animations": "^4.1.3",
@@ -31,6 +32,7 @@
         "zone.js": "^0.8.11"
     },
     "devDependencies": {
+        "@compodoc/compodoc": "^1.0.0-beta.9",
         "@types/jasmine": "^2.5.47",
         "angular2-template-loader": "^0.6.2",
         "awesome-typescript-loader": "^3.1.3",
@@ -56,8 +58,6 @@
         "sass-loader": "^6.0.5",
         "style-loader": "^0.17.0",
         "ts-loader": "^2.0.3",
-        "typedoc": "^0.7.1",
-        "typedoc-webpack-plugin": "^1.1.4",
         "typescript": "^2.3.2",
         "webpack": "beta",
         "webpack-merge": "^4.1.0",

@@ -6,9 +6,7 @@ const CleanWebpackPlugin   = require('clean-webpack-plugin');
 const { CheckerPlugin }    = require('awesome-typescript-loader');
 const ExtractTextPlugin    = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin    = require('html-webpack-plugin');
-const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 const CommonsChunkPlugin   = require('webpack/lib/optimize/CommonsChunkPlugin');
-
 
 module.exports = {
     entry: {
@@ -41,10 +39,10 @@ module.exports = {
                     collapseWhitespace: true,
 
                     // angular 2 templates break if these are omitted
-                    removeAttributeQuotes: false,
-                    keepClosingSlash: true,
-                    caseSensitive: true,
-                    conservativeCollapse: true
+                    // removeAttributeQuotes: false,
+                    // keepClosingSlash: true,
+                    // caseSensitive: true,
+                    // conservativeCollapse: true
                 }
             },
             {
@@ -77,21 +75,14 @@ module.exports = {
         // type checker plugin for TypeScript
         new CheckerPlugin(),
         // clean the dist folder before building
-        new CleanWebpackPlugin(['dist'], {
-            root: helpers.root('.'),
-        }),
-        // cf. https://github.com/angular/angular/issues/11580
+        // new CleanWebpackPlugin(['dist'], {
+        //     root: helpers.root('.'),
+        // }),
+        // cf. https://github.com/angular/angular/issues/14898
         new webpack.ContextReplacementPlugin(
-            // The (\\|\/) piece accounts for path separators in *nix and Windows
-            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-            helpers.root('src'), {}
-        ),
-        new TypedocWebpackPlugin({
-            name: 'HostMyDocs',
-            target: 'es6',
-            mode: 'file',
-            exclude: helpers.root('src/**/*.spec.ts'),
-            out: helpers.root('dist/docs')
-        }, helpers.root('src/ts'))
+            /angular(\\|\/)core(\\|\/)@angular/,
+            helpers.root('./src'),
+            {}
+        )
     ]
 };

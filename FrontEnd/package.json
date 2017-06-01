@@ -8,8 +8,8 @@
         "build:dev": "webpack --watch",
         "build:prod": "webpack --progress -p --config webpack/webpack.prod.js",
         "test": "karma start karma/karma.conf.js",
-        "serve": "lite-server",
-        "start": "concurrently --kill-others -c \"blue,green\" \"npm run serve\" \"npm run build:dev\"",
+        "serve": "webpack-dev-server",
+        "start": "webpack-dashboard -- npm run serve",
         "docs": "compodoc -p tsconfig.json --theme readthedocs"
     },
     "dependencies": {
@@ -56,10 +56,12 @@
         "raw-loader": "^0.5.1",
         "reflect-metadata": "^0.1.10",
         "sass-loader": "^6.0.5",
-        "style-loader": "^0.17.0",
+        "style-loader": "^0.18.1",
         "ts-loader": "^2.0.3",
         "typescript": "^2.3.2",
         "webpack": "beta",
+        "webpack-dashboard": "^0.4.0",
+        "webpack-dev-server": "^2.4.5",
         "webpack-merge": "^4.1.0",
         "webpack-subresource-integrity": "^1.0.0-rc.1"
     }

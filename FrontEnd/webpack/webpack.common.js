@@ -2,11 +2,12 @@ const webpack = require('webpack');
 const path    = require("path");
 const helpers = require('./helpers');
 
-const CleanWebpackPlugin   = require('clean-webpack-plugin');
-const { CheckerPlugin }    = require('awesome-typescript-loader');
-const ExtractTextPlugin    = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin    = require('html-webpack-plugin');
-const CommonsChunkPlugin   = require('webpack/lib/optimize/CommonsChunkPlugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CheckerPlugin }  = require('awesome-typescript-loader');
+const ExtractTextPlugin  = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin  = require('html-webpack-plugin');
+const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const DashboardPlugin    = require('webpack-dashboard/plugin');
 
 module.exports = {
     entry: {
@@ -34,15 +35,9 @@ module.exports = {
                 test: /\.html$/,
                 loader: 'html-loader',
                 options: {
-                    minimize: true,
+                    minimize: false,
                     removeComments: true,
-                    collapseWhitespace: true,
-
-                    // angular 2 templates break if these are omitted
-                    // removeAttributeQuotes: false,
-                    // keepClosingSlash: true,
-                    // caseSensitive: true,
-                    // conservativeCollapse: true
+                    collapseWhitespace: true
                 }
             },
             {
@@ -75,14 +70,16 @@ module.exports = {
         // type checker plugin for TypeScript
         new CheckerPlugin(),
         // clean the dist folder before building
-        // new CleanWebpackPlugin(['dist'], {
-        //     root: helpers.root('.'),
-        // }),
+        new CleanWebpackPlugin(['dist'], {
+            root: helpers.root('.'),
+        }),
         // cf. https://github.com/angular/angular/issues/14898
         new webpack.ContextReplacementPlugin(
             /angular(\\|\/)core(\\|\/)@angular/,
             helpers.root('./src'),
             {}
-        )
+        ),
+        // sweet interface to replace verbose webpack output
+        new DashboardPlugin()
     ]
 };

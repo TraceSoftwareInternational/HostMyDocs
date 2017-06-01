@@ -7,5 +7,11 @@ module.exports = webpackMerge(commonConfig, {
     performance: {
         hints: false
     },
-    devtool: 'source-map'
+    devtool: 'source-map',
+    devServer: {
+        proxy: {
+            "/BackEnd": "http://localhost:3000",
+            "/data": "http://localhost:3000"
+        }
+    }
 })

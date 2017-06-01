@@ -21,7 +21,16 @@ You can refer to the [production setup section](#production-setup) to properly d
 
 2) Put all the documentation files and the `index.html` file into a folder
 
-3) Zip that folder !
+    It should looks like this :
+    ```
+        documentation <- top folder that wou you will zip next
+        ├── images
+        ├── index.html
+        ├── injectables
+        └── styles
+    ```
+
+3) Zip that folder ! (by example `zip -r docs.zip documentation`)
 
 4) Now upload it with cURL by example :
 
@@ -34,7 +43,7 @@ curl --request POST \
   -F "name=DocumentationName" \
   -F "version=1.0.0" \
   -F "language=YourProgrammingLanguage" \
-  -F "archive=@YourZipFile.zip;type=application/zip"
+  -F "archive=@docs.zip;type=application/zip"
 ```
 
 5) Open [http://localhost:8080](http://localhost:8080) to see your uploaded docs !
@@ -59,3 +68,17 @@ The container provide two volumes, so you can mount your certificate and your pr
 
 - `/etc/ssl/certs/ssl-cert-snakeoil.pem`
 - `/etc/ssl/private/ssl-cert-snakeoil.key`
+
+## Development
+
+### FrontEnd
+
+1) Open a terminal at the root of the project
+
+2) Start a Docker container containing the BackEnd : ``docker run -d -p 3000:80 -e CREDENTIALS=user:password -e SHOULD_SECURE=FALSE -v `pwd`/BackEnd:/var/www/html``
+
+3) Start the Webpack dev server : `cd FrontEnd && yarn start`
+
+4) Open [http://localhost:8080]() to see your changes automatically refreshed
+
+5) Now you can develop with your favorite editor/IDE !

@@ -17,6 +17,7 @@ script:
     - cd ../FrontEnd
     - yarn
     - yarn test
+    - yarn docs:coverage
     - yarn build:prod
     - cd ..
 

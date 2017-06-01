@@ -13,10 +13,19 @@ module.exports = webpackMerge(commonConfig, {
     output: {
         path: helpers.root('dist'),
         publicPath: '',
-        filename: '[name].[chunkhash].js',
         crossOriginLoading: 'anonymous'
     },
-
+    module: {
+        loaders: [
+            {
+                test: /\.ts$/,
+                loaders: [
+                    'angular2-template-loader',
+                    'awesome-typescript-loader',
+                ]
+            }
+        ]
+    },
     plugins: [
         // make build fail if there is any error
         new webpack.NoEmitOnErrorsPlugin(),

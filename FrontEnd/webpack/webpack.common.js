@@ -7,7 +7,6 @@ const { CheckerPlugin }  = require('awesome-typescript-loader');
 const ExtractTextPlugin  = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin  = require('html-webpack-plugin');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
-const DashboardPlugin    = require('webpack-dashboard/plugin');
 
 module.exports = {
     entry: {
@@ -15,7 +14,7 @@ module.exports = {
         main: helpers.root('src/ts/main.ts')
     },
     output: {
-        filename: 'js/[chunkhash].[name].js',
+        filename: 'js/[hash].[name].js',
         path: helpers.root('dist'),
         sourceMapFilename: '[name].map'
     },
@@ -27,10 +26,6 @@ module.exports = {
     },
     module: {
         loaders: [
-            {
-                test: /\.ts$/,
-                loaders: ['angular2-template-loader', 'awesome-typescript-loader']
-            },
             {
                 test: /\.html$/,
                 loader: 'html-loader',
@@ -79,7 +74,7 @@ module.exports = {
             helpers.root('./src'),
             {}
         ),
-        // sweet interface to replace verbose webpack output
-        new DashboardPlugin()
+        // give modules names instaed of numeric IDs
+        new webpack.NamedModulesPlugin()
     ]
 };

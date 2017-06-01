@@ -5,5 +5,17 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { enableProdMode } from '@angular/core';
 
-enableProdMode();
-platformBrowserDynamic().bootstrapModule(HostMyDocs);
+export function main() {
+    enableProdMode();
+    platformBrowserDynamic().bootstrapModule(HostMyDocs);
+}
+
+function bootloader(main) {
+    if (document.readyState === 'complete') {
+        main()
+    } else {
+        document.addEventListener('DOMContentLoaded', main);
+    }
+}
+
+bootloader(main);

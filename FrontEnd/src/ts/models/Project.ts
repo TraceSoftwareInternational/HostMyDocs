@@ -6,6 +6,9 @@ import { Version } from './Version';
 
 import { JSONProject } from './JsonInterfaces';
 
+/**
+ * Object holding several Versions object
+ */
 export class Project {
     public versions: Version[]
 

@@ -4,6 +4,9 @@ import { Params } from '@angular/router';
 import { Project } from './Project'
 import { Version } from './Version'
 
+/**
+ * Object used in between-component communication
+ */
 export class ProjectInfo {
     private indexFile: string
     private archiveFile: string
@@ -15,6 +18,9 @@ export class ProjectInfo {
         private language: string
     ) { }
 
+    /**
+     * Verifies validity of the current object
+     */
     public isValid() : boolean {
         if(this.project === undefined) {
             return false;
@@ -35,30 +41,53 @@ export class ProjectInfo {
         return true;
     }
 
+    /**
+     * Return current project name
+     */
     public getProject() : string {
         return this.project;
     }
 
+    /**
+     * Return current version
+     */
     public getVersion() : string {
         return this.version;
     }
 
+    /**
+     * Return current language name
+     */
     public getLanguage() : string {
         return this.language;
     }
 
+    /**
+     * Return relative path to the current project archives
+     */
     public getArchiveFile() : string {
         return this.archiveFile;
     }
 
+    /**
+     * Return relative path to the current project index.html file
+     */
     public getIndexFile() : string {
         return this.indexFile;
     }
 
+    /**
+     * Return current page
+     * (if a user access the app with aparametrized URL)
+     */
     public getCurrentPage() : string {
         return this.currentPage;
     }
 
+    /**
+     * Set an archive file path
+     * @param path string
+     */
     public setArchiveFile(path: string) {
         this.archiveFile = path;
     }
@@ -72,7 +101,7 @@ export class ProjectInfo {
     }
 
     /**
-     * return a representation of this object in matrix notation
+     * Return a representation of this object in matrix notation
      */
     public getMatrixNotation() : string {
         let str = `;project=${encodeURIComponent(this.project)};` +

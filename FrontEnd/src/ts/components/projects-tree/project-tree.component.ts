@@ -7,7 +7,9 @@ import { Version }     from '../../models/Version';
 import { Project }     from '../../models/Project';
 import { ProjectInfo } from '../../models/ProjectInfo';
 
-
+/**
+ * This component display all available projects and a simple filter
+ */
 @Component({
     selector: 'project-tree',
     templateUrl: './template.html',

@@ -3,6 +3,9 @@ import { Http, Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
+/**
+ * Simple service to check if an URL exists and answer to an HEAD request
+ */
 @Injectable()
 export class UrlExistence {
     constructor(private http: Http) {}

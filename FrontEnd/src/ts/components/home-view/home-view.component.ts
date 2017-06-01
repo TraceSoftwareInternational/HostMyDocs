@@ -9,6 +9,9 @@ import { ProjectInfo } from '../../models/ProjectInfo';
 
 import { UrlExistence } from '../../services/UrlExistence.service';
 
+/**
+ * This component is the core of the application, it display the chosen documentations
+ */
 @Component({
     selector: 'home-view',
     templateUrl: './template.html',

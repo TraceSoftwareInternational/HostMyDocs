@@ -10,7 +10,9 @@
         "test": "karma start karma/karma.conf.js",
         "serve": "webpack-dev-server --hot --inline",
         "start": "webpack-dashboard -- npm run serve",
-        "docs": "compodoc -p tsconfig.json --theme readthedocs"
+        "docs:build": "compodoc --name HostMyDocs --tsconfig tsconfig.json --theme readthedocs --toggleMenuItems all",
+        "docs:watch": "compodoc --name HostMyDocs --tsconfig tsconfig.json --theme readthedocs --watch --serve --port 4000",
+        "docs:coverage": "compodoc --name HostMyDocs --tsconfig tsconfig.json --coverageTest"
     },
     "dependencies": {
         "@angular/animations": "^4.1.3",

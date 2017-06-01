@@ -61,7 +61,9 @@
 
     <div class="content-container">
         <div class="content-area">
-            <h1 *ngIf="isProjectSelected === false && loadingError === false">No project loaded</h1>
+            <ng-container *ngIf="isProjectSelected === false && loadingError === false">
+                <landing-page></landing-page>
+            </ng-container>
             <h1 *ngIf="loadingError">Project cannot be loaded</h1>
 
             <iframe #frame

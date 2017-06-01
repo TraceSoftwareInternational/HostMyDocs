@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { ProjectInfo } from '../../models/ProjectInfo';
 
-import { UrlExistence } from '../../services/UrlExistence.service'
+import { UrlExistence } from '../../services/UrlExistence.service';
 
 @Component({
     selector: 'home-view',

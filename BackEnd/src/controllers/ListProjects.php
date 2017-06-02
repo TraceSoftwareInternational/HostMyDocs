@@ -43,7 +43,7 @@ class ListProjects extends BaseController
         $startPoint = $this->container->get('storageRoot');
 
         $projectLister  = new Finder();
-        $projectLister->depth('== 0')->directories()->in($startPoint);
+        $projectLister->depth('== 0')->directories()->in($startPoint)->sortByName();
 
         $projectStructure = [];
 

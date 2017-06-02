@@ -5,7 +5,8 @@ import { DomSanitizer } from '@angular/platform-browser';
  * Simple pipe to make Angular trust a given URL resource
  */
 @Pipe({
-    name: 'trustUrl'
+    name: 'trustUrl',
+    pure: true
 })
 export class TrustUrl implements PipeTransform {
     constructor(private sanitizer: DomSanitizer) {}

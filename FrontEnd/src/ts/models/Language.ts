@@ -4,6 +4,9 @@
 
 import { JSONLanguage }    from './JsonInterfaces';
 
+/**
+ * Object contained in a Version, also hold relative links to documentation and it's archive
+ */
 export class Language {
     constructor(
         public name: string,

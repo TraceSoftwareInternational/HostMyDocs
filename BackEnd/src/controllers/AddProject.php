@@ -7,6 +7,7 @@ use Slim\Container;
 use Slim\Http\Response as Response;
 use Slim\Http\Request as Request;
 use Slim\Http\UploadedFile;
+use Symfony\Component\Filesystem\Filesystem;
 
 class AddProject extends BaseController
 {
@@ -35,9 +36,15 @@ class AddProject extends BaseController
      */
     private $archive = null;
 
+    /**
+     * @var null|Filesystem Symfony Filesystem wrapper
+     */
+    private $filesystem = null;
+
     public function __construct(Container $container)
     {
         parent::__construct($container);
+        $this->filesystem = new Filesystem();
     }
 
     /**
@@ -50,11 +57,11 @@ class AddProject extends BaseController
     public function __invoke(Request $request, Response $response)
     {
         // increasing execution time
-        ini_set ('max_execution_time', 3600);
+        ini_set('max_execution_time', 3600);
 
         $requestParams = $request->getParsedBody();
 
-        if(is_array($requestParams) === false) {
+        if (is_array($requestParams) === false) {
             $this->errorMessage = 'no parameters found';
             $response = $response->write($this->errorMessage);
             return $response->withStatus(400);
@@ -213,7 +220,7 @@ class AddProject extends BaseController
         }
 
         if (file_exists($destinationPath)) {
-            $this->recursiveDirectoryDeletion($destinationPath);
+            $this->filesystem->remove($destinationPath);
         }
 
         if (mkdir($destinationPath, 0755, true) === false) {
@@ -274,20 +281,5 @@ class AddProject extends BaseController
         }
 
         return true;
-    }
-
-    /**
-     * Delete a folder and all its folders and files
-     *
-     * @param $path string directory to completely delete
-     */
-    private function recursiveDirectoryDeletion($path) : void
-    {
-        $files = glob($path . '/*');
-
-        foreach ($files as $file) {
-            is_dir($file) ? $this->recursiveDirectoryDeletion($file) : unlink($file);
-        }
-        rmdir($path);
     }
 }

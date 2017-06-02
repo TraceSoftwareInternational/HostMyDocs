@@ -44,15 +44,18 @@
             </a>
         </div>
         <div class="header-actions">
-            <clr-dropdown class="dropdown bottom-right">
+        <clr-dropdown clrMenuPosition="bottom-right" class="dropdown">
+
                 <button class="nav-icon" clrDropdownToggle>
                     <clr-icon shape="help-info"></clr-icon>
                     <clr-icon shape="caret down"></clr-icon>
                 </button>
                 <div class="dropdown-menu">
                     <a target="_blank" href="https://github.com/TraceSoftwareInternational/HostMyDocs" clrDropdownItem>GitHub repo</a>
+
                     <a target="_blank" href="https://github.com/TraceSoftwareInternational/HostMyDocs/issues/new" clrDropdownItem>Report an issue</a>
-                    <a target="_blank" href="https://github.com/TraceSoftwareInternational/HostMyDocs/releases" clrDropdownItem>Version 1.2.1</a>
+                    <a target="_blank" href="https://github.com/TraceSoftwareInternational/HostMyDocs/releases" clrDropdownItem>Version 1.3.0</a>
+
                 </div>
             </clr-dropdown>
         </div>
@@ -60,7 +63,9 @@
 
     <div class="content-container">
         <div class="content-area">
-            <h1 *ngIf="isProjectSelected === false && loadingError === false">No project loaded</h1>
+            <ng-container *ngIf="isProjectSelected === false && loadingError === false">
+                <landing-page></landing-page>
+            </ng-container>
             <h1 *ngIf="loadingError">Project cannot be loaded</h1>
 
             <iframe #frame

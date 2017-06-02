@@ -2,13 +2,11 @@ const webpack = require('webpack');
 const path    = require("path");
 const helpers = require('./helpers');
 
-const CleanWebpackPlugin   = require('clean-webpack-plugin');
-const { CheckerPlugin }    = require('awesome-typescript-loader');
-const ExtractTextPlugin    = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin    = require('html-webpack-plugin');
-const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
-const CommonsChunkPlugin   = require('webpack/lib/optimize/CommonsChunkPlugin');
-
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CheckerPlugin }  = require('awesome-typescript-loader');
+const ExtractTextPlugin  = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin  = require('html-webpack-plugin');
+const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
 module.exports = {
     entry: {
@@ -16,7 +14,7 @@ module.exports = {
         main: helpers.root('src/ts/main.ts')
     },
     output: {
-        filename: 'js/[chunkhash].[name].js',
+        filename: 'js/[hash].[name].js',
         path: helpers.root('dist'),
         sourceMapFilename: '[name].map'
     },
@@ -29,22 +27,12 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.ts$/,
-                loaders: ['angular2-template-loader', 'awesome-typescript-loader']
-            },
-            {
                 test: /\.html$/,
                 loader: 'html-loader',
                 options: {
-                    minimize: true,
+                    minimize: false,
                     removeComments: true,
-                    collapseWhitespace: true,
-
-                    // angular 2 templates break if these are omitted
-                    removeAttributeQuotes: false,
-                    keepClosingSlash: true,
-                    caseSensitive: true,
-                    conservativeCollapse: true
+                    collapseWhitespace: true
                 }
             },
             {
@@ -80,18 +68,13 @@ module.exports = {
         new CleanWebpackPlugin(['dist'], {
             root: helpers.root('.'),
         }),
-        // cf. https://github.com/angular/angular/issues/11580
+        // cf. https://github.com/angular/angular/issues/14898
         new webpack.ContextReplacementPlugin(
-            // The (\\|\/) piece accounts for path separators in *nix and Windows
-            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-            helpers.root('src'), {}
+            /angular(\\|\/)core(\\|\/)@angular/,
+            helpers.root('./src'),
+            {}
         ),
-        new TypedocWebpackPlugin({
-            name: 'HostMyDocs',
-            target: 'es6',
-            mode: 'file',
-            exclude: helpers.root('src/**/*.spec.ts'),
-            out: helpers.root('dist/docs')
-        }, helpers.root('src/ts'))
+        // give modules names instaed of numeric IDs
+        new webpack.NamedModulesPlugin()
     ]
 };

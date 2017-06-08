@@ -10,10 +10,27 @@ import { JSONProject } from './JsonInterfaces';
  * Object holding several Versions object
  */
 export class Project {
+    /**
+     * All available version for the current project
+     */
     public versions: Version[]
+
+    /**
+     * Should the project seen as expanded in view ?
+     */
+    public isExpanded: boolean
 
     constructor(public name: string) {
         this.versions = [];
+        this.isExpanded = false;
+    }
+
+    /**
+     * Change the expanded state of the current Version
+     */
+    public toggle(event: MouseEvent) {
+        this.isExpanded = ! this.isExpanded
+        event.stopPropagation()
     }
 
     /**

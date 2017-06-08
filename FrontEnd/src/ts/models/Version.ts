@@ -7,15 +7,33 @@ import { Language } from './Language';
 import { JSONLanguage, JSONVersion } from './JsonInterfaces';
 
 export class Version {
+    /**
+     * All available languages for the current version
+     */
     public languages: Language[]
+
+    /**
+     * Should the project seen as expanded in view ?
+     */
+    public isExpanded: boolean
 
     constructor(public number: string) {
         this.languages = [];
+        this.isExpanded = false;
     }
 
     public addLanguage(language: Language) {
         this.languages.push(language);
     }
+
+    /**
+     * Change the expanded state of the current Version
+     */
+    public toggle(event: MouseEvent) {
+        this.isExpanded = ! this.isExpanded
+        event.stopPropagation()
+    }
+
 
     static arrayFromJSON(jsonVersions: JSONVersion[]) : Version[] {
         let versions: Version[] = [];

@@ -56,7 +56,9 @@ export class ProjectsTree implements OnInit {
     /**
      * Sending an event to the parent, to display documentation
      */
-    notifyParent(project: Project, version: Version, language: Language) : void {
+    notifyParent(event: MouseEvent, project: Project, version: Version, language: Language) : void {
+        event.stopPropagation();
+
         let state = new ProjectInfo(project.name, version.number, language.name);
         state.setArchiveFile(language.archivePath);
         state.setindexFile(language.indexPath);

@@ -11,18 +11,21 @@
             placeholder="Filter projects">
     </label>
 
-    <clr-tree-node *ngFor="let project of projects | filterProjects:filterText">
+    <clr-tree-node *ngFor="let project of projects | filterProjects:filterText"
+        [clrTreeNodeExpanded]="project.isExpanded"
+        (click)="project.toggle($event)">
         <clr-icon shape="folder"></clr-icon>
-        {{ project.name }}
-        <a class="label badge-link">
+        <span class="clickable">{{ project.name }}</span>
+        <a class="label clickable">
             {{ getLastVersion(project) }}
         </a>
-        <ng-container *ngFor="let version of project.versions" ngProjectAs="clr-tree-node">
+        <ng-container ngProjectAs="clr-tree-node"
+            *ngFor="let version of project.versions">
             <ng-container *ngIf="version.languages.length > 1; else versionBlock">
-                <clr-tree-node>
-                    {{ version.number }}
-                    <clr-tree-node *ngFor="let language of version.languages">
-                        <a class="clr-treenode-link tree-link" (click)="notifyParent(project, version, language)">
+                <clr-tree-node [clrTreeNodeExpanded]="version.isExpanded" (click)="version.toggle($event)">
+                    <span class="clickable">{{ version.number }}</span>
+                    <clr-tree-node *ngFor="let language of version.languages" (click)="notifyParent($event, project, version, language)">
+                        <a class="clr-treenode-link tree-link">
                             {{ language.name }}
                         </a>
                     </clr-tree-node>
@@ -30,8 +33,8 @@
             </ng-container>
 
             <ng-template #versionBlock>
-                <clr-tree-node>
-                    <a class="clr-treenode-link tree-link" (click)="notifyParent(project, version, version.languages[0])">
+                <clr-tree-node (click)="notifyParent($event, project, version, version.languages[0])">
+                    <a class="clr-treenode-link tree-link">
                         {{ version.number }}
                     </a>
                 </clr-tree-node>

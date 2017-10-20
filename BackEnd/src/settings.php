@@ -26,5 +26,8 @@ return [
         }
 
         return [];
+    },
+    'cache' => function () {
+        return new \Slim\HttpCache\CacheProvider();
     }
 ];

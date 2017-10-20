@@ -25,12 +25,14 @@ class ListProjects extends BaseController
 
     public function __invoke(Request $request, Response $response)
     {
+
         try {
             $this->listProjects();
         } catch (\Exception $e) {
         }
 
-        return $response->withJson($this->projects);
+        $cacheProvider = $this->container->get('cache');
+        return $cacheProvider->withEtag($response->withJson($this->projects), md5(json_encode($this->projects)));
     }
 
     /**

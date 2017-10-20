@@ -37,7 +37,8 @@ class AddProjectTest extends BaseTestCase
     /**
      * Providing parameters for requests
      */
-    public function arrayOfParametersProvider() {
+    public function arrayOfParametersProvider()
+    {
         return [
             'no credentials' => [
                 [

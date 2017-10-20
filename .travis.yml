@@ -18,8 +18,6 @@ script:
     - yarn
     - yarn test
     - yarn docs:coverage
-    - yarn build:prod
-    - cd ..
 
 after_success:
   - docker login  -u $DOCKER_LOGIN -p $DOCKER_PASSWORD

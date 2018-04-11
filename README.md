@@ -23,7 +23,7 @@ You can refer to the [production setup section](#production-setup) to properly d
 
     It should looks like this :
     ```
-        documentation <- top folder that wou you will zip next
+        documentation <- top folder that you will zip next
         ├── images
         ├── index.html
         ├── injectables

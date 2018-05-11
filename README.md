@@ -75,10 +75,12 @@ The container provide two volumes, so you can mount your certificate and your pr
 
 1) Open a terminal at the root of the project
 
-2) Start a Docker container containing the BackEnd : ``docker run -d -p 3000:80 -e CREDENTIALS=user:password -e SHOULD_SECURE=FALSE -v `pwd`/BackEnd:/var/www/html``
+2) Build a local Docker image of HostMyDocs : `docker build -t hmd .`
 
-3) Start the Webpack dev server : `cd FrontEnd && yarn start`
+3) Start a Docker container containing the BackEnd : ``docker run -p 3000:80 -e CREDENTIALS=user:password -e SHOULD_SECURE=FALSE -v `pwd`/BackEnd:/var/www/html/BackEnd hmd``
 
-4) Open [http://localhost:8080]() to see your changes automatically refreshed
+4) Start the Webpack dev server : `cd FrontEnd && yarn start`
 
-5) Now you can develop with your favorite editor/IDE !
+5) Open [http://localhost:8080]() to see your changes automatically refreshed
+
+6) Now you can develop with your favorite editor/IDE !

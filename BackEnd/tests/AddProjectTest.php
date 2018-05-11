@@ -10,10 +10,11 @@ class AddProjectTest extends BaseTestCase
     private $serverCredentials = 'beep:bep';
 
     private $wrongCredentials = 'plop:plop';
+
     /**
      * @dataProvider arrayOfParametersProvider
      */
-    public function testAddProject($parameters, $statusCode)
+    public function testAddProject($parameters, $credentialsArray, $statusCode)
     {
         $files = [];
         $credentials = null;
@@ -22,12 +23,12 @@ class AddProjectTest extends BaseTestCase
             $files = ['archive' => $parameters['archive']];
         }
 
-        if (array_key_exists('serverCredentials', $parameters)) {
-            putenv('CREDENTIALS='.$parameters['serverCredentials']);
+        if (array_key_exists('serverCredentials', $credentialsArray)) {
+            putenv('CREDENTIALS='.$credentialsArray['serverCredentials']);
         }
 
-        if (array_key_exists('userCredentials', $parameters)) {
-            $credentials = $parameters['userCredentials'];
+        if (array_key_exists('userCredentials', $credentialsArray)) {
+            $credentials = $credentialsArray['userCredentials'];
         }
 
         $response = $this->runApp('POST', '/addProject', $parameters, $files, $credentials);
@@ -41,13 +42,12 @@ class AddProjectTest extends BaseTestCase
     {
         return [
             'no credentials' => [
-                [
-                    [
-                    ]
-                ],
+                [],
+                [],
                 'statusCode' => 401
             ],
             'good credentials but no params' => [
+                [],
                 [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->serverCredentials
@@ -55,6 +55,7 @@ class AddProjectTest extends BaseTestCase
                 'statusCode' => 400
             ],
             'bad credentials' => [
+                [],
                 [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->wrongCredentials
@@ -63,7 +64,9 @@ class AddProjectTest extends BaseTestCase
             ],
             'name' => [
                 [
-                    'name' => 'SomeProject',
+                    'name' => 'SomeProject'
+                ],
+                [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->serverCredentials
                 ],
@@ -73,6 +76,8 @@ class AddProjectTest extends BaseTestCase
                 [
                     'name' => 'AnotherProject',
                     'version' => '6.6.6',
+                ],
+                [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->serverCredentials
                 ],
@@ -82,6 +87,8 @@ class AddProjectTest extends BaseTestCase
                 [
                     'name' => 'AnotherProject',
                     'language' => 'R\'lyehian',
+                ],
+                [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->serverCredentials
                 ],
@@ -92,6 +99,8 @@ class AddProjectTest extends BaseTestCase
                     'name' => 'AnotherProject',
                     'language' => 'R\'lyehian',
                     'version' => '6.6.6',
+                ],
+                [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->serverCredentials
                 ],
@@ -102,6 +111,8 @@ class AddProjectTest extends BaseTestCase
                     'name' => 'AnotherProject',
                     'language' => 'R\'lyehian',
                     'version' => 'v2017',
+                ],
+                [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->serverCredentials
                 ],
@@ -113,6 +124,21 @@ class AddProjectTest extends BaseTestCase
                     'language' => 'R\'lyehian',
                     'version' => '6.6.6',
                     'archive' => $this->createFile(),
+                ],
+                [
+                    'serverCredentials' => $this->serverCredentials,
+                    'userCredentials' => $this->serverCredentials
+                ],
+                'statusCode' => 400
+            ],
+            'invalid zip file' => [
+                [
+                    'name' => 'AnotherProject',
+                    'language' => 'R\'lyehian',
+                    'version' => '6.6.6',
+                    'archive' => $this->createInvalidZipFile(),
+                ],
+                [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->serverCredentials
                 ],
@@ -124,6 +150,8 @@ class AddProjectTest extends BaseTestCase
                     'language' => 'R\'lyehian',
                     'version' => '6.6.6',
                     'archive' => $this->createZipFile(),
+                ],
+                [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->serverCredentials
                 ],

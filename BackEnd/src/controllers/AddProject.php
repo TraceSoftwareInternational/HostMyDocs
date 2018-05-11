@@ -200,9 +200,20 @@ class AddProject extends BaseController
 
         $zipFile = $zipper->make($this->archive->file);
 
-        $filesToExtract = $zipFile->listFiles();
+        $rootCandidates = array_values(array_filter($zipFile->listFiles(), function ($path) {
+            if (preg_match('@^[^/]+/index\.html$@', $path)) {
+                return true;
+            } else {
+                return false;
+            }
+        }));
 
-        $splittedPath = explode('/', $filesToExtract[0]);
+        if (count($rootCandidates) > 1) {
+            $this->errorMessage = "More than one index file found";
+            return false;
+        }
+
+        $splittedPath = explode('/', $rootCandidates[0]);
         $zipRoot = array_shift($splittedPath);
 
         $destination = [

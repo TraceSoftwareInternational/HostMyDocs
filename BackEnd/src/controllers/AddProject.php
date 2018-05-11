@@ -61,7 +61,7 @@ class AddProject extends BaseController
 
         $requestParams = $request->getParsedBody();
 
-        if (is_array($requestParams) === false) {
+        if (count($requestParams) === 0) {
             $this->errorMessage = 'no parameters found';
             $response = $response->write($this->errorMessage);
             return $response->withStatus(400);

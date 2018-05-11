@@ -45,7 +45,11 @@ class ListProjects extends BaseController
         $startPoint = $this->container->get('storageRoot');
 
         $projectLister  = new Finder();
-        $projectLister->depth('== 0')->directories()->in($startPoint)->sortByName();
+        $projectLister
+            ->ignoreDotFiles(false)
+            ->depth('== 0')
+            ->directories()
+            ->in($startPoint)->sortByName();
 
         $projectStructure = [];
 
@@ -72,7 +76,10 @@ class ListProjects extends BaseController
     private function listVersions(SplFileInfo $projectFolder, Project $currentProject, array $projectStructure)
     {
         $versionLister  = new Finder();
-        $versionLister->depth('== 0')->directories();
+        $versionLister
+            ->ignoreDotFiles(false)
+            ->depth('== 0')
+            ->directories();
 
         $versionStructure = $projectStructure;
 
@@ -100,7 +107,10 @@ class ListProjects extends BaseController
         $documentRoot = str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->container->get('storageRoot'));
 
         $languageLister = new Finder();
-        $languageLister->depth('== 0')->directories();
+        $languageLister
+            ->ignoreDotFiles(false)
+            ->depth('== 0')
+            ->directories();
 
         $languageStructure = $versionStructure;
 

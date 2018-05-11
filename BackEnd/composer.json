@@ -1,13 +1,13 @@
 {
     "name": "tracesoftware/host-my-docs",
     "scripts": {
-        "test": "phpunit --configuration phpunit.xml",
+        "test": "phpunit --coverage-text --configuration phpunit.xml",
         "fix-psr2": "php-cs-fixer fix ./src --rules=@PSR2"
     },
     "require": {
         "slim/slim": "^3.7",
         "chumper/zipper": "^1.0",
-        "symfony/finder": "^3.2",
+        "symfony/finder": "^4.0",
         "tuupola/slim-basic-auth": "^2.2",
         "slim/http-cache": "^0.4.0"
     },
@@ -25,6 +25,6 @@
     "license": "GPL-3.0",
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.0",
-        "phpunit/phpunit": "^5.7"
+        "phpunit/phpunit": "^7.0"
     }
 }

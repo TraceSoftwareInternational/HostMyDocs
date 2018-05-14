@@ -2,6 +2,7 @@
 
 namespace HostMyDocs\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -13,7 +14,7 @@ use ZipArchive;
  * from https://github.com/slimphp/Slim-Skeleton
  */
 
-class BaseTestCase extends \PHPUnit_Framework_TestCase
+class BaseTestCase extends TestCase
 {
     /**
      * @var array all paths to the temporary files that can be created during tests
@@ -81,7 +82,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     public function createFile() : UploadedFile
     {
-        $filename = __DIR__.'/php'.str_replace(' ', '', microtime());
+        $filename = sys_get_temp_dir().'/php'.str_replace(' ', '', microtime());
         $fh = fopen($filename, "w");
         fwrite($fh, '<html><body>');
         fwrite($fh, "<h1>I AM GROOT</h1>");
@@ -94,10 +95,10 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     public function createZipFile() : ?UploadedFile
     {
         $zip = new ZipArchive();
-        $zipName = __DIR__.'/php'.str_replace(' ', '', microtime());
+        $zipName = sys_get_temp_dir().'/php'.str_replace(' ', '', microtime());
         self::$tmpFiles[] = $zipName;
 
-        $fileName = __DIR__.'/php'.str_replace(' ', '', microtime());
+        $fileName = sys_get_temp_dir().'/php'.str_replace(' ', '', microtime());
         $fh = fopen($fileName, "w");
         fwrite($fh, '<html><body>');
         fwrite($fh, "<h1>I AM GROOT</h1>");
@@ -110,6 +111,35 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         }
 
         $zip->addFile($fileName, 'folder/index.html');
+
+        if ($zip->close() === false) {
+            return null;
+        }
+
+        return new UploadedFile($zipName, 'mini-groot.zip', 'application/zip', filesize($zipName));
+    }
+
+    public function createInvalidZipFile() : ?UploadedFile
+    {
+        $zip = new ZipArchive();
+        $zipName = sys_get_temp_dir().'/php'.str_replace(' ', '', microtime());
+        self::$tmpFiles[] = $zipName;
+
+        $fileName = sys_get_temp_dir().'/php'.str_replace(' ', '', microtime());
+        $fh = fopen($fileName, "w");
+        fwrite($fh, '<html><body>');
+        fwrite($fh, "<h1>I AM GROOT</h1>");
+        fwrite($fh, '</body></html>');
+        fclose($fh);
+        self::$tmpFiles[] = $fileName;
+
+        if ($zip->open($zipName, ZipArchive::CREATE) !== true) {
+            return null;
+        }
+
+        $zip->addFile($fileName, 'folder/index.html');
+        $zip->addFile($fileName, 'folder2/index.html');
+        $zip->addFile($fileName, $fileName);
 
         if ($zip->close() === false) {
             return null;

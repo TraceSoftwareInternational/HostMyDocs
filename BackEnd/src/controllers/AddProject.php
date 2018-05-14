@@ -61,7 +61,7 @@ class AddProject extends BaseController
 
         $requestParams = $request->getParsedBody();
 
-        if (is_array($requestParams) === false) {
+        if (count($requestParams) === 0) {
             $this->errorMessage = 'no parameters found';
             $response = $response->write($this->errorMessage);
             return $response->withStatus(400);
@@ -200,9 +200,16 @@ class AddProject extends BaseController
 
         $zipFile = $zipper->make($this->archive->file);
 
-        $filesToExtract = $zipFile->listFiles();
+        $rootCandidates = array_values(array_filter($zipFile->listFiles(), function ($path) {
+            return preg_match('@^[^/]+/index\.html$@', $path);
+        }));
 
-        $splittedPath = explode('/', $filesToExtract[0]);
+        if (count($rootCandidates) > 1) {
+            $this->errorMessage = "More than one index file found";
+            return false;
+        }
+
+        $splittedPath = explode('/', $rootCandidates[0]);
         $zipRoot = array_shift($splittedPath);
 
         $destination = [

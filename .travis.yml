@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-    - "node"
+    - "8"
 
 sudo: required
 
@@ -29,6 +29,3 @@ after_success:
     docker build -t tracesoftware/hostmydocs:dev . ;
     docker push tracesoftware/hostmydocs:dev;
     fi
-
-notifications:
-  webhooks: $MATTERMOST_HOOK_URL

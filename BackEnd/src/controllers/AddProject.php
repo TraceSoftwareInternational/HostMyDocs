@@ -201,11 +201,7 @@ class AddProject extends BaseController
         $zipFile = $zipper->make($this->archive->file);
 
         $rootCandidates = array_values(array_filter($zipFile->listFiles(), function ($path) {
-            if (preg_match('@^[^/]+/index\.html$@', $path)) {
-                return true;
-            } else {
-                return false;
-            }
+            return preg_match('@^[^/]+/index\.html$@', $path);
         }));
 
         if (count($rootCandidates) > 1) {

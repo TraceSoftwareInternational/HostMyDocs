@@ -5,7 +5,7 @@ RUN composer update --prefer-dist --ignore-platform-reqs --optimize-autoloader
 
 ########################################################################################
 
-FROM node AS frontFiles
+FROM node:8 AS frontFiles
 WORKDIR /home/builder
 COPY FrontEnd .
 RUN yarn install

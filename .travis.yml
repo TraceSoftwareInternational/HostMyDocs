@@ -21,6 +21,7 @@ script:
 
 after_success:
   - docker login  -u="$DOCKER_LOGIN" -p="$DOCKER_PASSWORD"
+  - cd "$TRAVIS_BUILD_DIR"
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker build -t tracesoftware/hostmydocs:latest . ;
     docker push tracesoftware/hostmydocs:latest;

@@ -168,19 +168,19 @@ class DeleteProject extends BaseController
 
         $archiveFolder =  $this->container->get('archiveRoot');
 
+        $archiveFileName = preg_replace("/^$/", "*", $fileName);
+
         $archiveDestination = [
             $archiveFolder,
-            implode('-', $fileName).'.zip'
+            implode('-', $archiveFileName).'.zip'
         ];
 
         $archiveDestinationPath = implode(DIRECTORY_SEPARATOR, $archiveDestination);
 
-        if (file_exists($archiveDestinationPath) === true) {
-            try {
-                unlink($archiveDestinationPath);
-            } catch (\Exception $e) {
-                $this->errorMessage = 'unlinking backup failed.';
-                return false;
+        $archiveToDelete = glob($archiveDestinationPath);
+        if (count($archiveToDelete) !== 0) {
+            foreach($archiveToDelete as $f) {
+                unlink($f);
             }
         } else {
             error_log('No backup found ' . $archiveDestinationPath);

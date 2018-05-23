@@ -55,6 +55,36 @@ paths:
         401:
           description: provided password is wrong
 
+    /deleteProject:
+        delete:
+          operationId: deleteProject
+          description: Delete a given version of a project to the database
+          security:
+            - basicAuth: []
+          parameters:
+            - name: name
+              type: string
+              required: true
+              in: formData
+              description: Display name of the project
+            - name: language
+              type: string
+              required: true
+              in: formData
+              description: Programming language used in this version of the project
+            - name: version
+              type: string
+              required: true
+              in: formData
+              description: a version number that match SemVer specification
+          responses:
+            200:
+              description: project was deleted successfully
+            400:
+              description: one or more parameters are invalid
+            401:
+              description: provided password is wrong
+
 securityDefinitions:
   basicAuth:
     type: basic
@@ -92,4 +122,3 @@ definitions:
       index:
         type: string
         description: an host-relative path to the index.html file of the documentation for a given version in a given project
-

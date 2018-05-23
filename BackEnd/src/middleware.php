@@ -10,4 +10,11 @@ $slim->add(new HttpBasicAuthentication([
     'users' => $slim->getContainer()->get('authorizedUser')
 ]));
 
+$slim->add(new HttpBasicAuthentication([
+    'relaxed' => [],
+    'path' => '/deleteProject',
+    'secure' => $slim->getContainer()->get('shouldSecure'),
+    'users' => $slim->getContainer()->get('authorizedUser')
+]));
+
 $slim->add(new Cache('public', 86400));

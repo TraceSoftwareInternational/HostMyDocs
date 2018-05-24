@@ -58,8 +58,6 @@ curl --request POST \
 curl --request DELETE \
     --url http://localhost:8080/BackEnd/deleteProject \
     --user user:password \
-    --header 'content-type: application/x-www-form-urlencoded;authorization: Basic dXNlcjpwYXNzd29yZA==' \
-    --header 'boundary=---011000010111000001101001' \
     -d "name=DocumentationName" \
     -d "version=1.0.0" \
     -d "language=YourProgrammingLanguage"

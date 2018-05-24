@@ -2,11 +2,9 @@
 
 namespace HostMyDocs\Controllers;
 
-use Chumper\Zipper\Zipper;
 use Slim\Container;
 use Slim\Http\Response as Response;
 use Slim\Http\Request as Request;
-use Slim\Http\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
 
 class DeleteProject extends BaseController
@@ -46,11 +44,7 @@ class DeleteProject extends BaseController
      */
     public function __invoke(Request $request, Response $response)
     {
-        // increasing execution time
-        ini_set('max_execution_time', 3600);
-
         $requestParams = $request->getParsedBody();
-        var_dump($requestParams);
 
         if (count($requestParams) === 0) {
             $this->errorMessage = 'no parameters found';

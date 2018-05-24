@@ -5,7 +5,7 @@ use Slim\Middleware\HttpBasicAuthentication;
 
 $slim->add(new HttpBasicAuthentication([
     'relaxed' => [],
-    'path' => '/addProject',
+    'path' => ['/addProject', '/deleteProject'],
     'secure' => $slim->getContainer()->get('shouldSecure'),
     'users' => $slim->getContainer()->get('authorizedUser')
 ]));

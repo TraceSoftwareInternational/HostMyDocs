@@ -16,6 +16,7 @@ Note that by default the BackEnd will require to be secured with HTTPS. If you w
 You can refer to the [production setup section](#production-setup) to properly deploy an HostMyDocs instance with SSL enabled.
 
 ## Getting Started
+### Add a doc
 
 1) Launch the application and its server with ```docker run -e CREDENTIALS=user:password -e SHOULD_SECURE=FALSE -v `pwd`:/data -p 8080:80 tracesoftware/hostmydocs```
 
@@ -47,6 +48,36 @@ curl --request POST \
 ```
 
 5) Open [http://localhost:8080](http://localhost:8080) to see your uploaded docs !
+
+### Delete a doc
+
+1) Launch the application and its server with ```docker run -e CREDENTIALS=user:password -e SHOULD_SECURE=FALSE -v `pwd`:/data -p 8080:80 tracesoftware/hostmydocs```
+
+2) delete using cURL by example :
+```bash
+curl --request DELETE \
+    --url http://localhost:8080/BackEnd/deleteProject \
+    --user user:password \
+    -d "name=DocumentationName" \
+    -d "version=1.0.0" \
+    -d "language=YourProgrammingLanguage"
+```
+
+> Note that you can write
+> ```bash
+> -d "language="
+> ```
+> to delete a whole `version` for the project
+>
+> OR
+>
+> ```bash
+> -d "version=" \
+> -d "language="
+> ```
+> to delete the whole `project`
+
+3) Open [http://localhost:8080](http://localhost:8080) to see your remainings docs !
 
 ## BackEnd API
 

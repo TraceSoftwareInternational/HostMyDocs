@@ -11,70 +11,17 @@ class DeleteProjectTest extends BaseTestCase
 
     private $wrongCredentials = 'plop:plop';
 
-    private static $isInitialized = false;
-
-    public function setUp()
-    {
-        // allow setUp to be done once
-        if (self::$isInitialized) {
-            return;
-        }
-        self::$isInitialized = true;
-
-        // create project for delete using every params
-        $parameters = [
-            'name' => 'AnotherProject',
-            'language' => 'R\'lyehian',
-            'version' => '6.6.6'
-        ];
-        $files = ['archive' => $this->createZipFile()];
-        $credentials = $this->serverCredentials;
-
-        $this->runApp('POST', '/addProject', $parameters, $files, $credentials);
-
-        // create project for multiple delete
-        $parameters = [
-            'name' => 'AThirdProject',
-            'language' => 'ALanguage',
-            'version' => '6.6.6'
-        ];
-        $files = ['archive' => $this->createZipFile()];
-        $credentials = $this->serverCredentials;
-        $this->runApp('POST', '/addProject', $parameters, $files, $credentials);
-
-        $parameters = [
-            'name' => 'AThirdProject',
-            'language' => 'ASecondLanguage',
-            'version' => '6.6.6'
-        ];
-        $files = ['archive' => $this->createZipFile()];
-        $credentials = $this->serverCredentials;
-        $this->runApp('POST', '/addProject', $parameters, $files, $credentials);
-
-        $parameters = [
-            'name' => 'AThirdProject',
-            'language' => 'ALanguage',
-            'version' => '4.2'
-        ];
-        $files = ['archive' => $this->createZipFile()];
-        $credentials = $this->serverCredentials;
-        $this->runApp('POST', '/addProject', $parameters, $files, $credentials);
-
-        $parameters = [
-            'name' => 'AThirdProject',
-            'language' => 'ALanguage',
-            'version' => '0'
-        ];
-        $files = ['archive' => $this->createZipFile()];
-        $credentials = $this->serverCredentials;
-        $this->runApp('POST', '/addProject', $parameters, $files, $credentials);
-    }
-
     /**
      * @dataProvider arrayOfParametersProvider
      */
-    public function testDeleteProject($parameters, $credentialsArray, $statusCode)
+    public function testDeleteProject($projectsToPost, $parameters, $credentialsArray, $statusCode)
     {
+        foreach ($projectsToPost as $project) {
+            $files = ['archive' => $this->createZipFile()];
+            $credentials= $this->serverCredentials;
+            $this->runApp('POST', '/addProject', $parameters, $files, $credentials);
+        }
+
         $credentials = null;
 
         if (array_key_exists('serverCredentials', $credentialsArray)) {
@@ -98,9 +45,11 @@ class DeleteProjectTest extends BaseTestCase
             'no credentials' => [
                 [],
                 [],
+                [],
                 'statusCode' => 401
             ],
             'good credentials but no params' => [
+                [],
                 [],
                 [
                     'serverCredentials' => $this->serverCredentials,
@@ -110,6 +59,7 @@ class DeleteProjectTest extends BaseTestCase
             ],
             'bad credentials' => [
                 [],
+                [],
                 [
                     'serverCredentials' => $this->serverCredentials,
                     'userCredentials' => $this->wrongCredentials
@@ -117,6 +67,7 @@ class DeleteProjectTest extends BaseTestCase
                 'statusCode' => 401
             ],
             'name' => [
+                [],
                 [
                     'name' => 'SomeProject'
                 ],
@@ -127,6 +78,7 @@ class DeleteProjectTest extends BaseTestCase
                 'statusCode' => 400
             ],
             'name + version' => [
+                [],
                 [
                     'name' => 'AnotherProject',
                     'version' => '6.6.6',
@@ -138,6 +90,7 @@ class DeleteProjectTest extends BaseTestCase
                 'statusCode' => 400
             ],
             'name + language' => [
+                [],
                 [
                     'name' => 'AnotherProject',
                     'language' => 'R\'lyehian',
@@ -149,6 +102,7 @@ class DeleteProjectTest extends BaseTestCase
                 'statusCode' => 400
             ],
             'name + language + empty version' => [
+                [],
                 [
                     'name' => 'AnotherProject',
                     'language' => 'R\'lyehian',
@@ -161,6 +115,7 @@ class DeleteProjectTest extends BaseTestCase
                 'statusCode' => 400
             ],
             'valid parameters project not existing' => [
+                [],
                 [
                     'name' => 'AnotherProject',
                     'language' => 'R\'lyehian',
@@ -174,6 +129,13 @@ class DeleteProjectTest extends BaseTestCase
             ],
             'valid parameters' => [
                 [
+                    [
+                        'name' => 'AnotherProject',
+                        'language' => 'R\'lyehian',
+                        'version' => '6.6.6'
+                    ]
+                ],
+                [
                     'name' => 'AnotherProject',
                     'language' => 'R\'lyehian',
                     'version' => '6.6.6'
@@ -186,6 +148,18 @@ class DeleteProjectTest extends BaseTestCase
             ],
             'valid empty language parameters' => [
                 [
+                    [
+                        'name' => 'AThirdProject',
+                        'language' => 'R\'lyehian',
+                        'version' => '6.6.6'
+                    ],
+                    [
+                        'name' => 'AThirdProject',
+                        'language' => 'ThePerfectLanguage',
+                        'version' => '6.6.6'
+                    ]
+                ],
+                [
                     'name' => 'AThirdProject',
                     'language' => '',
                     'version' => '6.6.6'
@@ -197,6 +171,23 @@ class DeleteProjectTest extends BaseTestCase
                 'statusCode' => 200
             ],
             'valid empty language + empty version parameters' => [
+                [
+                    [
+                        'name' => 'AThirdProject',
+                        'language' => 'R\'lyehian',
+                        'version' => '6.6.6'
+                    ],
+                    [
+                        'name' => 'AThirdProject',
+                        'language' => 'ThePerfectLanguage',
+                        'version' => '6.6.6'
+                    ],
+                    [
+                        'name' => 'AThirdProject',
+                        'language' => 'ThePerfectLanguage',
+                        'version' => '4.2'
+                    ]
+                ],
                 [
                     'name' => 'AThirdProject',
                     'language' => '',

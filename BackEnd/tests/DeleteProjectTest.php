@@ -66,10 +66,56 @@ class DeleteProjectTest extends BaseTestCase
                 ],
                 'statusCode' => 401
             ],
+            'name null' => [
+                [],
+                [
+                    'version' => '6.6.6',
+                    'language' => 'language'
+                ],
+                [
+                    'serverCredentials' => $this->serverCredentials,
+                    'userCredentials' => $this->serverCredentials
+                ],
+                'statusCode' => 400
+            ],
+            'empty name' => [
+                [],
+                [
+                    'name' => ''
+                ],
+                [
+                    'serverCredentials' => $this->serverCredentials,
+                    'userCredentials' => $this->serverCredentials
+                ],
+                'statusCode' => 400
+            ],
+            'name with slash' => [
+                [],
+                [
+                    'name' => 'Some/Project'
+                ],
+                [
+                    'serverCredentials' => $this->serverCredentials,
+                    'userCredentials' => $this->serverCredentials
+                ],
+                'statusCode' => 400
+            ],
             'name' => [
                 [],
                 [
                     'name' => 'SomeProject'
+                ],
+                [
+                    'serverCredentials' => $this->serverCredentials,
+                    'userCredentials' => $this->serverCredentials
+                ],
+                'statusCode' => 400
+            ],
+            'name + version with slash' => [
+                [],
+                [
+                    'name' => 'AnotherProject',
+                    'version' => '6/6.6',
                 ],
                 [
                     'serverCredentials' => $this->serverCredentials,
@@ -107,6 +153,19 @@ class DeleteProjectTest extends BaseTestCase
                     'name' => 'AnotherProject',
                     'language' => 'R\'lyehian',
                     'version' => ''
+                ],
+                [
+                    'serverCredentials' => $this->serverCredentials,
+                    'userCredentials' => $this->serverCredentials
+                ],
+                'statusCode' => 400
+            ],
+            'name + version + language with slash' => [
+                [],
+                [
+                    'name' => 'AnotherProject',
+                    'version' => '6.6.6',
+                    'language' => 'with/slash',
                 ],
                 [
                     'serverCredentials' => $this->serverCredentials,

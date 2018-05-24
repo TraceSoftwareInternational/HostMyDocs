@@ -64,7 +64,7 @@ curl --request DELETE \
 ```
 
 > Note that you can write
-> ```
+> ```bash
 > -d "language="
 > ```
 > to delete a whole `version` for the project
@@ -72,8 +72,8 @@ curl --request DELETE \
 > OR
 >
 > ```bash
-> -d "version=1.0.0" \
-> -d "language=YourProgrammingLanguage"
+> -d "version=" \
+> -d "language="
 > ```
 > to delete the whole `project`
 

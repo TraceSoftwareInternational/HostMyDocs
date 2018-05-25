@@ -17,6 +17,8 @@ abstract class BaseController
      */
     protected $errorMessage = null;
 
+    public abstract static function useRoute();
+
     public function __construct(Container $container)
     {
         $this->container = $container;

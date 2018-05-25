@@ -1,4 +1,11 @@
 <?php
+use Slim\Http\Response as Response;
+use Slim\Http\Request as Request;
+
+$slim->get('/', function (Request $request, Response $response) {
+    return $response->write('What did you expect ?');
+});
+
 // declare function used to dynamicaly load routes
 // they are first because since they are conditionnaly declared they have to be first to be recognized
 // they are conditionnaly declared because PHPUnit require the file multiple time

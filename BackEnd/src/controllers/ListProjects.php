@@ -18,6 +18,11 @@ class ListProjects extends BaseController
      */
     private $projects = [];
 
+    public static function useRoute()
+    {
+        return ["get", "listProjects"];
+    }
+
     public function __construct(Container $container)
     {
         parent::__construct($container);

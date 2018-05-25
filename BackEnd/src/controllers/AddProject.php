@@ -41,6 +41,11 @@ class AddProject extends BaseController
      */
     private $filesystem = null;
 
+    public static function useRoute()
+    {
+        return ["post", "addProject"];
+    }
+
     public function __construct(Container $container)
     {
         parent::__construct($container);

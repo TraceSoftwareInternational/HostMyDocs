@@ -22,11 +22,11 @@ script:
 after_success:
   - docker login  -u="$DOCKER_LOGIN" -p="$DOCKER_PASSWORD"
   - cd "$TRAVIS_BUILD_DIR"
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+  - if [ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]; then
     docker build -t tracesoftware/hostmydocs:latest . ;
     docker push tracesoftware/hostmydocs:latest;
     fi
-  - if [ "$TRAVIS_BRANCH" == "develop" ]; then
+  - if [ "$TRAVIS_BRANCH" == "develop" && "$TRAVIS_PULL_REQUEST" == "false" ]; then
     docker build -t tracesoftware/hostmydocs:dev . ;
     docker push tracesoftware/hostmydocs:dev;
     fi

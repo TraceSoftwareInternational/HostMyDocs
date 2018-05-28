@@ -78,6 +78,9 @@ $slim->post('/addProject', function (Request $request, Response $response)
         $archive = $files['archive'];
     } else {
         $errorMessage = 'no file provided';
+        // this one needed to prevent next if to throw a null pointer exeption
+        $response = $response->write($errorMessage);
+        return $response->withStatus(400);
     }
 
     if (pathinfo($archive->getClientFilename(), PATHINFO_EXTENSION) !== 'zip') {

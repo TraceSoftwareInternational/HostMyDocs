@@ -22,8 +22,8 @@ abstract class ProjectController {
             ->ignoreDotFiles(false)
             ->depth('== 0')
             ->directories()
-            ->in($storageRoot)->sortByName();
-
+            ->in($storageRoot)
+            ->sortByName();
         $projectStructure = [];
 
         foreach ($projectLister as $projectFolder) {
@@ -115,14 +115,6 @@ abstract class ProjectController {
             $languageStructure = $versionStructure;
         }
     }
-
-
-
-
-
-
-
-
 
     /**
      * Delete doc for project and corresponding backup

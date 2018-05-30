@@ -7,14 +7,17 @@ use HostMyDocs\Models\Version;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-abstract class ProjectController {
-
+class ProjectController
+{
     /**
      * Retrieving all information to list all languages from all versions from all projects stored
      *
+     * @param string $storageRoot
+     * @param string $archiveRoot
+     *
      * @return Project[] the list of projects
      */
-    public static function listProjects($storageRoot, $archiveRoot)
+    public function listProjects($storageRoot, $archiveRoot)
     {
         $projects = [];
         $projectLister  = new Finder();
@@ -46,7 +49,7 @@ abstract class ProjectController {
      * @param Project $currentProject
      * @param array $projectStructure
      */
-    private static function listVersions(SplFileInfo $projectFolder, Project $currentProject, array $projectStructure, string $storageRoot, string $archiveRoot)
+    private function listVersions(SplFileInfo $projectFolder, Project $currentProject, array $projectStructure, string $storageRoot, string $archiveRoot)
     {
         $versionLister  = new Finder();
         $versionLister
@@ -75,7 +78,7 @@ abstract class ProjectController {
      * @param Version $currentVersion
      * @param array $versionStructure
      */
-    private static function listLanguages(SplFileInfo $versionFolder, Version $currentVersion, array $versionStructure, string $storageRoot, string $archiveRoot)
+    private function listLanguages(SplFileInfo $versionFolder, Version $currentVersion, array $versionStructure, string $storageRoot, string $archiveRoot)
     {
         $documentRoot = str_replace($_SERVER['DOCUMENT_ROOT'], '', $storageRoot);
 
@@ -121,7 +124,8 @@ abstract class ProjectController {
      *
      * @return null|string null or the error's description if one append
      */
-    public static function deleteProject($name, $version, $language, $archiveFolder, $storageFolder) {
+    public function deleteProject($name, $version, $language, $archiveFolder, $storageFolder)
+    {
         $fileName = [
             $name,
             $version,
@@ -139,7 +143,7 @@ abstract class ProjectController {
 
         $archiveToDelete = glob($archiveDestinationPath);
         if (count($archiveToDelete) !== 0) {
-            foreach($archiveToDelete as $f) {
+            foreach ($archiveToDelete as $f) {
                 unlink($f);
             }
         } else {
@@ -155,10 +159,10 @@ abstract class ProjectController {
 
         if (file_exists($storageDestinationPath) === true) {
             try {
-                if(self::deleteDirectory($storageDestinationPath) === false) {
+                if (self::deleteDirectory($storageDestinationPath) === false) {
                     return 'deleting project failed.';
                 }
-                if(self::deleteEmptyDirectories($storageFolder) === false) {
+                if (self::deleteEmptyDirectories($storageFolder) === false) {
                     return 'deleting empty folders failed. /listProject will fail until you delete them';
                 }
             } catch (\Exception $e) {
@@ -178,7 +182,8 @@ abstract class ProjectController {
      *
      * @return bool
      */
-    private static function deleteDirectory($dir) : bool {
+    private function deleteDirectory($dir) : bool
+    {
         if (!file_exists($dir)) {
             return true;
         }
@@ -189,11 +194,9 @@ abstract class ProjectController {
 
         $dirContent = array_diff(scandir($dir), array('..', '.'));
         foreach ($dirContent as $item) {
-
             if (!self::deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
-
         }
 
         return rmdir($dir);
@@ -206,7 +209,8 @@ abstract class ProjectController {
      *
      * @return bool
      */
-    private static function deleteEmptyDirectories($dir) : bool {
+    private function deleteEmptyDirectories($dir) : bool
+    {
         if (!file_exists($dir)) {
             return true;
         }
@@ -217,11 +221,9 @@ abstract class ProjectController {
 
         $dirContentBefore = array_diff(scandir($dir), array('..', '.'));
         foreach ($dirContentBefore as $item) {
-
             if (!self::deleteEmptyDirectories($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
-
         }
         $dirContentAfter = array_diff(scandir($dir), array('..', '.'));
         if (count($dirContentAfter) === 0) {
@@ -231,4 +233,3 @@ abstract class ProjectController {
         return true;
     }
 }
-?>

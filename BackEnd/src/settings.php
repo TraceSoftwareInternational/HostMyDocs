@@ -29,5 +29,8 @@ return [
     },
     'cache' => function () {
         return new \Slim\HttpCache\CacheProvider();
+    },
+    'projectController' => function () {
+        return new \HostMyDocs\Controllers\ProjectController();
     }
 ];

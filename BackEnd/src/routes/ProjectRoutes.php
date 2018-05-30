@@ -5,11 +5,10 @@ use Slim\Http\Request as Request;
 use Symfony\Component\Filesystem\Filesystem;
 use HostMyDocs\Controllers\ProjectController;
 
-$slim->get('/listProjects', function (Request $request, Response $response)
-{
+$slim->get('/listProjects', function (Request $request, Response $response) {
     $projects = [];
     try {
-        $projects = ProjectController::listProjects($this->get('storageRoot'), $this->get('archiveRoot'));
+        $projects = $this->get('projectController')->listProjects($this->get('storageRoot'), $this->get('archiveRoot'));
     } catch (\Exception $e) {
     }
 
@@ -17,9 +16,7 @@ $slim->get('/listProjects', function (Request $request, Response $response)
     return $cacheProvider->withEtag($response->withJson($projects), md5(json_encode($projects)));
 });
 
-
-$slim->post('/addProject', function (Request $request, Response $response)
-{
+$slim->post('/addProject', function (Request $request, Response $response) {
     // increasing execution time
     ini_set('max_execution_time', 3600);
 
@@ -36,7 +33,6 @@ $slim->post('/addProject', function (Request $request, Response $response)
         $response = $response->write($errorMessage);
         return $response->withStatus(400);
     }
-
 
     error_log('Processing a new request');
 
@@ -58,34 +54,10 @@ $slim->post('/addProject', function (Request $request, Response $response)
 
     error_log('Checking provided parameters');
 
-    if ($name === null) {
-        $errorMessage = 'name is empty';
-    }
-
-    if (strpos($name, '/') !== false) {
-        $errorMessage = 'name cannot contains slashes';
-    }
-
-    if ($language === null) {
-        $errorMessage = 'language is empty';
-    }
-
-    if (strpos($language, '/') !== false) {
-        $errorMessage = 'language cannot contains slashes';
-    }
-
-    if ((array_key_exists('archive', $files))) {
-        $archive = $files['archive'];
-    } else {
-        $errorMessage = 'no file provided';
-        // this one needed to prevent next if to throw a null pointer exeption
-        $response = $response->write($errorMessage);
-        return $response->withStatus(400);
-    }
-
-    if (pathinfo($archive->getClientFilename(), PATHINFO_EXTENSION) !== 'zip') {
-        $errorMessage = 'archive is not a zip file';
-    }
+    // $project->setName($name);
+    // $version->setNumber($version);
+    // $language->setName($language);
+    // $language->setArchiveFile($archive);
 
     if ($errorMessage !== null) {
         $response = $response->write($errorMessage);
@@ -206,8 +178,7 @@ $slim->post('/addProject', function (Request $request, Response $response)
     return $response->withStatus(200);
 });
 
-$slim->delete('/deleteProject', function (Request $request, Response $response)
-{
+$slim->delete('/deleteProject', function (Request $request, Response $response) {
     $errorMessage = null;
     $name = null;
     $version = null;
@@ -238,47 +209,9 @@ $slim->delete('/deleteProject', function (Request $request, Response $response)
 
     error_log('Checking provided parameters');
 
-    if ($name === null) {
-        $errorMessage = 'name is empty';
-        $response = $response->write($errorMessage);
-        return $response->withStatus(400);
-    }
-
-    if (strpos($name, '/') !== false) {
-        $errorMessage = 'name cannot contains slashes';
-        $response = $response->write($errorMessage);
-        return $response->withStatus(400);
-    }
-
-    if (strlen($name) === 0) {
-        $errorMessage = 'name cannot be empty';
-        $response = $response->write($errorMessage);
-        return $response->withStatus(400);
-    }
-
-    if ($version === null) {
-        $errorMessage = 'version is empty';
-        $response = $response->write($errorMessage);
-        return $response->withStatus(400);
-    }
-
-    if (strpos($version, '/') !== false) {
-        $errorMessage = 'version cannot contains slashes';
-        $response = $response->write($errorMessage);
-        return $response->withStatus(400);
-    }
-
-    if ($language === null) {
-        $errorMessage = 'language is empty';
-        $response = $response->write($errorMessage);
-        return $response->withStatus(400);
-    }
-
-    if (strpos($language, '/') !== false) {
-        $errorMessage = 'language cannot contains slashes';
-        $response = $response->write($errorMessage);
-        return $response->withStatus(400);
-    }
+    // $project->setName($name);
+    // $version->setNumber($version);
+    // $language->setName($language);
 
     if (strlen($language) !== 0 && strlen($version) === 0) {
         $errorMessage = 'language must be empty when version is empty';
@@ -294,7 +227,7 @@ $slim->delete('/deleteProject', function (Request $request, Response $response)
 
     error_log('Deleting folder + backup');
 
-    $projectDeleteError = ProjectController::deleteProject($name, $version, $language, $this->get('archiveRoot'), $this->get('storageRoot'));
+    $projectDeleteError = $this->get('projectController')->deleteProject($name, $version, $language, $this->get('archiveRoot'), $this->get('storageRoot'));
     if ($projectDeleteError !== null) {
         $response = $response->write($projectDeleteError);
         return $response->withStatus(400);

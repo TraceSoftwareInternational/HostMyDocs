@@ -61,7 +61,7 @@ class BaseTestCase extends TestCase
         if (isset($requestData)) {
             $request = $request->withParsedBody($requestData);
         }
-        if(isset($files)) {
+        if (isset($files)) {
             $request = $request->withUploadedFiles($files);
         }
         // Set up a response object

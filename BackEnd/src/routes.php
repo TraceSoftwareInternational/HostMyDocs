@@ -18,4 +18,3 @@ $files = new RegexIterator($iter, '/^.+\.php$/i', RecursiveRegexIterator::GET_MA
 foreach ($files as $file) {
     include $file[0];
 }
-?>

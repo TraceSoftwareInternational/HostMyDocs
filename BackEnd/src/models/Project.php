@@ -55,10 +55,25 @@ class Project implements \JsonSerializable
 
     /**
      * @param null|string $name
-     * @return Project
+     * @return null|Project
      */
-    public function setName($name) : Project
+    public function setName($name) : ?self
     {
+        if ($name === null) {
+            error_log('project name cannot be null');
+            return null;
+        }
+
+        if (strpos($name, '/') !== false) {
+            error_log('project name cannot contains slashes');
+            return null;
+        }
+
+        if (strlen($name) === 0) {
+            error_log('project name cannot be empty');
+            return null;
+        }
+
         $this->name = $name;
 
         return $this;
@@ -76,7 +91,7 @@ class Project implements \JsonSerializable
      * @param Version[] $versions
      * @return Project
      */
-    public function setVersions($versions) : Project
+    public function setVersions($versions) : self
     {
         $this->versions = $versions;
 

@@ -55,10 +55,20 @@ class Version implements \JsonSerializable
 
     /**
      * @param null|string $number
-     * @return Version
+     * @return null|Version
      */
-    public function setNumber($number) : self
+    public function setNumber($number) : ?self
     {
+        if ($number === null) {
+            error_log('version cannot be null');
+            return null;
+        }
+
+        if (strpos($number, '/') !== false) {
+            error_log('version cannot contains slashes');
+            return null;
+        }
+
         $this->number = $number;
 
         return $this;

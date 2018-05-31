@@ -1,14 +1,23 @@
 <?php
 namespace HostMyDocs\Controllers;
 
+use Chumper\Zipper\Zipper;
 use HostMyDocs\Models\Language;
 use HostMyDocs\Models\Project;
 use HostMyDocs\Models\Version;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 class ProjectController
 {
+    private $filesystem = null;
+
+    public function __construct()
+    {
+        $this->filesystem = new Filesystem();
+    }
+
     /**
      * Retrieving all information to list all languages from all versions from all projects stored
      *
@@ -118,6 +127,72 @@ class ProjectController
             $languageStructure = $versionStructure;
         }
     }
+
+
+    public function extract($project): bool
+    {
+        $zipper = new Zipper();
+
+        $name = $project->getName();
+        $version = $project->getVersions()[0]->getNumber();
+        $language = $project->getVersions()[0]->getLanguages()[0]->getName();
+        $archive = $project->getVersions()[0]->getLanguages()[0]->getArchiveFile();
+
+        if (is_file($archive->file) === false) {
+            error_log('impossible to open archive file');
+            return false;
+        }
+
+        error_log("Opening file : " . $archive->file);
+
+        $zipFile = $zipper->make($archive->file);
+
+        $rootCandidates = array_values(array_filter($zipFile->listFiles(), function ($path) {
+            return preg_match('@^[^/]+/index\.html$@', $path);
+        }));
+
+        if (count($rootCandidates)>1) {
+            error_log('More than one index file found');
+            return false;
+        }
+
+        $splittedPath = explode('/', $rootCandidates[0]);
+        $zipRoot = array_shift($splittedPath);
+
+        $destination = [
+            '/var/www/html/data/docs', // $this->get('storageRoot'),
+            $name,
+            $version,
+            $language
+        ];
+
+        $destinationPath = implode('/', $destination);
+        error_log($destinationPath);
+
+        if (filter_var($destinationPath, FILTER_SANITIZE_URL) === false) {
+            error_log('extract path contains invalid characters');
+            return false;
+        }
+
+        if (file_exists($destinationPath)) {
+            $this->filesystem->remove($destinationPath);
+        }
+
+        if (mkdir($destinationPath, 0755, true) === false) {
+            error_log('failed to create folder');
+            return false;
+        }
+
+        error_log('Extracting to ' . $destinationPath);
+
+        $zipFile->folder($zipRoot)->extractTo($destinationPath);
+
+        $zipper->close();
+
+        return true;
+    }
+
+
 
     /**
      * Delete doc for project and corresponding backup

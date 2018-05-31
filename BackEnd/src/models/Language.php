@@ -2,6 +2,8 @@
 
 namespace HostMyDocs\Models;
 
+use Psr\Http\Message\UploadedFileInterface;
+
 class Language implements \JsonSerializable
 {
     /**
@@ -10,12 +12,12 @@ class Language implements \JsonSerializable
     private $name = null;
 
     /**
-     * @var null|string path tho the index file of the documentation
+     * @var null|string path to the index file of the documentation
      */
     private $indexFile = null;
 
     /**
-     * @var null|string path to a downloadable zip of the current language and version of the documentation for the current project
+     * @var null|UploadedFileInterface path to a downloadable zip of the current language and version of the documentation for the current project
      */
     private $archiveFile = null;
 
@@ -23,7 +25,7 @@ class Language implements \JsonSerializable
      * Language constructor.
      * @param string $name
      * @param string $indexFile
-     * @param string $archiveFile
+     * @param UploadedFileInterface $archiveFile
      */
     public function __construct($name, $indexFile, $archiveFile)
     {
@@ -66,11 +68,22 @@ class Language implements \JsonSerializable
 
     /**
      * @param null|string $name
-     * @return Language
+     * @return null|Language
      */
-    public function setName($name) : self
+    public function setName($name) : ?self
     {
+        if ($name === null) {
+            error_log('language name cannot be null');
+            return null;
+        }
+
+        if (strpos($name, '/') !== false) {
+            error_log('language name cannot contains slashes');
+            return null;
+        }
+
         $this->name = $name;
+
         return $this;
     }
 
@@ -89,6 +102,30 @@ class Language implements \JsonSerializable
     public function setIndexFile($indexFile) : self
     {
         $this->indexFile = $indexFile;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getArchiveFile(): ?UploadedFileInterface
+    {
+        return $this->archiveFile;
+    }
+
+    /**
+     * @param null|UploadedFileInterface $archiveFile
+     * @return Language
+     */
+    public function setArchiveFile($archiveFile): ?self
+    {
+        if (pathinfo($archiveFile->getClientFilename(), PATHINFO_EXTENSION) !== 'zip') {
+            $errorMessage = 'archive is not a zip file';
+            return null;
+        }
+
+        $this->archiveFile = $archiveFile;
+
         return $this;
     }
 }

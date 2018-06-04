@@ -70,7 +70,7 @@ class Language implements \JsonSerializable
      * @param null|string $name
      * @return null|Language
      */
-    public function setName($name) : ?self
+    public function setName($name, $allowEmpty = false) : ?self
     {
         if ($name === null) {
             error_log('language name cannot be null');
@@ -79,6 +79,11 @@ class Language implements \JsonSerializable
 
         if (strpos($name, '/') !== false) {
             error_log('language name cannot contains slashes');
+            return null;
+        }
+
+        if (strlen($name) === 0 && !$allowEmpty) {
+            error_log('language name cannot be empty');
             return null;
         }
 

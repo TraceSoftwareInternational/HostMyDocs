@@ -57,7 +57,7 @@ class Version implements \JsonSerializable
      * @param null|string $number
      * @return null|Version
      */
-    public function setNumber($number) : ?self
+    public function setNumber($number, $allowEmpty = false) : ?self
     {
         if ($number === null) {
             error_log('version cannot be null');
@@ -66,6 +66,11 @@ class Version implements \JsonSerializable
 
         if (strpos($number, '/') !== false) {
             error_log('version cannot contains slashes');
+            return null;
+        }
+
+        if (strlen($number) === 0 && !$allowEmpty) {
+            error_log('version cannot be empty');
             return null;
         }
 

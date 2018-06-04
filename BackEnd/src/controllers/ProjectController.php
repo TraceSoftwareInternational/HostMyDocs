@@ -12,21 +12,25 @@ use Symfony\Component\Finder\SplFileInfo;
 class ProjectController
 {
     private $filesystem = null;
+    private $storageRoot = "";
+    private $archiveRoot = "";
 
-    public function __construct()
+    public function __construct(string $storageRoot, string $archiveRoot)
     {
         $this->filesystem = new Filesystem();
+        $this->storageRoot = $storageRoot;
+        $this->archiveRoot = $archiveRoot;
     }
 
     /**
      * Retrieving all information to list all languages from all versions from all projects stored
      *
-     * @param string $storageRoot
-     * @param string $archiveRoot
+     * @param string $this->storageRoot
+     * @param string $this->archiveRoot
      *
      * @return Project[] the list of projects
      */
-    public function listProjects($storageRoot, $archiveRoot)
+    public function listProjects()
     {
         $projects = [];
         $projectLister  = new Finder();
@@ -34,7 +38,7 @@ class ProjectController
             ->ignoreDotFiles(false)
             ->depth('== 0')
             ->directories()
-            ->in($storageRoot)
+            ->in($this->storageRoot)
             ->sortByName();
         $projectStructure = [];
 
@@ -43,7 +47,7 @@ class ProjectController
 
             $projectStructure[] = $projectFolder->getFilename();
 
-            self::listVersions($projectFolder, $project, $projectStructure, $storageRoot, $archiveRoot);
+            $this->listVersions($projectFolder, $project, $projectStructure);
 
             $projects[] = $project;
 
@@ -58,7 +62,7 @@ class ProjectController
      * @param Project $currentProject
      * @param array $projectStructure
      */
-    private function listVersions(SplFileInfo $projectFolder, Project $currentProject, array $projectStructure, string $storageRoot, string $archiveRoot)
+    private function listVersions(SplFileInfo $projectFolder, Project $currentProject, array $projectStructure)
     {
         $versionLister  = new Finder();
         $versionLister
@@ -74,7 +78,7 @@ class ProjectController
 
             $versionStructure[] = $versionFolder->getFilename();
 
-            self::listLanguages($versionFolder, $version, $versionStructure, $storageRoot, $archiveRoot);
+            $this->listLanguages($versionFolder, $version, $versionStructure);
 
             $currentProject->addVersion($version);
 
@@ -87,9 +91,9 @@ class ProjectController
      * @param Version $currentVersion
      * @param array $versionStructure
      */
-    private function listLanguages(SplFileInfo $versionFolder, Version $currentVersion, array $versionStructure, string $storageRoot, string $archiveRoot)
+    private function listLanguages(SplFileInfo $versionFolder, Version $currentVersion, array $versionStructure)
     {
-        $documentRoot = str_replace($_SERVER['DOCUMENT_ROOT'], '', $storageRoot);
+        $documentRoot = str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->storageRoot);
 
         $languageLister = new Finder();
         $languageLister
@@ -109,7 +113,7 @@ class ProjectController
                 'index.html'
             ];
 
-            $archiveRoot = str_replace($_SERVER['DOCUMENT_ROOT'], '', $archiveRoot);
+            $archiveRoot = str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->archiveRoot);
 
             $archivePath = $archiveRoot
                 . DIRECTORY_SEPARATOR
@@ -129,14 +133,13 @@ class ProjectController
     }
 
 
-    public function extract($project): bool
+    public function extract(Project $project): bool
     {
         $zipper = new Zipper();
 
-        $name = $project->getName();
-        $version = $project->getVersions()[0]->getNumber();
-        $language = $project->getVersions()[0]->getLanguages()[0]->getName();
-        $archive = $project->getVersions()[0]->getLanguages()[0]->getArchiveFile();
+        $version = $project->getVersions()[0];
+        $language = $version->getLanguages()[0];
+        $archive = $language->getArchiveFile();
 
         if (is_file($archive->file) === false) {
             error_log('impossible to open archive file');
@@ -160,14 +163,13 @@ class ProjectController
         $zipRoot = array_shift($splittedPath);
 
         $destination = [
-            '/var/www/html/data/docs', // $this->get('storageRoot'),
-            $name,
-            $version,
-            $language
+            $this->storageRoot,
+            $project->getName(),
+            $version->getNumber(),
+            $language->getName()
         ];
 
         $destinationPath = implode('/', $destination);
-        error_log($destinationPath);
 
         if (filter_var($destinationPath, FILTER_SANITIZE_URL) === false) {
             error_log('extract path contains invalid characters');
@@ -197,20 +199,23 @@ class ProjectController
     /**
      * Delete doc for project and corresponding backup
      *
-     * @return null|string null or the error's description if one append
+     * @return bool
      */
-    public function deleteProject($name, $version, $language, $archiveFolder, $storageFolder)
+    public function deleteProject($project): bool
     {
+        $version = $project->getVersions()[0];
+        $language = $version->getLanguages()[0];
+
         $fileName = [
-            $name,
-            $version,
-            $language
+			$project->getName(),
+			$version->getNumber(),
+			$language->getName()
         ];
 
         $archiveFileName = preg_replace("/^$/", "*", $fileName);
 
         $archiveDestination = [
-            $archiveFolder,
+            $this->archiveRoot,
             implode('-', $archiveFileName).'.zip'
         ];
 
@@ -226,7 +231,7 @@ class ProjectController
         }
 
         $storageDestination = [
-            $storageFolder,
+            $this->storageRoot,
             implode(DIRECTORY_SEPARATOR, $fileName)
         ];
 
@@ -235,19 +240,23 @@ class ProjectController
         if (file_exists($storageDestinationPath) === true) {
             try {
                 if (self::deleteDirectory($storageDestinationPath) === false) {
-                    return 'deleting project failed.';
+                    error_log('deleting project failed.');
+                    return false;
                 }
-                if (self::deleteEmptyDirectories($storageFolder) === false) {
-                    return 'deleting empty folders failed. /listProject will fail until you delete them';
+                if (self::deleteEmptyDirectories($this->storageRoot) === false) {
+                    error_log('deleting empty folders failed. /listProject will fail until you delete them');
+                    return false;
                 }
             } catch (\Exception $e) {
-                return 'deleting project failed.';
+                error_log('deleting project failed.');
+                return false;
             }
         } else {
-            return 'project does not exists.';
+            error_log('project does not exists.');
+            return false;
         }
 
-        return null;
+        return true;
     }
 
     /**

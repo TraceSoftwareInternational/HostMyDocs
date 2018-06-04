@@ -27,7 +27,7 @@ class Language implements \JsonSerializable
      * @param string $indexFile
      * @param UploadedFileInterface $archiveFile
      */
-    public function __construct($name, $indexFile, $archiveFile)
+    public function __construct(?string $name, ?string $indexFile, $archiveFile)
     {
         $this->name = $name;
         $this->indexFile = $indexFile;
@@ -70,7 +70,7 @@ class Language implements \JsonSerializable
      * @param null|string $name
      * @return null|Language
      */
-    public function setName($name, $allowEmpty = false) : ?self
+    public function setName(?string $name, bool $allowEmpty = false) : ?self
     {
         if ($name === null) {
             error_log('language name cannot be null');
@@ -104,7 +104,7 @@ class Language implements \JsonSerializable
      * @param null|string $indexFile
      * @return Language
      */
-    public function setIndexFile($indexFile) : self
+    public function setIndexFile(?string $indexFile) : self
     {
         $this->indexFile = $indexFile;
         return $this;
@@ -122,7 +122,7 @@ class Language implements \JsonSerializable
      * @param null|UploadedFileInterface $archiveFile
      * @return Language
      */
-    public function setArchiveFile($archiveFile): ?self
+    public function setArchiveFile(?UploadedFileInterface $archiveFile): ?self
     {
         if (pathinfo($archiveFile->getClientFilename(), PATHINFO_EXTENSION) !== 'zip') {
             $errorMessage = 'archive is not a zip file';

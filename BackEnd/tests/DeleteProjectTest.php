@@ -220,7 +220,7 @@ class DeleteProjectTest extends BaseTestCase
                 ],
                 [
                     'name' => 'AThirdProject',
-                    'language' => '',
+                    'language' => '""',
                     'version' => '6.6.6'
                 ],
                 [
@@ -249,8 +249,8 @@ class DeleteProjectTest extends BaseTestCase
                 ],
                 [
                     'name' => 'AThirdProject',
-                    'language' => '',
-                    'version' => ''
+                    'language' => '""',
+                    'version' => '""'
                 ],
                 [
                     'serverCredentials' => $this->serverCredentials,

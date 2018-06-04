@@ -30,7 +30,7 @@ class ProjectController
      *
      * @return Project[] the list of projects
      */
-    public function listProjects()
+    public function listProjects(): array
     {
         $projects = [];
         $projectLister  = new Finder();
@@ -201,7 +201,7 @@ class ProjectController
      *
      * @return bool
      */
-    public function deleteProject($project): bool
+    public function deleteProject(Project $project): bool
     {
         $version = $project->getVersions()[0];
         $language = $version->getLanguages()[0];
@@ -266,7 +266,7 @@ class ProjectController
      *
      * @return bool
      */
-    private function deleteDirectory($dir) : bool
+    private function deleteDirectory(string $dir) : bool
     {
         if (!file_exists($dir)) {
             return true;
@@ -293,7 +293,7 @@ class ProjectController
      *
      * @return bool
      */
-    private function deleteEmptyDirectories($dir) : bool
+    private function deleteEmptyDirectories(string $dir) : bool
     {
         if (!file_exists($dir)) {
             return true;

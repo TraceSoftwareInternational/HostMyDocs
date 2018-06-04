@@ -14,7 +14,7 @@ class Project implements \JsonSerializable
      */
     private $versions = [];
 
-    public function __construct($name)
+    public function __construct(?string $name)
     {
         $this->name = $name;
     }
@@ -57,7 +57,7 @@ class Project implements \JsonSerializable
      * @param null|string $name
      * @return null|Project
      */
-    public function setName($name) : ?self
+    public function setName(?string $name) : ?self
     {
         if ($name === null) {
             error_log('project name cannot be null');
@@ -91,7 +91,7 @@ class Project implements \JsonSerializable
      * @param Version[] $versions
      * @return Project
      */
-    public function setVersions($versions) : self
+    public function setVersions(array $versions) : self
     {
         $this->versions = $versions;
 
@@ -102,7 +102,7 @@ class Project implements \JsonSerializable
     /**
      * @param Version $version
      */
-    public function addVersion(Version $version) : void
+    public function addVersion(Version $version)
     {
         $this->versions[] = $version;
     }

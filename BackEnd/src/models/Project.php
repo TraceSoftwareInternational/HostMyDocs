@@ -14,9 +14,8 @@ class Project implements \JsonSerializable
      */
     private $versions = [];
 
-    public function __construct(?string $name)
+    public function __construct()
     {
-        $this->name = $name;
     }
 
     /**
@@ -85,6 +84,14 @@ class Project implements \JsonSerializable
     public function getVersions() : array
     {
         return $this->versions;
+    }
+
+    public function getFirstVersion(): ?Version
+    {
+        if (count($this->versions) === 0) {
+            return null;
+        }
+        return $this->versions[0];
     }
 
     /**

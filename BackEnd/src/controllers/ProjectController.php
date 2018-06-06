@@ -5,6 +5,7 @@ use Chumper\Zipper\Zipper;
 use HostMyDocs\Models\Language;
 use HostMyDocs\Models\Project;
 use HostMyDocs\Models\Version;
+use Slim\Http\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -43,7 +44,7 @@ class ProjectController
         $projectStructure = [];
 
         foreach ($projectLister as $projectFolder) {
-            $project = new Project($projectFolder->getFilename());
+            $project = (new Project())->setName($projectFolder->getFilename());
 
             $projectStructure[] = $projectFolder->getFilename();
 
@@ -74,7 +75,7 @@ class ProjectController
 
         /** @var SplFileInfo $versionFolder */
         foreach ($versionLister->in($projectFolder->getRealPath()) as $versionFolder) {
-            $version = new Version($versionFolder->getFilename());
+            $version = (new Version())->setNumber($versionFolder->getFilename());
 
             $versionStructure[] = $versionFolder->getFilename();
 
@@ -91,7 +92,7 @@ class ProjectController
      * @param Version $currentVersion
      * @param array $versionStructure
      */
-    private function listLanguages(SplFileInfo $versionFolder, Version $currentVersion, array $versionStructure)
+    private function listLanguages(SplFileInfo $versionFolder, Version &$currentVersion, array $versionStructure)
     {
         $documentRoot = str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->storageRoot);
 
@@ -120,11 +121,10 @@ class ProjectController
                 . implode('-', $languageStructure)
                 . '.zip';
 
-            $language = new Language(
-                $languageFolder->getFilename(),
-                implode('/', $indexPath),
-                $archivePath
-            );
+            $language = (new Language())
+                ->setName($languageFolder->getFilename())
+                ->setIndexFile(implode('/', $indexPath))
+                ->setArchiveFile(new UploadedFile($archivePath, null, 'application/zip'));
 
             $currentVersion->addLanguage($language);
 
@@ -137,9 +137,19 @@ class ProjectController
     {
         $zipper = new Zipper();
 
-        $version = $project->getVersions()[0];
-        $language = $version->getLanguages()[0];
+        $version = $project->getFirstVersion();
+        $language = $version->getFirstLanguage();
         $archive = $language->getArchiveFile();
+
+        if ($version === null) {
+            error_log('An error occured while building the project (it has no version)');
+            return false;
+        }
+
+        if ($language === null) {
+            error_log('An error occured while building the project (it has no language)');
+            return false;
+        }
 
         if (is_file($archive->file) === false) {
             error_log('impossible to open archive file');
@@ -154,7 +164,7 @@ class ProjectController
             return preg_match('@^[^/]+/index\.html$@', $path);
         }));
 
-        if (count($rootCandidates)>1) {
+        if (count($rootCandidates) > 1) {
             error_log('More than one index file found');
             return false;
         }
@@ -162,14 +172,12 @@ class ProjectController
         $splittedPath = explode('/', $rootCandidates[0]);
         $zipRoot = array_shift($splittedPath);
 
-        $destination = [
+        $destinationPath = implode('/', [
             $this->storageRoot,
             $project->getName(),
             $version->getNumber(),
             $language->getName()
-        ];
-
-        $destinationPath = implode('/', $destination);
+        ]);
 
         if (filter_var($destinationPath, FILTER_SANITIZE_URL) === false) {
             error_log('extract path contains invalid characters');
@@ -203,50 +211,44 @@ class ProjectController
      */
     public function deleteProject(Project $project): bool
     {
-        $version = $project->getVersions()[0];
-        $language = $version->getLanguages()[0];
+        $version = $project->getFirstVersion();
+        $language = $version->getFirstLanguage();
 
-        $fileName = [
-			$project->getName(),
-			$version->getNumber(),
-			$language->getName()
-        ];
+        if ($version === null) {
+            error_log('An error occured while building the project (it has no version)');
+            return false;
+        }
 
-        $archiveFileName = preg_replace("/^$/", "*", $fileName);
+        if ($language === null) {
+            error_log('An error occured while building the project (it has no language)');
+            return false;
+        }
 
-        $archiveDestination = [
-            $this->archiveRoot,
-            implode('-', $archiveFileName).'.zip'
-        ];
+        $fileNameParts = array_filter(
+            [
+                $project->getName(),
+                $version->getNumber(),
+                $language->getName()
+            ],
+            function ($v) {
+                return strlen($v) !== 0;
+            }
+        );
 
-        $archiveDestinationPath = implode(DIRECTORY_SEPARATOR, $archiveDestination);
+        $archiveDestinationPath = $this->archiveRoot . DIRECTORY_SEPARATOR . implode('-', $fileNameParts) . '*.zip';
 
         $archiveToDelete = glob($archiveDestinationPath);
         if (count($archiveToDelete) !== 0) {
-            foreach ($archiveToDelete as $f) {
-                unlink($f);
-            }
+            $this->filesystem->remove($archiveToDelete);
         } else {
             error_log('No backup found ' . $archiveDestinationPath);
         }
 
-        $storageDestination = [
-            $this->storageRoot,
-            implode(DIRECTORY_SEPARATOR, $fileName)
-        ];
-
-        $storageDestinationPath = implode(DIRECTORY_SEPARATOR, $storageDestination);
+        $storageDestinationPath = $this->storageRoot . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $fileNameParts);
 
         if (file_exists($storageDestinationPath) === true) {
             try {
-                if (self::deleteDirectory($storageDestinationPath) === false) {
-                    error_log('deleting project failed.');
-                    return false;
-                }
-                if (self::deleteEmptyDirectories($this->storageRoot) === false) {
-                    error_log('deleting empty folders failed. /listProject will fail until you delete them');
-                    return false;
-                }
+                $this->filesystem->remove($storageDestinationPath);
             } catch (\Exception $e) {
                 error_log('deleting project failed.');
                 return false;
@@ -259,61 +261,12 @@ class ProjectController
         return true;
     }
 
-    /**
-     * delete the directory in argument $dir
-     *
-     * @param  [string] $dir path to dir to delete
-     *
-     * @return bool
-     */
-    private function deleteDirectory(string $dir) : bool
-    {
-        if (!file_exists($dir)) {
-            return true;
-        }
-
-        if (!is_dir($dir)) {
-            return unlink($dir);
-        }
-
-        $dirContent = array_diff(scandir($dir), array('..', '.'));
-        foreach ($dirContent as $item) {
-            if (!self::deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-                return false;
-            }
-        }
-
-        return rmdir($dir);
-    }
-
-    /**
-     * delete the directory in argument $dir
-     *
-     * @param  [string] $dir path to dir to delete
-     *
-     * @return bool
-     */
-    private function deleteEmptyDirectories(string $dir) : bool
-    {
-        if (!file_exists($dir)) {
-            return true;
-        }
-
-        if (!is_dir($dir)) {
-            return true;
-        }
-
-        $dirContentBefore = array_diff(scandir($dir), array('..', '.'));
-        foreach ($dirContentBefore as $item) {
-            if (!self::deleteEmptyDirectories($dir . DIRECTORY_SEPARATOR . $item)) {
-                return false;
-            }
-        }
-        $dirContentAfter = array_diff(scandir($dir), array('..', '.'));
-        if (count($dirContentAfter) === 0) {
-            return rmdir($dir);
-        }
-
-        return true;
-    }
+	public function removeEmptySubFolders(string $path)
+	{
+	    $empty=true;
+	    foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file) {
+	        $empty &= is_dir($file) && $this->removeEmptySubFolders($file);
+	    }
+	    return $empty && rmdir($path);
+	}
 }

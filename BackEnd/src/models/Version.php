@@ -18,9 +18,8 @@ class Version implements \JsonSerializable
      * Version constructor.
      * @param null|string $number
      */
-    public function __construct(?string $number)
+    public function __construct()
     {
-        $this->number = $number;
     }
 
     /**
@@ -87,11 +86,19 @@ class Version implements \JsonSerializable
         return $this->languages;
     }
 
+    public function getFirstLanguage(): ?Language
+    {
+        if (count($this->languages) === 0) {
+            return null;
+        }
+        return $this->languages[0];
+    }
+
     /**
      * @param Language[] $languages
      * @return Version
      */
-    public function setLanguages(array $languages) : self
+    public function setLanguages(array $languages): self
     {
         if (is_array($languages)) {
             $this->languages = $languages;

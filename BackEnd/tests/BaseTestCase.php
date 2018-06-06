@@ -70,6 +70,8 @@ class BaseTestCase extends TestCase
         $settings = require __DIR__ . '/../src/settings.php';
         // Instantiate the application
         $slim = new App($settings);
+        // add the dependencies in the container
+        require __DIR__ . '/../src/dependencies.php';
         // Registering application's middlewares
         require __DIR__ . '/../src/middleware.php';
         // Register routes

@@ -21,17 +21,8 @@ class Language implements \JsonSerializable
      */
     private $archiveFile = null;
 
-    /**
-     * Language constructor.
-     * @param string $name
-     * @param string $indexFile
-     * @param UploadedFileInterface $archiveFile
-     */
-    public function __construct(?string $name, ?string $indexFile, $archiveFile)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->indexFile = $indexFile;
-        $this->archiveFile = $archiveFile;
     }
 
     /**
@@ -52,7 +43,7 @@ class Language implements \JsonSerializable
         }
 
         if ($this->archiveFile !== null) {
-            $data['archivePath'] = $this->archiveFile;
+            $data['archivePath'] = $this->archiveFile->file;
         }
 
         return $data;
@@ -119,12 +110,12 @@ class Language implements \JsonSerializable
     }
 
     /**
-     * @param null|UploadedFileInterface $archiveFile
+     * @param UploadedFileInterface $archiveFile
      * @return Language
      */
-    public function setArchiveFile(?UploadedFileInterface $archiveFile): ?self
+    public function setArchiveFile(UploadedFileInterface $archiveFile): ?self
     {
-        if (pathinfo($archiveFile->getClientFilename(), PATHINFO_EXTENSION) !== 'zip') {
+        if ($archiveFile->getClientMediaType() !== 'application/zip') {
             $errorMessage = 'archive is not a zip file';
             return null;
         }

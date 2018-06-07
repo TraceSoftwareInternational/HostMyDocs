@@ -2,13 +2,15 @@
 
 use Monolog\Logger;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Formatter\LineFormatter;
 
 $container = $slim->getContainer();
 
 $container['logger'] = function () {
     $logger = new Logger('logger');
-    $logger->pushHandler(new ErrorLogHandler());
-    $logger->info('The logger is ready');
+    $handler = new ErrorLogHandler();
+    $handler->setFormatter(new LineFormatter('[%datetime%] %channel%.%level_name%: %message%'));
+    $logger->pushHandler($handler);
     return $logger;
 };
 
@@ -17,5 +19,5 @@ $container['cache'] = function () {
 };
 
 $container['projectController'] = function () use ($container) {
-    return new \HostMyDocs\Controllers\ProjectController($container['storageRoot'], $container['archiveRoot']);
+    return new \HostMyDocs\Controllers\ProjectController($container);
 };

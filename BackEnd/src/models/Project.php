@@ -2,7 +2,7 @@
 
 namespace HostMyDocs\Models;
 
-class Project implements \JsonSerializable
+class Project extends BaseModel
 {
     /**
      * @var null|string name of the project
@@ -13,10 +13,6 @@ class Project implements \JsonSerializable
      * @var array|Version[] available versions of the project
      */
     private $versions = [];
-
-    public function __construct()
-    {
-    }
 
     /**
      * Build a JSON serializable array
@@ -59,17 +55,17 @@ class Project implements \JsonSerializable
     public function setName(?string $name) : ?self
     {
         if ($name === null) {
-            error_log('project name cannot be null');
+            $this->logger->info('project name cannot be null');
             return null;
         }
 
         if (strpos($name, '/') !== false) {
-            error_log('project name cannot contains slashes');
+            $this->logger->info('project name cannot contains slashes');
             return null;
         }
 
         if (strlen($name) === 0) {
-            error_log('project name cannot be empty');
+            $this->logger->info('project name cannot be empty');
             return null;
         }
 

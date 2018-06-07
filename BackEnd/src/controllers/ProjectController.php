@@ -5,6 +5,8 @@ use Chumper\Zipper\Zipper;
 use HostMyDocs\Models\Language;
 use HostMyDocs\Models\Project;
 use HostMyDocs\Models\Version;
+use Monolog\Logger;
+use Slim\Container;
 use Slim\Http\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -15,12 +17,26 @@ class ProjectController
     private $filesystem = null;
     private $storageRoot = "";
     private $archiveRoot = "";
+	private $logger = null;
 
-    public function __construct(string $storageRoot, string $archiveRoot)
+    public function __construct(Container $container)
     {
+		if (isset($container['storageRoot']) === false) {
+			throw new \Exception("Container doesn't contain the key 'storageRoot'");
+		}
+
+		if (isset($container['archiveRoot']) === false) {
+			throw new \Exception("Container doesn't contain the key 'archiveRoot'");
+		}
+
+		if (isset($container['logger']) === false) {
+			throw new \Exception("Container doesn't contain the key 'logger'");
+		}
+
         $this->filesystem = new Filesystem();
-        $this->storageRoot = $storageRoot;
-        $this->archiveRoot = $archiveRoot;
+		$this->storageRoot = $container['storageRoot'];
+        $this->archiveRoot = $container['archiveRoot'];
+		$this->logger = $container['logger'];
     }
 
     /**
@@ -44,7 +60,7 @@ class ProjectController
         $projectStructure = [];
 
         foreach ($projectLister as $projectFolder) {
-            $project = (new Project())->setName($projectFolder->getFilename());
+            $project = (new Project($this->logger))->setName($projectFolder->getFilename());
 
             $projectStructure[] = $projectFolder->getFilename();
 
@@ -75,7 +91,7 @@ class ProjectController
 
         /** @var SplFileInfo $versionFolder */
         foreach ($versionLister->in($projectFolder->getRealPath()) as $versionFolder) {
-            $version = (new Version())->setNumber($versionFolder->getFilename());
+            $version = (new Version($this->logger))->setNumber($versionFolder->getFilename());
 
             $versionStructure[] = $versionFolder->getFilename();
 
@@ -121,7 +137,7 @@ class ProjectController
                 . implode('-', $languageStructure)
                 . '.zip';
 
-            $language = (new Language())
+            $language = (new Language($this->logger))
                 ->setName($languageFolder->getFilename())
                 ->setIndexFile(implode('/', $indexPath))
                 ->setArchiveFile(new UploadedFile($archivePath, null, 'application/zip'));
@@ -142,21 +158,21 @@ class ProjectController
         $archive = $language->getArchiveFile();
 
         if ($version === null) {
-            error_log('An error occured while building the project (it has no version)');
+            $this->logger->critical('An error occured while building the project (it has no version)');
             return false;
         }
 
         if ($language === null) {
-            error_log('An error occured while building the project (it has no language)');
+            $this->logger->critical('An error occured while building the project (it has no language)');
             return false;
         }
 
         if (is_file($archive->file) === false) {
-            error_log('impossible to open archive file');
+            $this->logger->warning('impossible to open archive file');
             return false;
         }
 
-        error_log("Opening file : " . $archive->file);
+        $this->logger->info("Opening file : " . $archive->file);
 
         $zipFile = $zipper->make($archive->file);
 
@@ -165,7 +181,7 @@ class ProjectController
         }));
 
         if (count($rootCandidates) > 1) {
-            error_log('More than one index file found');
+            $this->logger->warning('More than one index file found');
             return false;
         }
 
@@ -180,7 +196,7 @@ class ProjectController
         ]);
 
         if (filter_var($destinationPath, FILTER_SANITIZE_URL) === false) {
-            error_log('extract path contains invalid characters');
+            $this->logger->warning('extract path contains invalid characters');
             return false;
         }
 
@@ -189,11 +205,11 @@ class ProjectController
         }
 
         if (mkdir($destinationPath, 0755, true) === false) {
-            error_log('failed to create folder');
+            $this->logger->critical('failed to create folder');
             return false;
         }
 
-        error_log('Extracting to ' . $destinationPath);
+        $this->logger->info('Extracting to ' . $destinationPath);
 
         $zipFile->folder($zipRoot)->extractTo($destinationPath);
 
@@ -215,12 +231,12 @@ class ProjectController
         $language = $version->getFirstLanguage();
 
         if ($version === null) {
-            error_log('An error occured while building the project (it has no version)');
+            $this->logger->critical('An error occured while building the project (it has no version)');
             return false;
         }
 
         if ($language === null) {
-            error_log('An error occured while building the project (it has no language)');
+            $this->logger->critical('An error occured while building the project (it has no language)');
             return false;
         }
 
@@ -236,12 +252,11 @@ class ProjectController
         );
 
         $archiveDestinationPath = $this->archiveRoot . DIRECTORY_SEPARATOR . implode('-', $fileNameParts) . '*.zip';
-
         $archiveToDelete = glob($archiveDestinationPath);
         if (count($archiveToDelete) !== 0) {
             $this->filesystem->remove($archiveToDelete);
         } else {
-            error_log('No backup found ' . $archiveDestinationPath);
+            $this->logger->error('No backup found ' . $archiveDestinationPath);
         }
 
         $storageDestinationPath = $this->storageRoot . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $fileNameParts);
@@ -250,23 +265,23 @@ class ProjectController
             try {
                 $this->filesystem->remove($storageDestinationPath);
             } catch (\Exception $e) {
-                error_log('deleting project failed.');
+                $this->logger->critical('deleting project failed.');
                 return false;
             }
         } else {
-            error_log('project does not exists.');
+            $this->logger->info('project does not exists.');
             return false;
         }
 
         return true;
     }
 
-	public function removeEmptySubFolders(string $path)
-	{
-	    $empty=true;
-	    foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file) {
-	        $empty &= is_dir($file) && $this->removeEmptySubFolders($file);
-	    }
-	    return $empty && rmdir($path);
-	}
+    public function removeEmptySubFolders(string $path)
+    {
+        $empty=true;
+        foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file) {
+            $empty &= is_dir($file) && $this->removeEmptySubFolders($file);
+        }
+        return $empty && rmdir($path);
+    }
 }

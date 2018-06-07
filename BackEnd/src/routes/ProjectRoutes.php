@@ -5,9 +5,10 @@ use HostMyDocs\Controllers\ProjectController;
 use HostMyDocs\Models\Language;
 use HostMyDocs\Models\Project;
 use HostMyDocs\Models\Version;
+use Monolog\Logger;
 
 if (!function_exists('createProjectFromParams')) {
-    function createProjectFromParams(Request $request, $allowEmpty = false): array
+    function createProjectFromParams(Request $request, Logger $logger, bool $allowEmpty = false): array
     {
         $requestParams = $request->getParsedBody();
 
@@ -15,7 +16,7 @@ if (!function_exists('createProjectFromParams')) {
             return ['errorMessage' => 'No parameters found'];
         }
 
-        error_log('Processing a new request');
+        $logger->info('Processing a new request');
 
         $name = null;
         if (array_key_exists('name', $requestParams)) {
@@ -32,11 +33,11 @@ if (!function_exists('createProjectFromParams')) {
             $language = $requestParams['language'];
         }
 
-        error_log('Checking provided parameters');
+        $logger->info('Checking provided parameters');
 
-        $project = new Project();
-        $projectVersion = new Version();
-        $projectLanguage = new Language();
+        $project = new Project($logger);
+        $projectVersion = new Version($logger);
+        $projectLanguage = new Language($logger);
 
         if ($project->setName($name) === null) {
             return ['errorMessage' => 'Given name is not valid'];
@@ -69,7 +70,6 @@ $slim->get('/listProjects', function (Request $request, Response $response): Res
     try {
         $projects = $this->get('projectController')->listProjects();
     } catch (\Exception $e) {
-        error_log($e);
         $response = $response->write('An unexpected error append');
         return $response->withStatus(400);
     }
@@ -79,7 +79,8 @@ $slim->get('/listProjects', function (Request $request, Response $response): Res
 });
 
 $slim->post('/addProject', function (Request $request, Response $response): Response {
-    $params = createProjectFromParams($request);
+	$logger = $this->get('logger');
+    $params = createProjectFromParams($request, $logger);
     if (isset($params['errorMessage'])) {
         $response = $response->write($params['errorMessage']);
         return $response->withStatus(400);
@@ -101,23 +102,22 @@ $slim->post('/addProject', function (Request $request, Response $response): Resp
         return $response->withStatus(400);
     }
 
+    $logger->info('Parameters OK');
 
-    error_log('Parameters OK');
+    $logger->info("Name of the project : " . $project->getName());
+    $logger->info("Version of the project : " . $projectVersion->getNumber());
+    $logger->info("Language of the project : " . $projectLanguage->getName());
 
-    error_log("Name of the project : " . $project->getName());
-    error_log("Version of the project : " . $projectVersion->getNumber());
-    error_log("Language of the project : " . $projectLanguage->getName());
-
-    error_log('Extracting the archive');
+    $logger->info('Extracting the archive');
 
     if ($this->get('projectController')->extract($project) === false) {
         $response = $response->write('Failed to extract the archive');
         return $response->withStatus(400);
     }
 
-    error_log('Extracting OK');
+    $logger->info('Extracting OK');
 
-    error_log('Backuping uploaded file');
+    $logger->info('Backuping uploaded file');
 
     $destinationFolder =  $this->get('archiveRoot');
     if (file_exists($destinationFolder) === false) {
@@ -137,28 +137,30 @@ $slim->post('/addProject', function (Request $request, Response $response): Resp
     ])
     . '.zip';
 
-    error_log('Trying to move upload file to ' . $destinationPath);
+    $logger->info('Trying to move upload file to ' . $destinationPath);
 
     try {
         $archive->moveTo($destinationPath);
     } catch (\Exception $e) {
-        error_log('moveTo method failed.');
-        error_log('Trying with rename()');
+        $logger->warning('moveTo method failed.');
+        $logger->info('Trying with rename()');
         if (rename($projectLanguage->getArchiveFile()->file, $destinationPath) === false) {
+			$logger->critical('Failed twice to move uploaded file to backup folder');
             $response = $response->write('Failed twice to move uploaded file to backup folder');
             return $response->withStatus(400);
         }
     }
 
-    error_log('Backup done.');
+    $logger->info('Backup done.');
 
-    error_log('Project added successfully');
+    $logger->info('Project added successfully');
 
     return $response->withStatus(200);
 });
 
 $slim->delete('/deleteProject', function (Request $request, Response $response): Response {
-    $params = createProjectFromParams($request, true);
+	$logger = $this->get('logger');
+    $params = createProjectFromParams($request, $logger, true);
 
     if (isset($params['errorMessage'])) {
         $response = $response->write($params['errorMessage']);
@@ -167,27 +169,26 @@ $slim->delete('/deleteProject', function (Request $request, Response $response):
 
     $project = $params['project'];
 
+    $logger->info('Parameters OK');
 
-    error_log('Parameters OK');
+    $logger->info("Name of the project : $name");
+    $logger->info("Version of the project : $version");
+    $logger->info("Language of the project : $language");
 
-    error_log("Name of the project : $name");
-    error_log("Version of the project : $version");
-    error_log("Language of the project : $language");
-
-    error_log('Deleting folder + backup');
+    $logger->info('Deleting folder + backup');
 
     if ($this->get('projectController')->deleteProject($project) === false) {
         $response = $response->write('Project deletion failed');
         return $response->withStatus(400);
     }
 
-    error_log('Deleting done.');
+    $logger->info('Deleting done.');
 
-    error_log('Removing resulting empty folders');
+    $logger->info('Removing resulting empty folders');
     $this->get('projectController')->removeEmptySubFolders($this->get('storageRoot'));
-    error_log('Empty folders removed');
+    $logger->info('Empty folders removed');
 
-    error_log('Project deleted successfully');
+    $logger->info('Project deleted successfully');
 
     return $response->withStatus(200);
 });

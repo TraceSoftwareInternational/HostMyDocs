@@ -4,7 +4,7 @@ namespace HostMyDocs\Models;
 
 use Psr\Http\Message\UploadedFileInterface;
 
-class Language implements \JsonSerializable
+class Language extends BaseModel
 {
     /**
      * @var null|string Name of the programming language
@@ -20,10 +20,6 @@ class Language implements \JsonSerializable
      * @var null|UploadedFileInterface path to a downloadable zip of the current language and version of the documentation for the current project
      */
     private $archiveFile = null;
-
-    public function __construct()
-    {
-    }
 
     /**
      * Build a JSON serializable array
@@ -64,17 +60,17 @@ class Language implements \JsonSerializable
     public function setName(?string $name, bool $allowEmpty = false) : ?self
     {
         if ($name === null) {
-            error_log('language name cannot be null');
+            $this->logger->info('language name cannot be null');
             return null;
         }
 
         if (strpos($name, '/') !== false) {
-            error_log('language name cannot contains slashes');
+            $this->logger->info('language name cannot contains slashes');
             return null;
         }
 
         if (strlen($name) === 0 && !$allowEmpty) {
-            error_log('language name cannot be empty');
+            $this->logger->info('language name cannot be empty');
             return null;
         }
 

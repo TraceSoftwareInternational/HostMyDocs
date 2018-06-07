@@ -2,7 +2,7 @@
 
 namespace HostMyDocs\Models;
 
-class Version implements \JsonSerializable
+class Version extends BaseModel
 {
     /**
      * @var null|string SemVer compliant number of the current version
@@ -13,14 +13,6 @@ class Version implements \JsonSerializable
      * @var Language[]
      */
     private $languages = [];
-
-    /**
-     * Version constructor.
-     * @param null|string $number
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * Build a JSON serializable array
@@ -59,17 +51,17 @@ class Version implements \JsonSerializable
     public function setNumber(?string $number, bool $allowEmpty = false) : ?self
     {
         if ($number === null) {
-            error_log('version cannot be null');
+            $this->logger->info('version cannot be null');
             return null;
         }
 
         if (strpos($number, '/') !== false) {
-            error_log('version cannot contains slashes');
+            $this->logger->info('version cannot contains slashes');
             return null;
         }
 
         if (strlen($number) === 0 && !$allowEmpty) {
-            error_log('version cannot be empty');
+            $this->logger->info('version cannot be empty');
             return null;
         }
 

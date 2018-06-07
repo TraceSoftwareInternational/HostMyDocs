@@ -79,7 +79,7 @@ $slim->get('/listProjects', function (Request $request, Response $response): Res
 });
 
 $slim->post('/addProject', function (Request $request, Response $response): Response {
-	$logger = $this->get('logger');
+    $logger = $this->get('logger');
     $params = createProjectFromParams($request, $logger);
     if (isset($params['errorMessage'])) {
         $response = $response->write($params['errorMessage']);
@@ -145,7 +145,7 @@ $slim->post('/addProject', function (Request $request, Response $response): Resp
         $logger->warning('moveTo method failed.');
         $logger->info('Trying with rename()');
         if (rename($projectLanguage->getArchiveFile()->file, $destinationPath) === false) {
-			$logger->critical('Failed twice to move uploaded file to backup folder');
+            $logger->critical('Failed twice to move uploaded file to backup folder');
             $response = $response->write('Failed twice to move uploaded file to backup folder');
             return $response->withStatus(400);
         }
@@ -159,7 +159,7 @@ $slim->post('/addProject', function (Request $request, Response $response): Resp
 });
 
 $slim->delete('/deleteProject', function (Request $request, Response $response): Response {
-	$logger = $this->get('logger');
+    $logger = $this->get('logger');
     $params = createProjectFromParams($request, $logger, true);
 
     if (isset($params['errorMessage'])) {

@@ -26,7 +26,7 @@ class Language extends BaseModel
      *
      * @return array
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         $data = [];
 
@@ -48,7 +48,7 @@ class Language extends BaseModel
     /**
      * @return null|string
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -57,7 +57,7 @@ class Language extends BaseModel
      * @param null|string $name
      * @return null|Language
      */
-    public function setName(?string $name, bool $allowEmpty = false) : ?self
+    public function setName(?string $name, bool $allowEmpty = false): ?self
     {
         if ($name === null) {
             $this->logger->info('language name cannot be null');
@@ -82,7 +82,7 @@ class Language extends BaseModel
     /**
      * @return null|string
      */
-    public function getIndexFile() : ?string
+    public function getIndexFile(): ?string
     {
         return $this->indexFile;
     }
@@ -91,7 +91,7 @@ class Language extends BaseModel
      * @param null|string $indexFile
      * @return Language
      */
-    public function setIndexFile(?string $indexFile) : self
+    public function setIndexFile(?string $indexFile): self
     {
         $this->indexFile = $indexFile;
         return $this;

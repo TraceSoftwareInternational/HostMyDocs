@@ -17,26 +17,26 @@ class ProjectController
     private $filesystem = null;
     private $storageRoot = "";
     private $archiveRoot = "";
-	private $logger = null;
+    private $logger = null;
 
     public function __construct(Container $container)
     {
-		if (isset($container['storageRoot']) === false) {
-			throw new \Exception("Container doesn't contain the key 'storageRoot'");
-		}
+        if (isset($container['storageRoot']) === false) {
+            throw new \Exception("Container doesn't contain the key 'storageRoot'");
+        }
 
-		if (isset($container['archiveRoot']) === false) {
-			throw new \Exception("Container doesn't contain the key 'archiveRoot'");
-		}
+        if (isset($container['archiveRoot']) === false) {
+            throw new \Exception("Container doesn't contain the key 'archiveRoot'");
+        }
 
-		if (isset($container['logger']) === false) {
-			throw new \Exception("Container doesn't contain the key 'logger'");
-		}
+        if (isset($container['logger']) === false) {
+            throw new \Exception("Container doesn't contain the key 'logger'");
+        }
 
         $this->filesystem = new Filesystem();
-		$this->storageRoot = $container['storageRoot'];
+        $this->storageRoot = $container['storageRoot'];
         $this->archiveRoot = $container['archiveRoot'];
-		$this->logger = $container['logger'];
+        $this->logger = $container['logger'];
     }
 
     /**
@@ -276,7 +276,7 @@ class ProjectController
         return true;
     }
 
-    public function removeEmptySubFolders(string $path)
+    public function removeEmptySubFolders(string $path): bool
     {
         $empty=true;
         foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file) {

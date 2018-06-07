@@ -19,7 +19,7 @@ class Version extends BaseModel
      *
      * @return array
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         $data = [];
 
@@ -39,7 +39,7 @@ class Version extends BaseModel
     /**
      * @return null|string
      */
-    public function getNumber() : ?string
+    public function getNumber(): ?string
     {
         return $this->number;
     }
@@ -48,7 +48,7 @@ class Version extends BaseModel
      * @param null|string $number
      * @return null|Version
      */
-    public function setNumber(?string $number, bool $allowEmpty = false) : ?self
+    public function setNumber(?string $number, bool $allowEmpty = false): ?self
     {
         if ($number === null) {
             $this->logger->info('version cannot be null');

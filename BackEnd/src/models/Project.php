@@ -19,7 +19,7 @@ class Project extends BaseModel
      *
      * @return array
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         $data = [];
 
@@ -43,7 +43,7 @@ class Project extends BaseModel
     /**
      * @return null|string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -52,7 +52,7 @@ class Project extends BaseModel
      * @param null|string $name
      * @return null|Project
      */
-    public function setName(?string $name) : ?self
+    public function setName(?string $name): ?self
     {
         if ($name === null) {
             $this->logger->info('project name cannot be null');
@@ -77,7 +77,7 @@ class Project extends BaseModel
     /**
      * @return array|Version[]
      */
-    public function getVersions() : array
+    public function getVersions(): array
     {
         return $this->versions;
     }
@@ -94,7 +94,7 @@ class Project extends BaseModel
      * @param Version[] $versions
      * @return Project
      */
-    public function setVersions(array $versions) : self
+    public function setVersions(array $versions): self
     {
         $this->versions = $versions;
 

@@ -2,6 +2,9 @@
 
 namespace HostMyDocs\Models;
 
+/**
+ * Model representing a Project
+ */
 class Project extends BaseModel
 {
     /**
@@ -10,14 +13,14 @@ class Project extends BaseModel
     private $name = null;
 
     /**
-     * @var array|Version[] available versions of the project
+     * @var Version[] available versions of the project
      */
     private $versions = [];
 
     /**
      * Build a JSON serializable array
      *
-     * @return array
+     * @return array an array containing the informations about this object for JSON serialization
      */
     public function jsonSerialize(): array
     {
@@ -41,16 +44,21 @@ class Project extends BaseModel
     }
 
     /**
-     * @return null|string
+     * get the name of the project
+     *
+     * @return null|string the name of the project
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @param null|string $name
-     * @return null|Project
+     * set the name of this Project if it is valid
+     *
+     * @param null|string $name the new value for the name
+     *
+     * @return null|Project this Project if $name is valid, null otherwise
      */
     public function setName(?string $name): ?self
     {
@@ -75,13 +83,20 @@ class Project extends BaseModel
     }
 
     /**
-     * @return array|Version[]
+     * get the array containing all the Version of this project
+     *
+     * @return Version[] the Versions of this project
      */
     public function getVersions(): array
     {
         return $this->versions;
     }
 
+    /**
+     * return the first version added to this project or null if none where added
+     *
+     * @return null|Version the first Version of this project or null if there is no Version for this project
+     */
     public function getFirstVersion(): ?Version
     {
         if (count($this->versions) === 0) {
@@ -91,22 +106,30 @@ class Project extends BaseModel
     }
 
     /**
-     * @param Version[] $versions
-     * @return Project
+     * Replace the current Version array of this Project by the one given in parameter
+     *
+     * @param Version[] $versions the new array of Version of this project
+     *
+     * @return Project this project
      */
     public function setVersions(array $versions): self
     {
         $this->versions = $versions;
 
-
         return $this;
     }
 
     /**
-     * @param Version $version
+     * add a new Version to this Project
+     *
+     * @param Version $version the Version to add to this project
+     *
+     * @return Project this project
      */
-    public function addVersion(Version $version)
+    public function addVersion(Version $version): self
     {
         $this->versions[] = $version;
+
+        return $this;
     }
 }

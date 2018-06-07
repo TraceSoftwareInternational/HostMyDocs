@@ -5,10 +5,20 @@ use HostMyDocs\Controllers\ProjectController;
 use HostMyDocs\Models\Language;
 use HostMyDocs\Models\Project;
 use HostMyDocs\Models\Version;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
-if (!function_exists('createProjectFromParams')) {
-    function createProjectFromParams(Request $request, Logger $logger, bool $allowEmpty = false): array
+if (!function_exists('createProjectFromRequest')) {
+    /**
+     * take a Request to create the Project described in it's params
+     *
+     * @param  Request         $request    the request containing th params
+     * @param  LoggerInterface $logger     the psr 3 logger interface
+     * @param  boolean         $allowEmpty if object allow empty params (e.g. to delete a whole Project)
+     *
+     * @return array                       if an error occur this array contain the error message
+     * 		else it contains the part of the project
+     */
+    function createProjectFromRequest(Request $request, LoggerInterface $logger, bool $allowEmpty = false): array
     {
         $requestParams = $request->getParsedBody();
 
@@ -80,7 +90,7 @@ $slim->get('/listProjects', function (Request $request, Response $response): Res
 
 $slim->post('/addProject', function (Request $request, Response $response): Response {
     $logger = $this->get('logger');
-    $params = createProjectFromParams($request, $logger);
+    $params = createProjectFromRequest($request, $logger);
     if (isset($params['errorMessage'])) {
         $response = $response->write($params['errorMessage']);
         return $response->withStatus(400);
@@ -160,7 +170,7 @@ $slim->post('/addProject', function (Request $request, Response $response): Resp
 
 $slim->delete('/deleteProject', function (Request $request, Response $response): Response {
     $logger = $this->get('logger');
-    $params = createProjectFromParams($request, $logger, true);
+    $params = createProjectFromRequest($request, $logger, true);
 
     if (isset($params['errorMessage'])) {
         $response = $response->write($params['errorMessage']);

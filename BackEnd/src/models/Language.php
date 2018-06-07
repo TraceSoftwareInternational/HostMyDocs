@@ -4,6 +4,9 @@ namespace HostMyDocs\Models;
 
 use Psr\Http\Message\UploadedFileInterface;
 
+/**
+ * Model representing a programming language of a project
+ */
 class Language extends BaseModel
 {
     /**
@@ -17,14 +20,15 @@ class Language extends BaseModel
     private $indexFile = null;
 
     /**
-     * @var null|UploadedFileInterface path to a downloadable zip of the current language and version of the documentation for the current project
+     * @var null|UploadedFileInterface a downloadable zip of the current language and version of the documentation for the current project
+     * 		using the psr-7 interface
      */
     private $archiveFile = null;
 
     /**
      * Build a JSON serializable array
      *
-     * @return array
+     * @return array an array containing the informations about this object for JSON serialization
      */
     public function jsonSerialize(): array
     {
@@ -46,7 +50,9 @@ class Language extends BaseModel
     }
 
     /**
-     * @return null|string
+     * get the name of the language
+     *
+     * @return null|string the name of the language
      */
     public function getName(): ?string
     {
@@ -54,8 +60,12 @@ class Language extends BaseModel
     }
 
     /**
-     * @param null|string $name
-     * @return null|Language
+     * set the name of this Language if it is valid
+     *
+     * @param null|string $name the new value for the name
+     * @param bool $allowEmpty whether the empty string ("") is allowed
+     *
+     * @return null|Language this Language if $name is valid, null otherwise
      */
     public function setName(?string $name, bool $allowEmpty = false): ?self
     {
@@ -80,6 +90,8 @@ class Language extends BaseModel
     }
 
     /**
+     * get the path to the index.html file of the documentation
+     *
      * @return null|string
      */
     public function getIndexFile(): ?string
@@ -88,8 +100,11 @@ class Language extends BaseModel
     }
 
     /**
-     * @param null|string $indexFile
-     * @return Language
+     * set the path to the index.html file of the documentation
+     *
+     * @param null|string $indexFile the path to the index file
+     *
+     * @return Language this language
      */
     public function setIndexFile(?string $indexFile): self
     {
@@ -98,7 +113,9 @@ class Language extends BaseModel
     }
 
     /**
-     * @return null|string
+     * get the archive file of this documentation
+     *
+     * @return null|UploadedFileInterface the archive
      */
     public function getArchiveFile(): ?UploadedFileInterface
     {
@@ -106,8 +123,11 @@ class Language extends BaseModel
     }
 
     /**
-     * @param UploadedFileInterface $archiveFile
-     * @return Language
+     * set the archive file of this documentation using the psr-7 documentation
+     *
+     * @param UploadedFileInterface $archiveFile the archive file
+     *
+     * @return Language this Language if $archiveFile is valid, null otherwise
      */
     public function setArchiveFile(UploadedFileInterface $archiveFile): ?self
     {

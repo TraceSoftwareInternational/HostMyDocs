@@ -5,32 +5,67 @@ use Chumper\Zipper\Zipper;
 use HostMyDocs\Models\Language;
 use HostMyDocs\Models\Project;
 use HostMyDocs\Models\Version;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Slim\Container;
 use Slim\Http\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
+/**
+ * class used to create, list and delete the projects
+ * you must get it using the slim dependency injector
+ *
+ * @see https://www.slimframework.com/docs/concepts/di.html
+ */
 class ProjectController
 {
-    private $filesystem = null;
-    private $storageRoot = "";
-    private $archiveRoot = "";
-    private $logger = null;
+    /**
+     * @var Filesystem Object used to interact with the projects folder
+     */
+    private $filesystem;
 
+    /**
+     * @var string Path to the folder where project are stored
+     */
+    private $storageRoot;
+
+    /**
+     * @var string Path to the folder where archives are stored
+     */
+    private $archiveRoot;
+
+    /**
+     * @var LoggerInterface psr-3 compatible logger
+     */
+    private $logger;
+
+    /**
+     * Create a project controller
+     *
+     * You must not call this function by yourselves but get an instance from the slim container
+     *
+     * @param Container $container the slim container, it must contain the following keys
+     * 		- string storageRoot Path to the folder where project are stored
+     * 		- string archiveRoot Path to the folder where archives are stored
+     * 		- Psr\Log\LoggerInterface logger psr-3 compatible logger
+     *
+     * @throws InvalidArgumentException when the container miss a key
+     *
+     * @see https://www.slimframework.com/docs/concepts/di.html
+     */
     public function __construct(Container $container)
     {
         if (isset($container['storageRoot']) === false) {
-            throw new \Exception("Container doesn't contain the key 'storageRoot'");
+            throw new \InvalidArgumentException("Container doesn't contain the key 'storageRoot'");
         }
 
         if (isset($container['archiveRoot']) === false) {
-            throw new \Exception("Container doesn't contain the key 'archiveRoot'");
+            throw new \InvalidArgumentException("Container doesn't contain the key 'archiveRoot'");
         }
 
         if (isset($container['logger']) === false) {
-            throw new \Exception("Container doesn't contain the key 'logger'");
+            throw new \InvalidArgumentException("Container doesn't contain the key 'logger'");
         }
 
         $this->filesystem = new Filesystem();
@@ -40,10 +75,7 @@ class ProjectController
     }
 
     /**
-     * Retrieving all information to list all languages from all versions from all projects stored
-     *
-     * @param string $this->storageRoot
-     * @param string $this->archiveRoot
+     * Retrieve all projects stored and asks for their versions
      *
      * @return Project[] the list of projects
      */
@@ -75,11 +107,16 @@ class ProjectController
     }
 
     /**
-     * @param SplFileInfo $projectFolder
-     * @param Project $currentProject
-     * @param array $projectStructure
+     * Retrieve all versions for a project stored and asks for their languages
+     *
+     * it has no return since it modify the project given in parameter
+     *
+     * @param SplFileInfo $projectFolder Folder where the versions folders are found
+     * @param Project $currentProject Object containing the project being processed
+     * @param array $projectStructure array containing the parts of the path to the project
+     * 		e.g. ['DocumentationName']
      */
-    private function listVersions(SplFileInfo $projectFolder, Project $currentProject, array $projectStructure)
+    private function listVersions(SplFileInfo $projectFolder, Project &$currentProject, array $projectStructure)
     {
         $versionLister  = new Finder();
         $versionLister
@@ -104,10 +141,15 @@ class ProjectController
     }
 
     /**
-     * @param SplFileInfo $versionFolder
-     * @param Version $currentVersion
-     * @param array $versionStructure
-     */
+      * Retrieve all languages for a version of a project stored
+      *
+      * it has no return since it modify the Version given in parameter
+      *
+      * @param SplFileInfo $versionFolder Folder where the languages folders are found
+      * @param Version $currentVersion Object containing the version being processed
+      * @param array $versionStructure array containing the parts of the path to the version
+      * 		e.g. ['DocumentationName', '1.0.0']
+      */
     private function listLanguages(SplFileInfo $versionFolder, Version &$currentVersion, array $versionStructure)
     {
         $documentRoot = str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->storageRoot);
@@ -148,7 +190,13 @@ class ProjectController
         }
     }
 
-
+    /**
+     * take the archive from a project and extract it in the storage folder
+     *
+     * @param  Project $project the project to extract
+     *
+     * @return bool             whether the extration succeed
+     */
     public function extract(Project $project): bool
     {
         $zipper = new Zipper();
@@ -218,12 +266,12 @@ class ProjectController
         return true;
     }
 
-
-
     /**
-     * Delete doc for project and corresponding backup
+     * delete every files targetted by a Project
      *
-     * @return bool
+     * @param  Project $project The project to delete
+     *
+     * @return bool             whether the deletion succeed
      */
     public function deleteProject(Project $project): bool
     {
@@ -251,12 +299,12 @@ class ProjectController
             }
         );
 
-        $archiveDestinationPath = $this->archiveRoot . DIRECTORY_SEPARATOR . implode('-', $fileNameParts) . '*.zip';
-        $archiveToDelete = glob($archiveDestinationPath);
+        $archiveDestinationGlob = $this->archiveRoot . DIRECTORY_SEPARATOR . implode('-', $fileNameParts) . '*.zip';
+        $archiveToDelete = glob($archiveDestinationGlob);
         if (count($archiveToDelete) !== 0) {
             $this->filesystem->remove($archiveToDelete);
         } else {
-            $this->logger->error('No backup found ' . $archiveDestinationPath);
+            $this->logger->error('No backup found ' . $archiveDestinationGlob);
         }
 
         $storageDestinationPath = $this->storageRoot . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $fileNameParts);
@@ -276,6 +324,11 @@ class ProjectController
         return true;
     }
 
+    /**
+     * remove every empty subfolder of the given folder
+     * @param  string $path path to the folder to clean
+     * @return bool         whether the cleaning succeed
+     */
     public function removeEmptySubFolders(string $path): bool
     {
         $empty=true;

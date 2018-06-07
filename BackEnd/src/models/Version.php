@@ -2,6 +2,9 @@
 
 namespace HostMyDocs\Models;
 
+/**
+ * Model representing a Version of a Project
+ */
 class Version extends BaseModel
 {
     /**
@@ -10,14 +13,14 @@ class Version extends BaseModel
     private $number = null;
 
     /**
-     * @var Language[]
+     * @var Language[] available Languages for this Version
      */
     private $languages = [];
 
     /**
      * Build a JSON serializable array
      *
-     * @return array
+     * @return array an array containing the informations about this object for JSON serialization
      */
     public function jsonSerialize(): array
     {
@@ -37,7 +40,9 @@ class Version extends BaseModel
     }
 
     /**
-     * @return null|string
+     * get the number of the project
+     *
+     * @return null|string the name of the project
      */
     public function getNumber(): ?string
     {
@@ -45,8 +50,12 @@ class Version extends BaseModel
     }
 
     /**
-     * @param null|string $number
-     * @return null|Version
+     * set the number of this Version if it is valid
+     *
+     * @param null|string $number the new value for the number
+     * @param bool $allowEmpty whether the empty string ("") is allowed
+     *
+     * @return null|Version this Version if $number is valid, null otherwise
      */
     public function setNumber(?string $number, bool $allowEmpty = false): ?self
     {
@@ -71,13 +80,20 @@ class Version extends BaseModel
     }
 
     /**
-     * @return array
+     * get the array containing all the Language for this Version
+     *
+     * @return Language[] the Languages of this Version
      */
     public function getLanguages(): ?array
     {
         return $this->languages;
     }
 
+    /**
+     * return the first language added to this version or null if none where added
+     *
+     * @return null|Language the first Language of this project or null if there is no Language for this project
+     */
     public function getFirstLanguage(): ?Language
     {
         if (count($this->languages) === 0) {
@@ -87,8 +103,11 @@ class Version extends BaseModel
     }
 
     /**
-     * @param Language[] $languages
-     * @return Version
+     * Replace the current Language array of this Version by the one given in parameter
+     *
+     * @param Language[] $languages the new array of Language of this project
+     *
+     * @return Version this version
      */
     public function setLanguages(array $languages): self
     {
@@ -99,8 +118,17 @@ class Version extends BaseModel
         return $this;
     }
 
-    public function addLanguage(Language $language)
+    /**
+     * add a new Language to this Version
+     *
+     * @param Language $language the Language to add to this Version
+     *
+     * @return Version this Version
+     */
+    public function addLanguage(Language $language): self
     {
         $this->languages[] = $language;
+
+        return $this;
     }
 }

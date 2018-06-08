@@ -13,8 +13,8 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * class used to create, list and delete the projects
- * you must get it using the slim dependency injector
+ * Class used to create, list and delete the projects
+ * You must get it using the slim dependency injector
  *
  * @see https://www.slimframework.com/docs/concepts/di.html
  */
@@ -26,7 +26,7 @@ class ProjectController
     private $filesystem;
 
     /**
-     * @var string Path to the folder where project are stored
+     * @var string Path to the folder where projects are stored
      */
     private $storageRoot;
 
@@ -36,7 +36,7 @@ class ProjectController
     private $archiveRoot;
 
     /**
-     * @var LoggerInterface psr-3 compatible logger
+     * @var LoggerInterface Logger used by the class
      */
     private $logger;
 
@@ -46,25 +46,25 @@ class ProjectController
      * You must not call this function by yourselves but get an instance from the slim container
      *
      * @param Container $container the slim container, it must contain the following keys
-     * 		- string storageRoot Path to the folder where project are stored
+     * 		- string storageRoot Path to the folder where projects are stored
      * 		- string archiveRoot Path to the folder where archives are stored
-     * 		- Psr\Log\LoggerInterface logger psr-3 compatible logger
+     * 		- Psr\Log\LoggerInterface Logger used by the class
      *
-     * @throws InvalidArgumentException when the container miss a key
+     * @throws InvalidArgumentException When the container miss a key
      *
      * @see https://www.slimframework.com/docs/concepts/di.html
      */
     public function __construct(Container $container)
     {
-        if (isset($container['storageRoot']) === false) {
+        if (empty($container['storageRoot'])) {
             throw new \InvalidArgumentException("Container doesn't contain the key 'storageRoot'");
         }
 
-        if (isset($container['archiveRoot']) === false) {
+        if (empty($container['archiveRoot'])) {
             throw new \InvalidArgumentException("Container doesn't contain the key 'archiveRoot'");
         }
 
-        if (isset($container['logger']) === false) {
+        if (empty($container['logger'])) {
             throw new \InvalidArgumentException("Container doesn't contain the key 'logger'");
         }
 
@@ -75,9 +75,9 @@ class ProjectController
     }
 
     /**
-     * Retrieve all projects stored and asks for their versions
+     * Get all projects stored
      *
-     * @return Project[] the list of projects
+     * @return Project[] The list of projects
      */
     public function listProjects(): array
     {
@@ -107,13 +107,13 @@ class ProjectController
     }
 
     /**
-     * Retrieve all versions for a project stored and asks for their languages
+     * Retrieve all stored versions for a project
      *
-     * it has no return since it modify the project given in parameter
+     * It has no return since it modify the project given in parameter
      *
-     * @param SplFileInfo $projectFolder Folder where the versions folders are found
-     * @param Project $currentProject Object containing the project being processed
-     * @param array $projectStructure array containing the parts of the path to the project
+     * @param SplFileInfo $projectFolder    Folder where the versions folders are found
+     * @param Project     $currentProject   Object containing the project being processed
+     * @param array       $projectStructure Array containing the parts of the path to the project
      * 		e.g. ['DocumentationName']
      */
     private function listVersions(SplFileInfo $projectFolder, Project &$currentProject, array $projectStructure)
@@ -141,13 +141,13 @@ class ProjectController
     }
 
     /**
-      * Retrieve all languages for a version of a project stored
+      * Retrieve all languages stored for a version of a project
       *
-      * it has no return since it modify the Version given in parameter
+      * It has no return since it modify the Version given in parameter
       *
-      * @param SplFileInfo $versionFolder Folder where the languages folders are found
-      * @param Version $currentVersion Object containing the version being processed
-      * @param array $versionStructure array containing the parts of the path to the version
+      * @param SplFileInfo $versionFolder    Folder where the languages folders are found
+      * @param Version     $currentVersion   Object containing the version being processed
+      * @param array       $versionStructure array containing the parts of the path to the version
       * 		e.g. ['DocumentationName', '1.0.0']
       */
     private function listLanguages(SplFileInfo $versionFolder, Version &$currentVersion, array $versionStructure)
@@ -191,11 +191,11 @@ class ProjectController
     }
 
     /**
-     * take the archive from a project and extract it in the storage folder
+     * Take the archive from a project and extract it in the storage folder
      *
-     * @param  Project $project the project to extract
+     * @param  Project $project The project to extract
      *
-     * @return bool             whether the extration succeed
+     * @return bool             Whether the extration succeed
      */
     public function extract(Project $project): bool
     {
@@ -267,11 +267,11 @@ class ProjectController
     }
 
     /**
-     * delete every files targetted by a Project
+     * Delete every files targetted by a Project
      *
      * @param  Project $project The project to delete
      *
-     * @return bool             whether the deletion succeed
+     * @return bool             Whether the deletion succeed
      */
     public function deleteProject(Project $project): bool
     {
@@ -325,9 +325,11 @@ class ProjectController
     }
 
     /**
-     * remove every empty subfolder of the given folder
-     * @param  string $path path to the folder to clean
-     * @return bool         whether the cleaning succeed
+     * Remove every empty subfolder of the given folder
+     *
+     * @param  string $path Path to the folder to clean
+     *
+     * @return bool         Whether the cleaning succeed
      */
     public function removeEmptySubFolders(string $path): bool
     {

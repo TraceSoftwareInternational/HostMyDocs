@@ -40,7 +40,7 @@ class Version extends BaseModel
     }
 
     /**
-     * get the number of the project
+     * Get the number of the project
      *
      * @return null|string the name of the project
      */
@@ -50,7 +50,7 @@ class Version extends BaseModel
     }
 
     /**
-     * set the number of this Version if it is valid
+     * Set the number of this Version if it is valid
      *
      * @param null|string $number the new value for the number
      * @param bool $allowEmpty whether the empty string ("") is allowed
@@ -80,7 +80,7 @@ class Version extends BaseModel
     }
 
     /**
-     * get the array containing all the Language for this Version
+     * Get the array containing all the Language for this Version
      *
      * @return Language[] the Languages of this Version
      */
@@ -90,7 +90,7 @@ class Version extends BaseModel
     }
 
     /**
-     * return the first language added to this version or null if none where added
+     * Return the first language added to this version or null if none where added
      *
      * @return null|Language the first Language of this project or null if there is no Language for this project
      */
@@ -119,7 +119,7 @@ class Version extends BaseModel
     }
 
     /**
-     * add a new Language to this Version
+     * Add a new Language to this Version
      *
      * @param Language $language the Language to add to this Version
      *

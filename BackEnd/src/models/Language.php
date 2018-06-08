@@ -50,7 +50,7 @@ class Language extends BaseModel
     }
 
     /**
-     * get the name of the language
+     * Get the name of the language
      *
      * @return null|string the name of the language
      */
@@ -60,7 +60,7 @@ class Language extends BaseModel
     }
 
     /**
-     * set the name of this Language if it is valid
+     * Set the name of this Language if it is valid
      *
      * @param null|string $name the new value for the name
      * @param bool $allowEmpty whether the empty string ("") is allowed
@@ -90,7 +90,7 @@ class Language extends BaseModel
     }
 
     /**
-     * get the path to the index.html file of the documentation
+     * Get the path to the index.html file of the documentation
      *
      * @return null|string
      */
@@ -100,7 +100,7 @@ class Language extends BaseModel
     }
 
     /**
-     * set the path to the index.html file of the documentation
+     * Set the path to the index.html file of the documentation
      *
      * @param null|string $indexFile the path to the index file
      *
@@ -113,7 +113,7 @@ class Language extends BaseModel
     }
 
     /**
-     * get the archive file of this documentation
+     * Get the archive file of this documentation
      *
      * @return null|UploadedFileInterface the archive
      */
@@ -123,7 +123,7 @@ class Language extends BaseModel
     }
 
     /**
-     * set the archive file of this documentation using the psr-7 documentation
+     * Set the archive file of this documentation using the psr-7 documentation
      *
      * @param UploadedFileInterface $archiveFile the archive file
      *

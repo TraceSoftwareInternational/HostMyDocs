@@ -9,13 +9,13 @@ use Psr\Log\LoggerInterface;
 
 if (!function_exists('createProjectFromRequest')) {
     /**
-     * take a Request to create the Project described in it's params
+     * Take a Request to create the Project described in it's params
      *
-     * @param  Request         $request    the request containing th params
-     * @param  LoggerInterface $logger     the psr 3 logger interface
-     * @param  boolean         $allowEmpty if object allow empty params (e.g. to delete a whole Project)
+     * @param  Request         $request    The request containing th params
+     * @param  LoggerInterface $logger     The logger used to print errors
+     * @param  boolean         $allowEmpty If object allow empty params (e.g. to delete a whole Project)
      *
-     * @return array                       if an error occur this array contain the error message
+     * @return array                       If an error occur this array contain the error message
      * 		else it contains the part of the project
      */
     function createProjectFromRequest(Request $request, LoggerInterface $logger, bool $allowEmpty = false): array

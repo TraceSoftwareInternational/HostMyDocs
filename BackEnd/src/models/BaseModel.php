@@ -12,14 +12,14 @@ use Psr\Log\LoggerInterface;
 abstract class BaseModel implements \JsonSerializable
 {
     /**
-     * @var LoggerInterface Object implementing the psr-3 loggerInterface
+     * @var LoggerInterface Logger used by all sub models
      */
     protected $logger;
 
     /**
      * save the logger for models
      *
-     * @param LoggerInterface $logger Object implementing the psr-3 loggerInterface
+     * @param LoggerInterface $logger Logger used by all sub models
      */
     public function __construct(LoggerInterface $logger)
     {

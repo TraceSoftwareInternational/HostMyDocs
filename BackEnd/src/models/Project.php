@@ -44,7 +44,7 @@ class Project extends BaseModel
     }
 
     /**
-     * get the name of the project
+     * Get the name of the project
      *
      * @return null|string the name of the project
      */
@@ -54,7 +54,7 @@ class Project extends BaseModel
     }
 
     /**
-     * set the name of this Project if it is valid
+     * Set the name of this Project if it is valid
      *
      * @param null|string $name the new value for the name
      *
@@ -83,7 +83,7 @@ class Project extends BaseModel
     }
 
     /**
-     * get the array containing all the Version of this project
+     * Get the array containing all the Version of this project
      *
      * @return Version[] the Versions of this project
      */
@@ -93,7 +93,7 @@ class Project extends BaseModel
     }
 
     /**
-     * return the first version added to this project or null if none where added
+     * Return the first version added to this project or null if none where added
      *
      * @return null|Version the first Version of this project or null if there is no Version for this project
      */
@@ -120,7 +120,7 @@ class Project extends BaseModel
     }
 
     /**
-     * add a new Version to this Project
+     * Add a new Version to this Project
      *
      * @param Version $version the Version to add to this project
      *

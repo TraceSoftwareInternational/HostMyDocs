@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * This file contains the settings of the current slim application
+ * @see https://www.slimframework.com/docs/objects/application.html#application-configuration
+ */
+
 return [
     'settings' => [
         'displayErrorDetails' => true,
@@ -7,13 +12,7 @@ return [
 
     'storageRoot' => '/var/www/html/data/docs',
     'archiveRoot' => '/var/www/html/data/archives',
-    'shouldSecure' => function () {
-        if (getenv('SHOULD_SECURE') === false) {
-            return true;
-        } else {
-            return false;
-        }
-    },
+    'shouldSecure' => ! getenv('SHOULD_SECURE'),
     'authorizedUser' => function () {
         $credentials = getenv('CREDENTIALS');
 
@@ -26,8 +25,5 @@ return [
         }
 
         return [];
-    },
-    'cache' => function () {
-        return new \Slim\HttpCache\CacheProvider();
     }
 ];

@@ -1,8 +1,8 @@
 <?php
+/**
+ * This file is used to register all routes
+ */
 
-use HostMyDocs\Controllers\AddProject;
-use HostMyDocs\Controllers\DeleteProject;
-use HostMyDocs\Controllers\ListProjects;
 use Slim\Http\Response as Response;
 use Slim\Http\Request as Request;
 
@@ -10,6 +10,11 @@ $slim->get('/', function (Request $request, Response $response) {
     return $response->write('What did you expect ?');
 });
 
-$slim->get('/listProjects', ListProjects::class);
-$slim->post('/addProject', AddProject::class);
-$slim->delete('/deleteProject', DeleteProject::class);
+// Includes all php files (recursive) in Routes folder
+$dir = new RecursiveDirectoryIterator(__DIR__ . '/routes');
+$iter = new RecursiveIteratorIterator($dir);
+$files = new RegexIterator($iter, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH); // an Iterator, not an array
+
+foreach ($files as $file) {
+    include $file[0];
+}

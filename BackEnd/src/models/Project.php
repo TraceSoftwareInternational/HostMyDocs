@@ -2,7 +2,10 @@
 
 namespace HostMyDocs\Models;
 
-class Project implements \JsonSerializable
+/**
+ * Model representing a Project
+ */
+class Project extends BaseModel
 {
     /**
      * @var null|string name of the project
@@ -10,21 +13,16 @@ class Project implements \JsonSerializable
     private $name = null;
 
     /**
-     * @var array|Version[] available versions of the project
+     * @var Version[] available versions of the project
      */
     private $versions = [];
-
-    public function __construct($name)
-    {
-        $this->name = $name;
-    }
 
     /**
      * Build a JSON serializable array
      *
-     * @return array
+     * @return array an array containing the informations about this object for JSON serialization
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         $data = [];
 
@@ -46,49 +44,92 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * @return null|string
+     * Get the name of the project
+     *
+     * @return null|string the name of the project
      */
-    public function getName() : string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @param null|string $name
-     * @return Project
+     * Set the name of this Project if it is valid
+     *
+     * @param null|string $name the new value for the name
+     *
+     * @return null|Project this Project if $name is valid, null otherwise
      */
-    public function setName($name) : Project
+    public function setName(?string $name): ?self
     {
+        if ($name === null) {
+            $this->logger->info('project name cannot be null');
+            return null;
+        }
+
+        if (strpos($name, '/') !== false) {
+            $this->logger->info('project name cannot contains slashes');
+            return null;
+        }
+
+        if (strlen($name) === 0) {
+            $this->logger->info('project name cannot be empty');
+            return null;
+        }
+
         $this->name = $name;
 
         return $this;
     }
 
     /**
-     * @return array|Version[]
+     * Get the array containing all the Version of this project
+     *
+     * @return Version[] the Versions of this project
      */
-    public function getVersions() : array
+    public function getVersions(): array
     {
         return $this->versions;
     }
 
     /**
-     * @param Version[] $versions
-     * @return Project
+     * Return the first version added to this project or null if none where added
+     *
+     * @return null|Version the first Version of this project or null if there is no Version for this project
      */
-    public function setVersions($versions) : Project
+    public function getFirstVersion(): ?Version
+    {
+        if (count($this->versions) === 0) {
+            return null;
+        }
+        return $this->versions[0];
+    }
+
+    /**
+     * Replace the current Version array of this Project by the one given in parameter
+     *
+     * @param Version[] $versions the new array of Version of this project
+     *
+     * @return Project this project
+     */
+    public function setVersions(array $versions): self
     {
         $this->versions = $versions;
-
 
         return $this;
     }
 
     /**
-     * @param Version $version
+     * Add a new Version to this Project
+     *
+     * @param Version $version the Version to add to this project
+     *
+     * @return Project this project
      */
-    public function addVersion(Version $version) : void
+    public function addVersion(Version $version): self
     {
         $this->versions[] = $version;
+
+        return $this;
     }
 }

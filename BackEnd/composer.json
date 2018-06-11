@@ -9,7 +9,8 @@
         "chumper/zipper": "^1.0",
         "symfony/finder": "^4.0",
         "tuupola/slim-basic-auth": "^2.2",
-        "slim/http-cache": "^0.4.0"
+        "slim/http-cache": "^0.4.0",
+        "monolog/monolog": "^1.23"
     },
     "autoload": {
         "psr-4": {

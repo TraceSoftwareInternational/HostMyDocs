@@ -18,7 +18,7 @@ class DeleteProjectTest extends BaseTestCase
     {
         foreach ($projectsToPost as $project) {
             $files = ['archive' => $this->createZipFile()];
-            $credentials= $this->serverCredentials;
+            $credentials = $this->serverCredentials;
             $this->runApp('POST', '/addProject', $parameters, $files, $credentials);
         }
 
@@ -220,7 +220,7 @@ class DeleteProjectTest extends BaseTestCase
                 ],
                 [
                     'name' => 'AThirdProject',
-                    'language' => '',
+                    'language' => '""',
                     'version' => '6.6.6'
                 ],
                 [
@@ -249,8 +249,8 @@ class DeleteProjectTest extends BaseTestCase
                 ],
                 [
                     'name' => 'AThirdProject',
-                    'language' => '',
-                    'version' => ''
+                    'language' => '""',
+                    'version' => '""'
                 ],
                 [
                     'serverCredentials' => $this->serverCredentials,

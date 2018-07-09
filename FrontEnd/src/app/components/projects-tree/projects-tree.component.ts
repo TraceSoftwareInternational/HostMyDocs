@@ -38,7 +38,6 @@ export class ProjectsTreeComponent implements OnInit {
     ngOnInit(): void {
         this.projectsService.getProjects().subscribe(
             (response) => {
-                console.log('got', response.body);
                 this.projects = response.body;
             },
             (err: HttpErrorResponse) => {
@@ -65,8 +64,6 @@ export class ProjectsTreeComponent implements OnInit {
      * Sending an event to the parent, to display documentation
      */
     notifyParent(event: MouseEvent, project: Project, version: Version, language: Language): void {
-        console.log({event, project, version, language});
-
         event.stopPropagation();
 
         const state = new ProjectInfo(project.name, version.number, language.name);

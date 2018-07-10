@@ -53,7 +53,7 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "subresourceIntegrity": true,
+              "subresourceIntegrity": true
             }
           }
         },

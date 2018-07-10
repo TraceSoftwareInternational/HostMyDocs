@@ -20,7 +20,7 @@ script:
 after_success:
   - docker login  -u="$DOCKER_LOGIN" -p="$DOCKER_PASSWORD"
   - cd "$TRAVIS_BUILD_DIR"
-  - docker build -t tracesoftware/hostmydocs:ci
+  - docker build -t tracesoftware/hostmydocs:ci .
   - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     docker image tag tracesoftware/hostmydocs:ci tracesoftware/hostmydocs:latest;
     docker push tracesoftware/hostmydocs:latest;

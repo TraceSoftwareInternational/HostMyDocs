@@ -1,0 +1,42 @@
+<clr-tree-node *ngIf="projects.length == 0; else displayProjects">
+    No projects to display ):
+</clr-tree-node>
+
+<ng-template #displayProjects>
+    <label for="search_input">
+        <input [(ngModel)]="filterText" type="text" class="small-margin-bottom" placeholder="Filter projects">
+    </label>
+
+    <clr-tree-node *ngFor="let project of projects | filterProjects:filterText">
+        <clr-icon shape="folder"></clr-icon>
+        <span class="clickable">{{ project.name }}</span>
+        <a class="label clickable">
+            {{ getLastVersion(project) }}
+        </a>
+
+        <ng-template [clrIfExpanded]="false">
+            <ng-container ngProjectAs="clr-tree-node" *ngFor="let version of project.versions">
+                <ng-container *ngIf="version.languages.length > 1; else versionBlock">
+                    <clr-tree-node (click)="version.toggle($event)">
+                        <span class="clickable">{{ version.number }}</span>
+                        <ng-template [clrIfExpanded]="false">
+                            <clr-tree-node *ngFor="let language of version.languages" (click)="notifyParent($event, project, version, language)">
+                                <a class="clr-treenode-link tree-link">
+                                    {{ language.name }}
+                                </a>
+                            </clr-tree-node>
+                        </ng-template>
+                    </clr-tree-node>
+                </ng-container>
+
+                <ng-template #versionBlock>
+                    <clr-tree-node (click)="notifyParent($event, project, version, version.languages[0])">
+                        <a class="clr-treenode-link tree-link">
+                            {{ version.number }}
+                        </a>
+                    </clr-tree-node>
+                </ng-template>
+            </ng-container>
+        </ng-template>
+    </clr-tree-node>
+</ng-template>

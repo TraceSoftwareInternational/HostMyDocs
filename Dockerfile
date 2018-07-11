@@ -5,11 +5,11 @@ RUN composer update --prefer-dist --ignore-platform-reqs --optimize-autoloader
 
 ########################################################################################
 
-FROM node:8 AS frontFiles
+FROM node:10 AS frontFiles
 WORKDIR /home/builder
 COPY FrontEnd .
 RUN yarn install
-RUN yarn build:prod
+RUN yarn build --prod
 
 ########################################################################################
 
@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install zlib1g-dev && \
 
 
 
-COPY --from=frontFiles /home/builder/dist /var/www/html/
+COPY --from=frontFiles /home/builder/dist/ /var/www/html/
 COPY --from=backFiles /home/builder /var/www/html/BackEnd
 COPY --from=SSLGenerator /home/builder/ssl-cert-snakeoil.pem /etc/ssl/certs/ssl-cert-snakeoil.pem
 COPY --from=SSLGenerator /home/builder/ssl-cert-snakeoil.key /etc/ssl/private/ssl-cert-snakeoil.key

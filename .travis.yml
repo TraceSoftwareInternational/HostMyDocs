@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-    - "8"
+    - "10"
 
 sudo: required
 
@@ -16,17 +16,16 @@ script:
     - docker run -v "`pwd`:/home/builder/" tracesoftware/gitlab-builder:php7-cli /bin/sh -c "mkdir -p $ARCHIVE_PATH $DOCS_PATH; chmod -R 777 $DATA_PATH; composer update; composer test"
     - cd ../FrontEnd
     - yarn
-    - yarn test
-    - yarn docs:coverage
 
 after_success:
   - docker login  -u="$DOCKER_LOGIN" -p="$DOCKER_PASSWORD"
   - cd "$TRAVIS_BUILD_DIR"
-  - if [ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    docker build -t tracesoftware/hostmydocs:latest . ;
+  - docker build -t tracesoftware/hostmydocs:ci .
+  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    docker image tag tracesoftware/hostmydocs:ci tracesoftware/hostmydocs:latest;
     docker push tracesoftware/hostmydocs:latest;
     fi
-  - if [ "$TRAVIS_BRANCH" == "develop" && "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    docker build -t tracesoftware/hostmydocs:dev . ;
+  - if [ "$TRAVIS_BRANCH" == "develop" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    docker image tag tracesoftware/hostmydocs:ci tracesoftware/hostmydocs:dev;
     docker push tracesoftware/hostmydocs:dev;
     fi

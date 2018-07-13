@@ -1,16 +1,16 @@
 import { JSONProjectInfo } from './JsonInterfaces';
-import { Language } from './Language'
+import { Language } from './Language';
 import { Params } from '@angular/router';
-import { Project } from './Project'
-import { Version } from './Version'
+import { Project } from './Project';
+import { Version } from './Version';
 
 /**
  * Object used in between-component communication
  */
 export class ProjectInfo {
-    private indexFile: string
-    private archiveFile: string
-    private currentPage: string
+    private indexFile: string;
+    private archiveFile: string;
+    private currentPage: string;
 
     constructor(
         private project: string,
@@ -21,8 +21,8 @@ export class ProjectInfo {
     /**
      * Verifies validity of the current object
      */
-    public isValid() : boolean {
-        if(this.project === undefined) {
+    public isValid(): boolean {
+        if (this.project === undefined) {
             return false;
         }
 
@@ -34,7 +34,7 @@ export class ProjectInfo {
             return false;
         }
 
-        if(this.indexFile === undefined || this.currentPage === undefined) {
+        if (this.indexFile === undefined || this.currentPage === undefined) {
             return true;
         }
 
@@ -51,28 +51,28 @@ export class ProjectInfo {
     /**
      * Return current version
      */
-    public getVersion() : string {
+    public getVersion(): string {
         return this.version;
     }
 
     /**
      * Return current language name
      */
-    public getLanguage() : string {
+    public getLanguage(): string {
         return this.language;
     }
 
     /**
      * Return relative path to the current project archives
      */
-    public getArchiveFile() : string {
+    public getArchiveFile(): string {
         return this.archiveFile;
     }
 
     /**
      * Return relative path to the current project index.html file
      */
-    public getIndexFile() : string {
+    public getIndexFile(): string {
         return this.indexFile;
     }
 
@@ -80,7 +80,7 @@ export class ProjectInfo {
      * Return current page
      * (if a user access the app with aparametrized URL)
      */
-    public getCurrentPage() : string {
+    public getCurrentPage(): string {
         return this.currentPage;
     }
 
@@ -103,8 +103,8 @@ export class ProjectInfo {
     /**
      * Return a representation of this object in matrix notation
      */
-    public getMatrixNotation() : string {
-        let str = `;project=${encodeURIComponent(this.project)};` +
+    public getMatrixNotation(): string {
+        const str = `;project=${encodeURIComponent(this.project)};` +
             `version=${encodeURIComponent(this.version)};` +
             `language=${encodeURIComponent(this.language)};` +
             `currentPage=${encodeURIComponent(this.getBestURL())};`;
@@ -115,7 +115,7 @@ export class ProjectInfo {
     /**
      * Return the currentPage if it exists or the indexFile
      */
-    public getBestURL() : string {
+    public getBestURL(): string {
         if (this.currentPage !== undefined) {
             return this.currentPage;
         }
@@ -126,13 +126,13 @@ export class ProjectInfo {
     /**
      * Create a ProjectInfo object from a JSON object
      */
-    static fromJSON(json: JSONProjectInfo|string) : ProjectInfo {
+    static fromJSON(json: JSONProjectInfo|string): ProjectInfo {
         if (typeof json === 'string') {
-            return JSON.parse(json, ProjectInfo.reviver)
+            return JSON.parse(json, ProjectInfo.reviver);
         } else {
-            let projectInfo = Object.create(ProjectInfo.prototype)
+            let projectInfo = Object.create(ProjectInfo.prototype);
 
-            let newProjectInfo = Object.assign(projectInfo, json, {
+            const newProjectInfo = Object.assign(projectInfo, json, {
                 currentPage: decodeURIComponent(json.currentPage),
                 language: decodeURIComponent(json.language),
                 version: decodeURIComponent(json.version)
@@ -148,7 +148,7 @@ export class ProjectInfo {
      * reviver can be passed as the second parameter to JSON.parse
      * to automatically call ProjectInfo.fromJSON on the resulting value.
      */
-    static reviver(key: string, value: any) : any {
-        return key === "" ? ProjectInfo.fromJSON(value) : value;
+    static reviver(key: string, value: any): any {
+        return key === '' ? ProjectInfo.fromJSON(value) : value;
     }
 }

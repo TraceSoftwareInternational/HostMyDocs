@@ -12,18 +12,17 @@
                     <clr-icon [attr.shape]="copyIconShape"></clr-icon>
                 </a>
                 <div class="dropdown-menu">
-                    <p clrDropdownItem tsiClipboard (onSuccess)="afterClipboardAction($event)" (onError)="afterClipboardAction($event)" id="embeddedCopy"
+                    <p clrDropdownItem tsiClipboard (success)="afterClipboardAction($event)" (error)="afterClipboardAction($event)" id="embeddedCopy"
                         [attr.data-clipboard-text]="this.embeddedSharingLink">
                         Embedded documentation
                     </p>
-                    <p clrDropdownItem tsiClipboard (onSuccess)="afterClipboardAction($event)" (onError)="afterClipboardAction($event)" id="standaloneCopy"
+                    <p clrDropdownItem tsiClipboard (success)="afterClipboardAction($event)" (error)="afterClipboardAction($event)" id="standaloneCopy"
                         [attr.data-clipboard-text]="this.standaloneSharingLink">
                         Standalone documentation
                     </p>
                 </div>
             </clr-dropdown>
-            <a [attr.href]="downloadLink" role="tooltip" aria-haspopup="true" class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right clickable-element"
-                download>
+            <a [attr.href]="downloadLink" role="tooltip" aria-haspopup="true" class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right clickable-element" download>
                 <clr-icon shape="download"></clr-icon>
                 <span class="tooltip-content">Download this documentation</span>
             </a>

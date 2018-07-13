@@ -12,9 +12,11 @@ import { HomeViewComponent } from './components/home-view/home-view.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { ProjectsTreeComponent } from './components/projects-tree/projects-tree.component';
 import { FormsModule } from '@angular/forms';
+import { ClipboardDirective } from './directives/tsi-clipboard.directive';
 
 @NgModule({
     declarations: [
+        ClipboardDirective,
         TrustUrlPipe,
         FilterProjectsPipe,
         AppRootComponent,

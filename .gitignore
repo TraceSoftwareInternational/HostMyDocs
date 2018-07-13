@@ -1,9 +1,10 @@
 # JetBrains IDEs project files
 /.idea/
 
+node_modules
+
 /BackEnd/vendor/
 
-/FrontEnd/node_modules/
 /FrontEnd/dist/
 /FrontEnd/documentation/
 

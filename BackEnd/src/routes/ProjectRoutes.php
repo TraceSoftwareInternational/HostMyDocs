@@ -181,10 +181,6 @@ $slim->delete('/deleteProject', function (Request $request, Response $response):
 
     $logger->info('Parameters OK');
 
-    $logger->info("Name of the project : $name");
-    $logger->info("Version of the project : $version");
-    $logger->info("Language of the project : $language");
-
     $logger->info('Deleting folder + backup');
 
     if ($this->get('projectController')->deleteProject($project) === false) {

@@ -222,6 +222,11 @@ class ProjectController
 
         $this->logger->info("Opening file : " . $archive->file);
 
+        if (mime_content_type($archive->file) !== 'application/zip') {
+            $this->logger->warning('Uploaded file has wrong MIME type');
+            return false;
+        }
+
         $zipFile = $zipper->make($archive->file);
 
         $rootCandidates = array_values(array_filter($zipFile->listFiles(), function ($path) {
@@ -253,7 +258,7 @@ class ProjectController
         }
 
         if (mkdir($destinationPath, 0755, true) === false) {
-            $this->logger->critical('failed to create folder');
+            $this->logger->critical("failed to create folder : $destinationPath");
             return false;
         }
 
@@ -261,13 +266,11 @@ class ProjectController
 
         $zipFile->folder($zipRoot)->extractTo($destinationPath);
 
-        $zipper->close();
-
         return true;
     }
 
     /**
-     * Delete every files targetted by a Project
+     * Delete every files targeted by a Project
      *
      * @param  Project $project The project to delete
      *

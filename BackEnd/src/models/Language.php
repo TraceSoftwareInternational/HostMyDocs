@@ -131,11 +131,6 @@ class Language extends BaseModel
      */
     public function setArchiveFile(UploadedFileInterface $archiveFile): ?self
     {
-        if ($archiveFile->getClientMediaType() !== 'application/zip') {
-            $errorMessage = 'archive is not a zip file';
-            return null;
-        }
-
         $this->archiveFile = $archiveFile;
 
         return $this;

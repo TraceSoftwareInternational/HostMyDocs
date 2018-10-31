@@ -10,7 +10,8 @@
         "symfony/finder": "^4.0",
         "tuupola/slim-basic-auth": "^2.2",
         "slim/http-cache": "^0.4.0",
-        "monolog/monolog": "^1.23"
+        "monolog/monolog": "^1.23",
+        "ext-fileinfo": "*"
     },
     "autoload": {
         "psr-4": {

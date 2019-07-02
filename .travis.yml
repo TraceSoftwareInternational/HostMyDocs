@@ -14,8 +14,6 @@ before_script:
 script:
     - cd BackEnd
     - docker run -v "`pwd`:/home/builder/" tracesoftware/gitlab-builder:php7-cli /bin/sh -c "mkdir -p $ARCHIVE_PATH $DOCS_PATH; chmod -R 777 $DATA_PATH; composer update; composer test"
-    - cd ../FrontEnd
-    - yarn
 
 after_success:
   - docker login  -u="$DOCKER_LOGIN" -p="$DOCKER_PASSWORD"

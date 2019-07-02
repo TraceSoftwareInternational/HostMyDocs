@@ -5,11 +5,11 @@ RUN composer update --prefer-dist --ignore-platform-reqs --optimize-autoloader
 
 ########################################################################################
 
-FROM node:10 AS frontFiles
+FROM node AS frontFiles
 WORKDIR /home/builder
 COPY FrontEnd .
-RUN yarn install
-RUN yarn build --prod
+RUN npm ci
+RUN npm run build -- --prod
 
 ########################################################################################
 
@@ -24,7 +24,7 @@ RUN apk update && apk add openssl && \
 
 ########################################################################################
 
-FROM php:7.2-apache
+FROM php:7.3-apache
 RUN apt-get update && apt-get install zlib1g-dev && \
     docker-php-ext-install zip && \
     a2enmod rewrite

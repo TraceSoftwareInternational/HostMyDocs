@@ -130,7 +130,4 @@
     }
   },
   "defaultProject": "HostMyDocs",
-  "cli": {
-    "packageManager": "yarn"
-  }
 }

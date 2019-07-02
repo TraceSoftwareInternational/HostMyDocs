@@ -27,13 +27,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.sass",
+              "node_modules/@clr/icons/clr-icons.min.css",
               "node_modules/@clr/ui/clr-ui.min.css",
-              "node_modules/@clr/icons/clr-icons.min.css"
+              "src/styles.sass"
             ],
             "scripts": [
-              "node_modules/@clr/icons/clr-icons.min.js",
-              "node_modules/@webcomponents/custom-elements/custom-elements.min.js"
+              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
+              "node_modules/@clr/icons/clr-icons.min.js"
             ]
           },
           "configurations": {
@@ -129,5 +129,5 @@
       }
     }
   },
-  "defaultProject": "HostMyDocs",
+  "defaultProject": "HostMyDocs"
 }

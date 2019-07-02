@@ -1,12 +1,13 @@
+<form class="clr-form" *ngIf="projects.length !== 0">
+    <label for="search_input" class="clr-control-label">Filter projects</label>
+    <input clrInput id="search_input" [(ngModel)]="filterText" [ngModelOptions]="{standalone: true}" type="text">
+</form>
+
 <clr-tree-node *ngIf="projects.length == 0; else displayProjects">
     No projects to display ):
 </clr-tree-node>
 
 <ng-template #displayProjects>
-    <label for="search_input">
-        <input [(ngModel)]="filterText" type="text" class="small-margin-bottom" placeholder="Filter projects">
-    </label>
-
     <clr-tree-node *ngFor="let project of projects | filterProjects:filterText">
         <clr-icon shape="folder"></clr-icon>
         <span class="clickable">{{ project.name }}</span>

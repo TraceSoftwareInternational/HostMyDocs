@@ -8,6 +8,8 @@ BackEnd/phpunit.xml
 BackEnd/tests/
 BackEnd/specs
 
+FrontEnd/node_modules
+
 System/
 !System/ssl
 gRPC/

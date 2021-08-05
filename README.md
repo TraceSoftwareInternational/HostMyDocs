@@ -16,6 +16,7 @@ Note that by default the BackEnd will require to be secured with HTTPS. If you w
 You can refer to the [production setup section](#production-setup) to properly deploy an HostMyDocs instance with SSL enabled.
 
 ## Getting Started
+
 ### Add a doc
 
 1) Launch the application and its server with ```docker run -e CREDENTIALS=user:password -e SHOULD_SECURE=FALSE -v `pwd`:/data -p 8080:80 tracesoftware/hostmydocs```

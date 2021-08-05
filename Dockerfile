@@ -24,7 +24,7 @@ RUN apk update && apk add openssl && \
 
 ########################################################################################
 
-FROM php:7.4-apache
+FROM php:8.0-apache
 RUN apt-get update && apt-get install -y libzip-dev zlib1g-dev && \
     docker-php-ext-install zip && \
     a2enmod rewrite

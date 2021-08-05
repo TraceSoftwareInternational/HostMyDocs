@@ -24,7 +24,7 @@ RUN apk update && apk add openssl && \
 
 ########################################################################################
 
-FROM php:7.3-apache
+FROM php:7.4-apache
 RUN apt-get update && apt-get install -y libzip-dev zlib1g-dev && \
     docker-php-ext-install zip && \
     a2enmod rewrite
@@ -39,7 +39,8 @@ COPY --from=SSLGenerator /home/builder/ssl-cert-snakeoil.key /etc/ssl/private/ss
 COPY BackEnd/hostMyDocs.ini /usr/local/etc/php/php.ini
 COPY entrypoint.sh /usr/local/bin/
 
-RUN mkdir -p /var/www/html/data && \
+RUN echo "SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1" >> /etc/apache2/conf-available/security.conf && \
+    mkdir -p /var/www/html/data && \
     chmod -R 755 /var/www/html && \
     chown -R www-data:www-data /var/www/html && \
     ln -s /var/www/html/data /data && \
